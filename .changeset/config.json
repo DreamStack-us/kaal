@@ -1,0 +1,11 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
+  "changelog": ["@changesets/changelog-github", { "repo": "dreamstack/kaal" }],
+  "commit": false,
+  "fixed": [],
+  "linked": [["@dreamstack/kaal", "@dreamstack/kaal-themes"]],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": ["expo-example", "web-example"]
+}
