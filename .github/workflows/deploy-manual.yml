@@ -1,0 +1,25 @@
+name: Manual Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deploy environment'
+        required: true
+        default: 'preview'
+        type: choice
+        options:
+          - preview
+          - production
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel Deploy
+        run: |
+          if [ "${{ inputs.environment }}" = "production" ]; then
+            curl -X POST "${{ secrets.VERCEL_DEPLOY_HOOK_PRODUCTION }}"
+          else
+            curl -X POST "${{ secrets.VERCEL_DEPLOY_HOOK_PREVIEW }}"
+          fi
