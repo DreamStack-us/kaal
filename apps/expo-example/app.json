@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "Kaal Example",
+    "slug": "kaal-example",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "kaal-example",
+    "newArchEnabled": true,
+    "platforms": ["ios", "android"],
+    "ios": {
+      "bundleIdentifier": "com.dreamstack.kaal.example"
+    },
+    "android": {
+      "package": "com.dreamstack.kaal.example"
+    },
+    "plugins": [
+      "expo-router"
+    ]
+  }
+}

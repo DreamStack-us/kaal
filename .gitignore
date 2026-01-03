@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+.bun/
+
+# Lockfiles (keep bun.lockb)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build outputs
+dist/
+lib/
+*.tsbuildinfo
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Expo
+.expo/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+
+# Testing
+coverage/
+
+# Turbo
+.turbo/
+
+# Environment
+.env
+.env.local
+.env.*.local

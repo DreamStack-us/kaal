@@ -1,0 +1,101 @@
+{
+  "name": "@dreamstack/kaal",
+  "version": "0.1.0",
+  "description": "High-performance React Native DatePicker with Unistyles v3",
+  "type": "module",
+  "main": "./lib/module/index.js",
+  "types": "./lib/typescript/src/index.d.ts",
+  "react-native": "./src/index.ts",
+  "source": "./src/index.ts",
+  "exports": {
+    ".": {
+      "source": "./src/index.tsx",
+      "react-native": {
+        "types": "./lib/typescript/src/index.d.ts",
+        "default": "./lib/module/index.js"
+      },
+      "types": "./lib/typescript/src/index.d.ts",
+      "default": "./lib/module/index.js"
+    },
+    "./themes": {
+      "source": "./src/themes/index.ts",
+      "types": "./lib/typescript/src/themes/index.d.ts",
+      "default": "./lib/module/themes/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["lib", "src", "!**/__tests__", "!**/*.test.*"],
+  "scripts": {
+    "build": "bob build",
+    "dev": "bob build --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "test": "bun test",
+    "clean": "rm -rf lib",
+    "size": "size-limit"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0",
+    "react-native": ">=0.78.0",
+    "react-native-unistyles": "^3.0.0",
+    "react-native-nitro-modules": "0.31.4",
+    "react-native-reanimated": ">=3.17.0",
+    "react-native-gesture-handler": ">=2.20.0",
+    "@js-temporal/polyfill": ">=0.4.4",
+    "zod": ">=3.24.0"
+  },
+  "peerDependenciesMeta": {
+    "@expo/ui": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@js-temporal/polyfill": "^0.4.4",
+    "@types/react": "^18.3.0",
+    "eslint-config": "workspace:*",
+    "react": "18.3.1",
+    "react-native": "0.78.0",
+    "react-native-builder-bob": "^0.35.0",
+    "react-native-gesture-handler": "^2.21.0",
+    "react-native-nitro-modules": "0.31.4",
+    "react-native-reanimated": "^3.17.0",
+    "react-native-unistyles": "^3.0.0",
+    "typescript": "^5.7.0",
+    "typescript-config": "workspace:*",
+    "zod": "^3.24.0"
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      ["module", { "esm": true }],
+      "typescript"
+    ],
+    "exclude": "**/{__tests__,__fixtures__,__mocks__}/**"
+  },
+  "size-limit": [
+    {
+      "path": "lib/module/index.js",
+      "limit": "25 kB"
+    }
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dreamstack/kaal.git",
+    "directory": "packages/core"
+  },
+  "keywords": [
+    "react-native",
+    "datepicker",
+    "calendar",
+    "unistyles",
+    "new-architecture",
+    "temporal"
+  ],
+  "license": "MIT"
+}

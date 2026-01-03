@@ -1,0 +1,63 @@
+export const primitiveTokens = {
+  colors: {
+    blue: {
+      50: '#E3F2FD',
+      100: '#BBDEFB',
+      200: '#90CAF9',
+      500: '#2196F3',
+      600: '#1E88E5',
+      700: '#1976D2',
+      900: '#0D47A1',
+    },
+    gray: {
+      50: '#FAFAFA',
+      100: '#F5F5F5',
+      200: '#EEEEEE',
+      300: '#E0E0E0',
+      500: '#9E9E9E',
+      700: '#616161',
+      900: '#212121',
+    },
+    white: '#FFFFFF',
+    black: '#000000',
+    transparent: 'transparent',
+  },
+  spacing: {
+    0: 0,
+    1: 4,
+    2: 8,
+    3: 12,
+    4: 16,
+    5: 20,
+    6: 24,
+    8: 32,
+    10: 40,
+    12: 48,
+  },
+  radii: {
+    none: 0,
+    sm: 4,
+    md: 8,
+    lg: 12,
+    xl: 16,
+    '2xl': 24,
+    full: 9999,
+  },
+  fontSizes: {
+    xs: 12,
+    sm: 14,
+    md: 16,
+    lg: 18,
+    xl: 20,
+    '2xl': 24,
+    '3xl': 30,
+  },
+  fontWeights: {
+    normal: '400',
+    medium: '500',
+    semibold: '600',
+    bold: '700',
+  },
+} as const;
+
+export type PrimitiveTokens = typeof primitiveTokens;
