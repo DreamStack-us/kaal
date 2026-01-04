@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import { Temporal } from '@js-temporal/polyfill';
+import { z } from 'zod';
 
 export const isoDateSchema = z
   .string()
@@ -13,7 +13,7 @@ export const isoDateSchema = z
         return false;
       }
     },
-    { message: 'Invalid ISO 8601 date format' }
+    { message: 'Invalid ISO 8601 date format' },
   );
 
 export const isoDateTimeSchema = z
@@ -32,7 +32,7 @@ export const dateRangeSchema = z
       const end = Temporal.PlainDate.from(data.end);
       return Temporal.PlainDate.compare(start, end) <= 0;
     },
-    { message: 'Start date must be before or equal to end date' }
+    { message: 'Start date must be before or equal to end date' },
   );
 
 export const datePickerValueSchema = z.object({

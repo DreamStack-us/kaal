@@ -20,4 +20,9 @@ export {
 } from './utils';
 
 export type { DatePickerValue, DateRange } from './utils';
-export type { DatePickerMode, DatePickerTheme, DatePickerVariant, DatePickerProps } from './types';
+export type {
+  DatePickerMode,
+  DatePickerTheme,
+  DatePickerVariant,
+  DatePickerProps,
+} from './types';

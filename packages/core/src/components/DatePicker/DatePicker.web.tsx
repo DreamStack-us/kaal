@@ -1,9 +1,9 @@
-import React from 'react';
-import { View } from 'react-native';
 import type { Temporal } from '@js-temporal/polyfill';
-import type { KaalDatePickerProps } from './DatePicker';
+import type React from 'react';
+import { View } from 'react-native';
 import { CalendarGrid } from '../CalendarGrid';
 import { WheelPicker } from '../WheelPicker';
+import type { KaalDatePickerProps } from './DatePicker';
 import { styles } from './DatePicker.styles';
 
 export const DatePicker: React.FC<KaalDatePickerProps> = ({

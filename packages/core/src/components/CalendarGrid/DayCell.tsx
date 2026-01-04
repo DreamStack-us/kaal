@@ -1,6 +1,7 @@
-import React, { memo } from 'react';
-import { Pressable, Text } from 'react-native';
 import type { Temporal } from '@js-temporal/polyfill';
+import type React from 'react';
+import { memo } from 'react';
+import { Pressable, Text } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 interface DayCellProps {
@@ -72,12 +73,12 @@ export const DayCell: React.FC<DayCellProps> = memo(
     const state = isDisabled
       ? 'disabled'
       : isSelected
-      ? 'selected'
-      : isToday
-      ? 'today'
-      : isWeekend
-      ? 'weekend'
-      : undefined;
+        ? 'selected'
+        : isToday
+          ? 'today'
+          : isWeekend
+            ? 'weekend'
+            : undefined;
 
     styles.useVariants({ state });
 
@@ -102,7 +103,7 @@ export const DayCell: React.FC<DayCellProps> = memo(
     prev.date?.toString() === next.date?.toString() &&
     prev.isSelected === next.isSelected &&
     prev.isToday === next.isToday &&
-    prev.isDisabled === next.isDisabled
+    prev.isDisabled === next.isDisabled,
 );
 
 DayCell.displayName = 'DayCell';

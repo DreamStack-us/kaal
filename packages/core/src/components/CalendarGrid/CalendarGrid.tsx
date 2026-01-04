@@ -1,8 +1,8 @@
-import React, { memo, useCallback, useMemo } from 'react';
-import { View, FlatList, Text, Pressable } from 'react-native';
 import { Temporal } from '@js-temporal/polyfill';
-import { DayCell } from './DayCell';
+import React, { memo, useCallback, useMemo } from 'react';
+import { FlatList, Pressable, Text, View } from 'react-native';
 import { styles } from './CalendarGrid.styles';
+import { DayCell } from './DayCell';
 
 interface CalendarGridProps {
   value: Temporal.PlainDate;
@@ -17,7 +17,7 @@ const CELL_SIZE = 44;
 const WEEK_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 const generateMonthDays = (
-  yearMonth: Temporal.PlainYearMonth
+  yearMonth: Temporal.PlainYearMonth,
 ): (Temporal.PlainDate | null)[] => {
   const firstDay = yearMonth.toPlainDate({ day: 1 });
   const daysInMonth = yearMonth.daysInMonth;
@@ -47,25 +47,24 @@ const generateMonthDays = (
 export const CalendarGrid: React.FC<CalendarGridProps> = memo(
   ({ value, onChange, minDate, maxDate, disabledDates, themeMode }) => {
     const [currentMonth, setCurrentMonth] = React.useState(() =>
-      Temporal.PlainYearMonth.from(value)
+      Temporal.PlainYearMonth.from(value),
     );
 
-    const days = useMemo(
-      () => generateMonthDays(currentMonth),
-      [currentMonth]
-    );
+    const days = useMemo(() => generateMonthDays(currentMonth), [currentMonth]);
 
     const today = useMemo(() => Temporal.Now.plainDateISO(), []);
 
     const isDisabled = useCallback(
       (date: Temporal.PlainDate | null): boolean => {
         if (!date) return true;
-        if (minDate && Temporal.PlainDate.compare(date, minDate) < 0) return true;
-        if (maxDate && Temporal.PlainDate.compare(date, maxDate) > 0) return true;
+        if (minDate && Temporal.PlainDate.compare(date, minDate) < 0)
+          return true;
+        if (maxDate && Temporal.PlainDate.compare(date, maxDate) > 0)
+          return true;
         if (disabledDates?.some((d) => date.equals(d))) return true;
         return false;
       },
-      [minDate, maxDate, disabledDates]
+      [minDate, maxDate, disabledDates],
     );
 
     const navigateMonth = useCallback((direction: 1 | -1) => {
@@ -83,22 +82,25 @@ export const CalendarGrid: React.FC<CalendarGridProps> = memo(
           onPress={item && !isDisabled(item) ? () => onChange(item) : undefined}
         />
       ),
-      [value, today, isDisabled, onChange]
+      [value, today, isDisabled, onChange],
     );
 
     const keyExtractor = useCallback(
       (item: Temporal.PlainDate | null, index: number) =>
         item?.toString() ?? `empty-${index}`,
-      []
+      [],
     );
 
     const getItemLayout = useCallback(
-      (_: any, index: number) => ({
+      (
+        _data: ArrayLike<Temporal.PlainDate | null> | null | undefined,
+        index: number,
+      ) => ({
         length: CELL_SIZE,
         offset: CELL_SIZE * Math.floor(index / 7),
         index,
       }),
-      []
+      [],
     );
 
     return (
@@ -140,7 +142,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = memo(
         />
       </View>
     );
-  }
+  },
 );
 
 CalendarGrid.displayName = 'CalendarGrid';

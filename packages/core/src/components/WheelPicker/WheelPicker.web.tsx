@@ -1,12 +1,13 @@
-import React, { useCallback, useMemo } from 'react';
-import { View, Text, StyleSheet as RNStyleSheet } from 'react-native';
+import type { Temporal } from '@js-temporal/polyfill';
+import type React from 'react';
+import { useCallback, useMemo } from 'react';
+import { StyleSheet as RNStyleSheet, Text, View } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
 } from 'react-native-reanimated';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import type { Temporal } from '@js-temporal/polyfill';
 
 const ITEM_HEIGHT = 44;
 const VISIBLE_ITEMS = 5;
@@ -23,7 +24,7 @@ const generateDateItems = (
   type: 'day' | 'month' | 'year',
   currentDate: Temporal.PlainDate,
   minDate?: Temporal.PlainDate,
-  maxDate?: Temporal.PlainDate
+  maxDate?: Temporal.PlainDate,
 ) => {
   if (type === 'day') {
     return Array.from({ length: currentDate.daysInMonth }, (_, i) => ({
@@ -53,6 +54,7 @@ const WheelColumn: React.FC<{
   const translateY = useSharedValue(-selectedIndex * ITEM_HEIGHT);
   const velocity = useSharedValue(0);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Reanimated shared values are stable refs
   const panGesture = useMemo(
     () =>
       Gesture.Pan()
@@ -64,7 +66,10 @@ const WheelColumn: React.FC<{
         .onEnd(() => {
           'worklet';
           const targetIndex = Math.round(-translateY.value / ITEM_HEIGHT);
-          const clampedIndex = Math.max(0, Math.min(items.length - 1, targetIndex));
+          const clampedIndex = Math.max(
+            0,
+            Math.min(items.length - 1, targetIndex),
+          );
 
           translateY.value = withSpring(-clampedIndex * ITEM_HEIGHT, {
             velocity: velocity.value,
@@ -72,7 +77,7 @@ const WheelColumn: React.FC<{
             stiffness: 200,
           });
         }),
-    [selectedIndex, items.length]
+    [selectedIndex, items.length],
   );
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -108,15 +113,12 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
 }) => {
   const days = useMemo(
     () => generateDateItems('day', value, minDate, maxDate),
-    [value.year, value.month]
+    [value, minDate, maxDate],
   );
-  const months = useMemo(
-    () => generateDateItems('month', value),
-    []
-  );
+  const months = useMemo(() => generateDateItems('month', value), [value]);
   const years = useMemo(
     () => generateDateItems('year', value, minDate, maxDate),
-    [minDate, maxDate]
+    [value, minDate, maxDate],
   );
 
   const handleDayChange = useCallback(
@@ -126,7 +128,7 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
         onChange(value.with({ day: newDay }));
       }
     },
-    [value, days, onChange]
+    [value, days, onChange],
   );
 
   const handleMonthChange = useCallback(
@@ -136,7 +138,7 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
         onChange(value.with({ month: newMonth }));
       }
     },
-    [value, months, onChange]
+    [value, months, onChange],
   );
 
   const handleYearChange = useCallback(
@@ -146,7 +148,7 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
         onChange(value.with({ year: newYear }));
       }
     },
-    [value, years, onChange]
+    [value, years, onChange],
   );
 
   return (

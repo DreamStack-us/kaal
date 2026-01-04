@@ -33,10 +33,7 @@
   "react-native-builder-bob": {
     "source": "src",
     "output": "lib",
-    "targets": [
-      ["module", { "esm": true }],
-      "typescript"
-    ]
+    "targets": [["module", { "esm": true }], "typescript"]
   },
   "publishConfig": {
     "access": "restricted",

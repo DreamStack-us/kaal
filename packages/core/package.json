@@ -24,7 +24,7 @@
     "build": "bob build",
     "dev": "bob build --watch",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src/",
+    "lint": "biome check src/",
     "test": "bun test",
     "clean": "rm -rf lib",
     "size": "size-limit"
@@ -48,7 +48,6 @@
     "@dreamstack-us/kaal-themes": "workspace:*",
     "@js-temporal/polyfill": "^0.4.4",
     "@types/react": "^18.3.0",
-    "eslint-config": "workspace:*",
     "react": "18.3.1",
     "react-native": "0.78.0",
     "react-native-builder-bob": "^0.35.0",
@@ -63,10 +62,7 @@
   "react-native-builder-bob": {
     "source": "src",
     "output": "lib",
-    "targets": [
-      ["module", { "esm": true }],
-      "typescript"
-    ],
+    "targets": [["module", { "esm": true }], "typescript"],
     "exclude": "**/{__tests__,__fixtures__,__mocks__}/**"
   },
   "size-limit": [

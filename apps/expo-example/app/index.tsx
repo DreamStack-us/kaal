@@ -1,20 +1,16 @@
-import React, { useState } from 'react';
-import { View, Text } from 'react-native';
-import { Temporal } from '@js-temporal/polyfill';
 import { DatePicker } from '@dreamstack-us/kaal';
+import { Temporal } from '@js-temporal/polyfill';
+import React, { useState } from 'react';
+import { Text, View } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 export default function HomeScreen() {
-  const [selectedDate, setSelectedDate] = useState(
-    Temporal.Now.plainDateISO()
-  );
+  const [selectedDate, setSelectedDate] = useState(Temporal.Now.plainDateISO());
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Kaal DatePicker</Text>
-      <Text style={styles.selected}>
-        Selected: {selectedDate.toString()}
-      </Text>
+      <Text style={styles.selected}>Selected: {selectedDate.toString()}</Text>
 
       <DatePicker
         value={selectedDate}

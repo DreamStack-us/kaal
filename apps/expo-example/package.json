@@ -8,11 +8,12 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "build": "expo export --platform all",
-    "lint": "eslint .",
+    "lint": "biome check .",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@dreamstack-us/kaal": "workspace:*",
+    "@dreamstack-us/kaal-themes": "workspace:*",
     "@expo/ui": "^0.2.0-beta.9",
     "@js-temporal/polyfill": "^0.4.4",
     "expo": "~53.0.0",
@@ -29,7 +30,7 @@
   "devDependencies": {
     "@babel/core": "^7.26.0",
     "@types/react": "^18.3.0",
-    "eslint-config": "workspace:*",
+    "babel-preset-expo": "~12.0.0",
     "typescript": "^5.7.0",
     "typescript-config": "workspace:*"
   }
