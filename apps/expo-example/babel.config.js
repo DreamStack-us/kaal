@@ -2,7 +2,7 @@
 const unistylesPluginOptions = {
   root: 'app',
   autoProcessPaths: [
-    'node_modules/@dreamstack/kaal',
+    'node_modules/@dreamstack-us/kaal',
   ],
 };
 
