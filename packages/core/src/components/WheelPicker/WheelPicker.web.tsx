@@ -121,24 +121,30 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
 
   const handleDayChange = useCallback(
     (index: number) => {
-      const newDay = days[index].value;
-      onChange(value.with({ day: newDay }));
+      const newDay = days[index]?.value;
+      if (newDay !== undefined) {
+        onChange(value.with({ day: newDay }));
+      }
     },
     [value, days, onChange]
   );
 
   const handleMonthChange = useCallback(
     (index: number) => {
-      const newMonth = months[index].value;
-      onChange(value.with({ month: newMonth }));
+      const newMonth = months[index]?.value;
+      if (newMonth !== undefined) {
+        onChange(value.with({ month: newMonth }));
+      }
     },
-    [value, onChange]
+    [value, months, onChange]
   );
 
   const handleYearChange = useCallback(
     (index: number) => {
-      const newYear = years[index].value;
-      onChange(value.with({ year: newYear }));
+      const newYear = years[index]?.value;
+      if (newYear !== undefined) {
+        onChange(value.with({ year: newYear }));
+      }
     },
     [value, years, onChange]
   );

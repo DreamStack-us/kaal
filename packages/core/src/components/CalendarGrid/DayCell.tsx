@@ -18,11 +18,9 @@ const styles = StyleSheet.create((theme) => ({
     height: 44,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: theme.colors.datepicker.cellBackground,
     variants: {
       state: {
-        default: {
-          backgroundColor: theme.colors.datepicker.cellBackground,
-        },
         selected: {
           backgroundColor: theme.colors.datepicker.cellSelected,
           borderRadius: theme.radii.cell,
@@ -36,17 +34,16 @@ const styles = StyleSheet.create((theme) => ({
         disabled: {
           opacity: 0.4,
         },
+        weekend: {},
       },
     },
   },
   text: {
     fontSize: theme.typography.dayCell.fontSize,
     fontWeight: theme.typography.dayCell.fontWeight,
+    color: theme.colors.datepicker.textDefault,
     variants: {
       state: {
-        default: {
-          color: theme.colors.datepicker.textDefault,
-        },
         selected: {
           color: theme.colors.datepicker.textSelected,
           fontWeight: '600',
@@ -80,7 +77,7 @@ export const DayCell: React.FC<DayCellProps> = memo(
       ? 'today'
       : isWeekend
       ? 'weekend'
-      : 'default';
+      : undefined;
 
     styles.useVariants({ state });
 
