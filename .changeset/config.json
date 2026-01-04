@@ -1,6 +1,9 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
-  "changelog": ["@changesets/changelog-github", { "repo": "DreamStack-us/kaal" }],
+  "changelog": [
+    "@changesets/changelog-github",
+    { "repo": "DreamStack-us/kaal" }
+  ],
   "commit": false,
   "fixed": [],
   "linked": [["@dreamstack-us/kaal", "@dreamstack-us/kaal-themes"]],

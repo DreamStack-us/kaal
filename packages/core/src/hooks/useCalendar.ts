@@ -1,9 +1,9 @@
-import { useState, useMemo, useCallback } from 'react';
 import { Temporal } from '@js-temporal/polyfill';
+import { useCallback, useMemo, useState } from 'react';
 
 export const useCalendar = (initialDate?: Temporal.PlainDate) => {
   const [currentMonth, setCurrentMonth] = useState(() =>
-    Temporal.PlainYearMonth.from(initialDate ?? Temporal.Now.plainDateISO())
+    Temporal.PlainYearMonth.from(initialDate ?? Temporal.Now.plainDateISO()),
   );
 
   const navigateMonth = useCallback((direction: 1 | -1) => {

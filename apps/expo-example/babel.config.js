@@ -1,12 +1,10 @@
 /** @type {import('react-native-unistyles/plugin').UnistylesPluginOptions} */
 const unistylesPluginOptions = {
   root: 'app',
-  autoProcessPaths: [
-    'node_modules/@dreamstack-us/kaal',
-  ],
+  autoProcessPaths: ['node_modules/@dreamstack-us/kaal'],
 };
 
-module.exports = function (api) {
+module.exports = (api) => {
   api.cache(true);
   return {
     presets: ['babel-preset-expo'],

@@ -5,5 +5,11 @@
     "outDir": "lib/typescript"
   },
   "include": ["src"],
-  "exclude": ["node_modules", "lib", "**/__tests__/**", "**/*.test.ts", "**/*.test.tsx"]
+  "exclude": [
+    "node_modules",
+    "lib",
+    "**/__tests__/**",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
 }

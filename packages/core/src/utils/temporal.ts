@@ -7,7 +7,7 @@ export const toISODateString = (date: Temporal.PlainDate): string => {
 export const toISODateTimeString = (
   date: Temporal.PlainDate,
   time: Temporal.PlainTime,
-  timeZone?: string
+  timeZone?: string,
 ): string => {
   const tz = timeZone ?? Temporal.Now.timeZoneId();
   const zdt = date.toZonedDateTime({ timeZone: tz, plainTime: time });
@@ -19,12 +19,14 @@ export const fromISODateString = (iso: string): Temporal.PlainDate => {
 };
 
 export const fromISODateTimeString = (iso: string): Temporal.ZonedDateTime => {
-  return Temporal.Instant.from(iso).toZonedDateTimeISO(Temporal.Now.timeZoneId());
+  return Temporal.Instant.from(iso).toZonedDateTimeISO(
+    Temporal.Now.timeZoneId(),
+  );
 };
 
 export const getDateRange = (
   start: Temporal.PlainDate,
-  end: Temporal.PlainDate
+  end: Temporal.PlainDate,
 ): Temporal.PlainDate[] => {
   const dates: Temporal.PlainDate[] = [];
   let current = start;
@@ -40,7 +42,7 @@ export const getDateRange = (
 export const isDateInRange = (
   date: Temporal.PlainDate,
   minDate?: Temporal.PlainDate,
-  maxDate?: Temporal.PlainDate
+  maxDate?: Temporal.PlainDate,
 ): boolean => {
   if (minDate && Temporal.PlainDate.compare(date, minDate) < 0) return false;
   if (maxDate && Temporal.PlainDate.compare(date, maxDate) > 0) return false;

@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
 import { Temporal } from '@js-temporal/polyfill';
+import { useCallback, useState } from 'react';
 
 interface UseDatePickerOptions {
   initialDate?: Temporal.PlainDate;
@@ -23,7 +23,7 @@ export const useDatePicker = (options: UseDatePickerOptions = {}) => {
       setSelectedDate(date);
       onChange?.(date);
     },
-    [onChange]
+    [onChange],
   );
 
   const isDateDisabled = useCallback(
@@ -32,7 +32,7 @@ export const useDatePicker = (options: UseDatePickerOptions = {}) => {
       if (maxDate && Temporal.PlainDate.compare(date, maxDate) > 0) return true;
       return false;
     },
-    [minDate, maxDate]
+    [minDate, maxDate],
   );
 
   return {

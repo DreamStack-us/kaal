@@ -1,6 +1,6 @@
-import React from 'react';
-import { Platform } from 'react-native';
 import type { Temporal } from '@js-temporal/polyfill';
+import type React from 'react';
+import { Platform } from 'react-native';
 import type { DatePickerMode } from '../../types';
 
 export interface KaalDatePickerProps {

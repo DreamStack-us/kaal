@@ -33,7 +33,7 @@ jobs:
         run: bun install
 
       - name: Build packages
-        run: bun run build
+        run: bun run build --filter='./packages/*'
 
   typecheck:
     name: Type Check

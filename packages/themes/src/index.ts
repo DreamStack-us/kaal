@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { lightTheme, type LightTheme } from './themes/light';
-import { darkTheme } from './themes/dark';
 import { breakpoints } from './breakpoints';
+import { darkTheme } from './themes/dark';
+import { type LightTheme, lightTheme } from './themes/light';
 
 export { lightTheme } from './themes/light';
 export { darkTheme } from './themes/dark';
