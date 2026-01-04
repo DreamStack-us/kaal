@@ -7,6 +7,7 @@ import { styles } from './DatePicker.styles';
 
 const ExpoDatePicker = React.lazy(async () => {
   try {
+    // @ts-expect-error - @expo/ui types not available
     const { DateTimePicker } = await import('@expo/ui/jetpack-compose');
     return {
       default: ({ value, onChange }: any) => (
@@ -19,7 +20,8 @@ const ExpoDatePicker = React.lazy(async () => {
       ),
     };
   } catch {
-    return { default: () => null };
+    // Fallback when @expo/ui is not available
+    return { default: ({ value, onChange }: any) => null as any };
   }
 });
 
@@ -35,7 +37,7 @@ export const DatePicker: React.FC<KaalDatePickerProps> = ({
     (date: Date | Temporal.PlainDate) => {
       const plainDate =
         date instanceof Date
-          ? Temporal.PlainDate.from(date.toISOString().split('T')[0])
+          ? Temporal.PlainDate.from(date.toISOString().split('T')[0]!)
           : date;
       onChange(plainDate);
     },

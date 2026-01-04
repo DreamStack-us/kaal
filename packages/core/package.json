@@ -4,23 +4,18 @@
   "description": "High-performance React Native DatePicker with Unistyles v3",
   "type": "module",
   "main": "./lib/module/index.js",
-  "types": "./lib/typescript/src/index.d.ts",
+  "types": "./lib/typescript/index.d.ts",
   "react-native": "./src/index.ts",
   "source": "./src/index.ts",
   "exports": {
     ".": {
-      "source": "./src/index.tsx",
+      "source": "./src/index.ts",
       "react-native": {
-        "types": "./lib/typescript/src/index.d.ts",
+        "types": "./lib/typescript/index.d.ts",
         "default": "./lib/module/index.js"
       },
-      "types": "./lib/typescript/src/index.d.ts",
+      "types": "./lib/typescript/index.d.ts",
       "default": "./lib/module/index.js"
-    },
-    "./themes": {
-      "source": "./src/themes/index.ts",
-      "types": "./lib/typescript/src/themes/index.d.ts",
-      "default": "./lib/module/themes/index.js"
     },
     "./package.json": "./package.json"
   },
@@ -50,6 +45,7 @@
     }
   },
   "devDependencies": {
+    "@dreamstack-us/kaal-themes": "workspace:*",
     "@js-temporal/polyfill": "^0.4.4",
     "@types/react": "^18.3.0",
     "eslint-config": "workspace:*",

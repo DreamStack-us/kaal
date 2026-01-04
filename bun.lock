@@ -43,6 +43,7 @@
       "name": "@dreamstack-us/kaal",
       "version": "0.0.1",
       "devDependencies": {
+        "@dreamstack-us/kaal-themes": "workspace:*",
         "@js-temporal/polyfill": "^0.4.4",
         "@types/react": "^18.3.0",
         "eslint-config": "workspace:*",
