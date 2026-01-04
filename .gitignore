@@ -41,3 +41,8 @@ coverage/
 .env
 .env.local
 .env.*.local
+
+# Claude workflow - personal thoughts
+thoughts/srihari/
+thoughts/*/personal/
+.claude/settings.local.json
