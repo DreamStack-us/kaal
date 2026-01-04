@@ -1,3 +1,3 @@
-import { configureKaalThemes } from '@dreamstack/kaal/themes';
+import { configureKaalThemes } from '@dreamstack-us/kaal/themes';
 
 configureKaalThemes();

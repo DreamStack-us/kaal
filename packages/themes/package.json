@@ -1,15 +1,15 @@
 {
-  "name": "@dreamstack/kaal-themes",
-  "version": "0.1.0",
-  "description": "Theme system for @dreamstack/kaal",
+  "name": "@dreamstack-us/kaal-themes",
+  "version": "0.0.1",
+  "description": "Theme system for @dreamstack-us/kaal",
   "type": "module",
   "main": "./lib/module/index.js",
-  "types": "./lib/typescript/src/index.d.ts",
+  "types": "./lib/typescript/index.d.ts",
   "source": "./src/index.ts",
   "exports": {
     ".": {
       "source": "./src/index.ts",
-      "types": "./lib/typescript/src/index.d.ts",
+      "types": "./lib/typescript/index.d.ts",
       "default": "./lib/module/index.js"
     },
     "./package.json": "./package.json"
@@ -39,7 +39,13 @@
     ]
   },
   "publishConfig": {
-    "access": "public"
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DreamStack-us/kaal.git",
+    "directory": "packages/themes"
   },
   "license": "MIT"
 }

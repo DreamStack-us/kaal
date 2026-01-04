@@ -1,4 +1,4 @@
-# @dreamstack/kaal
+# @dreamstack-us/kaal
 
 High-performance React Native DatePicker with Unistyles v3, New Architecture-only, featuring native SwiftUI/Jetpack Compose pickers and pixel-perfect web implementations.
 
@@ -11,7 +11,7 @@ High-performance React Native DatePicker with Unistyles v3, New Architecture-onl
 ## Installation
 
 ```bash
-bun add @dreamstack/kaal
+bun add @dreamstack-us/kaal
 ```
 
 ### Peer Dependencies
@@ -29,7 +29,7 @@ Add to your `babel.config.js`:
 ```javascript
 const unistylesPluginOptions = {
   root: 'src', // or 'app' for Expo Router
-  autoProcessPaths: ['node_modules/@dreamstack/kaal'],
+  autoProcessPaths: ['node_modules/@dreamstack-us/kaal'],
 };
 
 module.exports = {
@@ -46,7 +46,7 @@ module.exports = {
 Configure themes before rendering any Kaal component:
 
 ```typescript
-import { configureKaalThemes } from '@dreamstack/kaal/themes';
+import { configureKaalThemes } from '@dreamstack-us/kaal/themes';
 
 configureKaalThemes();
 ```
@@ -56,7 +56,7 @@ configureKaalThemes();
 ```typescript
 import React, { useState } from 'react';
 import { Temporal } from '@js-temporal/polyfill';
-import { DatePicker } from '@dreamstack/kaal';
+import { DatePicker } from '@dreamstack-us/kaal';
 
 export default function App() {
   const [date, setDate] = useState(Temporal.Now.plainDateISO());
