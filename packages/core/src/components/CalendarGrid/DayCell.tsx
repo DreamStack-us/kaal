@@ -1,11 +1,10 @@
-import type { Temporal } from '@js-temporal/polyfill';
 import type React from 'react';
 import { memo } from 'react';
 import { Pressable, Text } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
 
 interface DayCellProps {
-  date: Temporal.PlainDate | null;
+  date: Date | null;
   isSelected: boolean;
   isToday: boolean;
   isDisabled: boolean;
@@ -88,19 +87,19 @@ export const DayCell: React.FC<DayCellProps> = memo(
         onPress={onPress}
         disabled={isDisabled}
         accessibilityRole="button"
-        accessibilityLabel={date.toLocaleString('en-US', {
+        accessibilityLabel={new Intl.DateTimeFormat('en-US', {
           weekday: 'long',
           month: 'long',
           day: 'numeric',
-        })}
+        }).format(date)}
         accessibilityState={{ selected: isSelected, disabled: isDisabled }}
       >
-        <Text style={styles.text}>{date.day}</Text>
+        <Text style={styles.text}>{date.getUTCDate()}</Text>
       </Pressable>
     );
   },
   (prev, next) =>
-    prev.date?.toString() === next.date?.toString() &&
+    prev.date?.getTime() === next.date?.getTime() &&
     prev.isSelected === next.isSelected &&
     prev.isToday === next.isToday &&
     prev.isDisabled === next.isDisabled,
