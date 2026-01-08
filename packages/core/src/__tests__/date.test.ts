@@ -124,8 +124,12 @@ describe('date utilities', () => {
     test('returns correct days for January', () => {
       const days = getMonthDays(2024, 0);
       expect(days).toHaveLength(31);
-      expect(toISODateString(days[0]!)).toBe('2024-01-01');
-      expect(toISODateString(days[30]!)).toBe('2024-01-31');
+      const firstDay = days[0];
+      const lastDay = days[30];
+      if (firstDay && lastDay) {
+        expect(toISODateString(firstDay)).toBe('2024-01-01');
+        expect(toISODateString(lastDay)).toBe('2024-01-31');
+      }
     });
 
     test('returns correct days for February leap year', () => {
