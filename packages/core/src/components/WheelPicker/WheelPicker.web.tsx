@@ -1,11 +1,10 @@
-import type { Temporal } from '@js-temporal/polyfill';
 import type React from 'react';
 import { useCallback, useMemo } from 'react';
 import { StyleSheet as RNStyleSheet, Text, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
-  useSharedValue,
   useAnimatedStyle,
+  useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
 
@@ -14,32 +13,42 @@ const VISIBLE_ITEMS = 5;
 const CONTAINER_HEIGHT = ITEM_HEIGHT * VISIBLE_ITEMS;
 
 interface WheelPickerProps {
-  value: Temporal.PlainDate;
-  onChange: (date: Temporal.PlainDate) => void;
-  minDate?: Temporal.PlainDate;
-  maxDate?: Temporal.PlainDate;
+  value: Date;
+  onChange: (date: Date) => void;
+  minDate?: Date;
+  maxDate?: Date;
 }
+
+const getDaysInMonth = (year: number, month: number): number => {
+  return new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+};
 
 const generateDateItems = (
   type: 'day' | 'month' | 'year',
-  currentDate: Temporal.PlainDate,
-  minDate?: Temporal.PlainDate,
-  maxDate?: Temporal.PlainDate,
+  currentDate: Date,
+  minDate?: Date,
+  maxDate?: Date,
 ) => {
   if (type === 'day') {
-    return Array.from({ length: currentDate.daysInMonth }, (_, i) => ({
+    const daysInMonth = getDaysInMonth(
+      currentDate.getUTCFullYear(),
+      currentDate.getUTCMonth(),
+    );
+    return Array.from({ length: daysInMonth }, (_, i) => ({
       value: i + 1,
       label: String(i + 1).padStart(2, '0'),
     }));
   }
   if (type === 'month') {
     return Array.from({ length: 12 }, (_, i) => ({
-      value: i + 1,
+      value: i,
       label: new Date(2000, i).toLocaleString('en-US', { month: 'short' }),
     }));
   }
-  const minYear = minDate?.year ?? currentDate.year - 100;
-  const maxYear = maxDate?.year ?? currentDate.year + 10;
+  const minYear =
+    minDate?.getUTCFullYear() ?? currentDate.getUTCFullYear() - 100;
+  const maxYear =
+    maxDate?.getUTCFullYear() ?? currentDate.getUTCFullYear() + 10;
   return Array.from({ length: maxYear - minYear + 1 }, (_, i) => ({
     value: minYear + i,
     label: String(minYear + i),
@@ -125,7 +134,10 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
     (index: number) => {
       const newDay = days[index]?.value;
       if (newDay !== undefined) {
-        onChange(value.with({ day: newDay }));
+        const newDate = new Date(
+          Date.UTC(value.getUTCFullYear(), value.getUTCMonth(), newDay),
+        );
+        onChange(newDate);
       }
     },
     [value, days, onChange],
@@ -135,7 +147,12 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
     (index: number) => {
       const newMonth = months[index]?.value;
       if (newMonth !== undefined) {
-        onChange(value.with({ month: newMonth }));
+        const daysInNewMonth = getDaysInMonth(value.getUTCFullYear(), newMonth);
+        const newDay = Math.min(value.getUTCDate(), daysInNewMonth);
+        const newDate = new Date(
+          Date.UTC(value.getUTCFullYear(), newMonth, newDay),
+        );
+        onChange(newDate);
       }
     },
     [value, months, onChange],
@@ -145,7 +162,12 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
     (index: number) => {
       const newYear = years[index]?.value;
       if (newYear !== undefined) {
-        onChange(value.with({ year: newYear }));
+        const daysInNewMonth = getDaysInMonth(newYear, value.getUTCMonth());
+        const newDay = Math.min(value.getUTCDate(), daysInNewMonth);
+        const newDate = new Date(
+          Date.UTC(newYear, value.getUTCMonth(), newDay),
+        );
+        onChange(newDate);
       }
     },
     [value, years, onChange],
@@ -155,17 +177,19 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
     <View style={webStyles.container}>
       <WheelColumn
         items={months}
-        selectedIndex={value.month - 1}
+        selectedIndex={value.getUTCMonth()}
         onSelect={handleMonthChange}
       />
       <WheelColumn
         items={days}
-        selectedIndex={value.day - 1}
+        selectedIndex={value.getUTCDate() - 1}
         onSelect={handleDayChange}
       />
       <WheelColumn
         items={years}
-        selectedIndex={years.findIndex((y) => y.value === value.year)}
+        selectedIndex={years.findIndex(
+          (y) => y.value === value.getUTCFullYear(),
+        )}
         onSelect={handleYearChange}
       />
     </View>
