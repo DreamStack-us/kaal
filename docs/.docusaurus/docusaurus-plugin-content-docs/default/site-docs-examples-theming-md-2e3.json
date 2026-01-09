@@ -1,0 +1,27 @@
+{
+  "id": "examples/theming",
+  "title": "Theming",
+  "description": "Kaal uses react-native-unistyles v3 for theming. Customize colors, spacing, and typography to match your app's design.",
+  "source": "@site/docs/examples/theming.md",
+  "sourceDirName": "examples",
+  "slug": "/examples/theming",
+  "permalink": "/kaal/docs/examples/theming",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/DreamStack-us/kaal/tree/main/docs/docs/examples/theming.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 5,
+  "frontMatter": {
+    "sidebar_position": 5
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "TimePicker (Material Style)",
+    "permalink": "/kaal/docs/examples/timepicker-material"
+  },
+  "next": {
+    "title": "Installation",
+    "permalink": "/kaal/docs/guides/installation"
+  }
+}

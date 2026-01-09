@@ -1,0 +1,27 @@
+{
+  "id": "api/calendar-grid",
+  "title": "CalendarGrid",
+  "description": "The CalendarGrid component displays a month calendar with selectable days. It's the building block for the DatePicker calendar variant.",
+  "source": "@site/docs/api/calendar-grid.md",
+  "sourceDirName": "api",
+  "slug": "/api/calendar-grid",
+  "permalink": "/kaal/docs/api/calendar-grid",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/DreamStack-us/kaal/tree/main/docs/docs/api/calendar-grid.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "sidebar_position": 3
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "TimePicker",
+    "permalink": "/kaal/docs/api/timepicker"
+  },
+  "next": {
+    "title": "WheelPicker",
+    "permalink": "/kaal/docs/api/wheel-picker"
+  }
+}

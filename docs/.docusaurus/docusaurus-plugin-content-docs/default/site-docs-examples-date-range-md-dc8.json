@@ -1,0 +1,27 @@
+{
+  "id": "examples/date-range",
+  "title": "Date Range Selection",
+  "description": "Examples for selecting date ranges.",
+  "source": "@site/docs/examples/date-range.md",
+  "sourceDirName": "examples",
+  "slug": "/examples/date-range",
+  "permalink": "/kaal/docs/examples/date-range",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/DreamStack-us/kaal/tree/main/docs/docs/examples/date-range.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "sidebar_position": 2
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Basic DatePicker",
+    "permalink": "/kaal/docs/examples/basic-datepicker"
+  },
+  "next": {
+    "title": "TimePicker (iOS Style)",
+    "permalink": "/kaal/docs/examples/timepicker-ios"
+  }
+}

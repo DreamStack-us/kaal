@@ -1,0 +1,27 @@
+{
+  "id": "api/datepicker",
+  "title": "DatePicker",
+  "description": "The DatePicker component provides a flexible date selection interface with multiple variants and themes.",
+  "source": "@site/docs/api/datepicker.md",
+  "sourceDirName": "api",
+  "slug": "/api/datepicker",
+  "permalink": "/kaal/docs/api/datepicker",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/DreamStack-us/kaal/tree/main/docs/docs/api/datepicker.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Getting Started",
+    "permalink": "/kaal/docs/getting-started"
+  },
+  "next": {
+    "title": "TimePicker",
+    "permalink": "/kaal/docs/api/timepicker"
+  }
+}
