@@ -54,18 +54,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.CHANGELOG_GITHUB_TOKEN }}
           # NO NPM_TOKEN needed - uses OIDC via Trusted Publishers
 
-      - name: Publish unscoped packages
-        if: steps.changesets.outputs.published == 'true'
-        run: node scripts/publish-unscoped.js
-
       - name: Release Summary
         if: steps.changesets.outputs.published == 'true'
         run: |
           echo "## Packages Published" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Scoped packages (@dreamstack-us)" >> $GITHUB_STEP_SUMMARY
           echo '${{ steps.changesets.outputs.publishedPackages }}' >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Unscoped packages" >> $GITHUB_STEP_SUMMARY
-          echo "- kaal" >> $GITHUB_STEP_SUMMARY
-          echo "- kaal-themes" >> $GITHUB_STEP_SUMMARY
