@@ -1,15 +1,27 @@
-import React, {useEffect} from 'react';
-import {useLocation} from '@docusaurus/router';
+import { useLocation } from '@docusaurus/router';
+import type React from 'react';
+import { useEffect } from 'react';
 
-function initSnack() {
-  if (typeof window !== 'undefined' && (window as any).ExpoSnack) {
-    (window as any).ExpoSnack.initialize();
+declare global {
+  interface Window {
+    ExpoSnack?: {
+      initialize: () => void;
+    };
   }
 }
 
-export default function Root({children}: {children: React.ReactNode}): JSX.Element {
+function initSnack() {
+  if (typeof window !== 'undefined' && window.ExpoSnack) {
+    window.ExpoSnack.initialize();
+  }
+}
+
+export default function Root({
+  children,
+}: { children: React.ReactNode }): JSX.Element {
   const location = useLocation();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Re-initialize snacks on route changes
   useEffect(() => {
     // Initialize immediately if ExpoSnack is ready
     initSnack();

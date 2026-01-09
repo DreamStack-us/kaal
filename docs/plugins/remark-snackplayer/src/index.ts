@@ -1,8 +1,6 @@
-'use strict';
-
-import {visitParents as visit} from 'unist-util-visit-parents';
-import type {Code} from 'mdast';
-import type {Node} from 'unist';
+import type { Code } from 'mdast';
+import type { Node } from 'unist';
+import { visitParents as visit } from 'unist-util-visit-parents';
 
 function parseParams(paramString = '') {
   const params = Object.fromEntries(new URLSearchParams(paramString));
@@ -30,7 +28,9 @@ async function toJsxNode(node: Code) {
   const description = params.description
     ? decodeURIComponent(params.description)
     : 'Example usage';
-  const dependencies = params.dependencies ?? '@dreamstack-us/kaal,@dreamstack-us/kaal-themes,react-native-unistyles';
+  const dependencies =
+    params.dependencies ??
+    '@dreamstack-us/kaal,@dreamstack-us/kaal-themes,react-native-unistyles';
   const platform = params.platform ?? 'web';
   const supportedPlatforms = params.supportedPlatforms ?? 'ios,android,web';
   const theme = params.theme ?? 'light';

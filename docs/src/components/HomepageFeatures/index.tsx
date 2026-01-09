@@ -14,7 +14,8 @@ const FeatureList: FeatureItem[] = [
     icon: '⚡',
     description: (
       <>
-        Lightweight and optimized. No bloated dependencies, just the essentials for smooth date and time picking.
+        Lightweight and optimized. No bloated dependencies, just the essentials
+        for smooth date and time picking.
       </>
     ),
   },
@@ -23,7 +24,8 @@ const FeatureList: FeatureItem[] = [
     icon: '📅',
     description: (
       <>
-        Uses native JavaScript Date and Intl APIs. No Temporal polyfill required, keeping your bundle lean.
+        Uses native JavaScript Date and Intl APIs. No Temporal polyfill
+        required, keeping your bundle lean.
       </>
     ),
   },
@@ -32,7 +34,8 @@ const FeatureList: FeatureItem[] = [
     icon: '🕐',
     description: (
       <>
-        Material Design 3 clock face for time selection. Touch-friendly analog dial with smooth animations.
+        Material Design 3 clock face for time selection. Touch-friendly analog
+        dial with smooth animations.
       </>
     ),
   },
@@ -41,7 +44,8 @@ const FeatureList: FeatureItem[] = [
     icon: '📱',
     description: (
       <>
-        Works seamlessly on iOS, Android, and Web. Platform-specific optimizations with consistent APIs.
+        Works seamlessly on iOS, Android, and Web. Platform-specific
+        optimizations with consistent APIs.
       </>
     ),
   },
@@ -50,7 +54,8 @@ const FeatureList: FeatureItem[] = [
     icon: '🎨',
     description: (
       <>
-        Advanced theming with react-native-unistyles. Dark mode, custom themes, and design tokens built-in.
+        Advanced theming with react-native-unistyles. Dark mode, custom themes,
+        and design tokens built-in.
       </>
     ),
   },
@@ -59,7 +64,8 @@ const FeatureList: FeatureItem[] = [
     icon: '🚀',
     description: (
       <>
-        Built for React Native 0.78+ and the New Architecture. TurboModules and Fabric ready.
+        Built for React Native 0.78+ and the New Architecture. TurboModules and
+        Fabric ready.
       </>
     ),
   },
@@ -82,8 +88,8 @@ export default function HomepageFeatures(): ReactNode {
     <section className={styles.features}>
       <div className="container">
         <div className={styles.featureRow}>
-          {FeatureList.map((props, idx) => (
-            <Feature key={idx} {...props} />
+          {FeatureList.map((props) => (
+            <Feature key={props.title} {...props} />
           ))}
         </div>
       </div>

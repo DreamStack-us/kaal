@@ -7,7 +7,14 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": ["**/lib", "**/.turbo", "**/.expo", "**/node_modules"]
+    "ignore": [
+      "**/lib",
+      "**/.turbo",
+      "**/.expo",
+      "**/node_modules",
+      "**/.docusaurus",
+      "**/build"
+    ]
   },
   "formatter": {
     "enabled": true,
