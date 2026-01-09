@@ -2,88 +2,159 @@
 sidebar_position: 5
 ---
 
-import ExpoSnackEmbed from '@site/src/components/ExpoSnackEmbed';
-
 # Theming
 
 Kaal uses react-native-unistyles v3 for theming. Customize colors, spacing, and typography to match your app's design.
 
-## Try it Live
+## Live Example
 
-<ExpoSnackEmbed snackId="@dreamstack-us/kaal-theming" />
+```SnackPlayer name=Theming%20Example&dependencies=@dreamstack-us/kaal,@dreamstack-us/kaal-themes,react-native-unistyles
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { DatePicker, toISODateString, KaalProvider } from '@dreamstack-us/kaal';
+import { kaalNativeTheme, kaalIOSTheme, kaalMaterialTheme } from '@dreamstack-us/kaal-themes';
+
+const themes = {
+  native: kaalNativeTheme,
+  ios: kaalIOSTheme,
+  material: kaalMaterialTheme,
+};
+
+export default function App() {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [activeTheme, setActiveTheme] = useState('native');
+
+  return (
+    <KaalProvider theme={themes[activeTheme]}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Theme Switcher</Text>
+
+        <View style={styles.themeButtons}>
+          {Object.keys(themes).map((themeName) => (
+            <Pressable
+              key={themeName}
+              style={[
+                styles.button,
+                activeTheme === themeName && styles.buttonActive,
+              ]}
+              onPress={() => setActiveTheme(themeName)}
+            >
+              <Text style={[
+                styles.buttonText,
+                activeTheme === themeName && styles.buttonTextActive,
+              ]}>
+                {themeName}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
+
+        <Text style={styles.label}>
+          Selected: {toISODateString(selectedDate)}
+        </Text>
+
+        <DatePicker
+          value={selectedDate}
+          onChange={setSelectedDate}
+          variant="calendar"
+        />
+      </View>
+    </KaalProvider>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#f8fafc',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: '600',
+    marginBottom: 16,
+  },
+  themeButtons: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 16,
+  },
+  button: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    backgroundColor: '#e2e8f0',
+  },
+  buttonActive: {
+    backgroundColor: '#3b82f6',
+  },
+  buttonText: {
+    color: '#64748b',
+    fontWeight: '500',
+  },
+  buttonTextActive: {
+    color: '#ffffff',
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 16,
+    color: '#666',
+  },
+});
+```
 
 ## Setup
 
-First, configure the Kaal themes:
+Wrap your app with `KaalProvider` and pass a theme:
 
 ```tsx
-// App.tsx or index.tsx
-import { configureKaalThemes } from '@dreamstack-us/kaal-themes';
+import { KaalProvider } from '@dreamstack-us/kaal';
+import { kaalNativeTheme } from '@dreamstack-us/kaal-themes';
 
-// Call this once before rendering
-configureKaalThemes();
-```
-
-## Using Built-in Themes
-
-Kaal includes light and dark themes that work out of the box:
-
-```tsx
-import { DatePicker } from '@dreamstack-us/kaal';
-import { useColorScheme } from 'react-native';
-
-export function ThemedDatePicker() {
-  // Theme automatically responds to system color scheme
+export default function App() {
   return (
-    <DatePicker
-      value={date}
-      onChange={setDate}
-      theme="custom" // Uses Unistyles theme
-    />
+    <KaalProvider theme={kaalNativeTheme}>
+      {/* Your app */}
+    </KaalProvider>
   );
 }
 ```
 
-## Customizing Theme Colors
+## Built-in Themes
 
-You can extend or override the default themes:
+Kaal includes three ready-to-use themes:
 
 ```tsx
-import { lightTheme, darkTheme } from '@dreamstack-us/kaal-themes';
-import { UnistylesRegistry } from 'react-native-unistyles';
+import {
+  kaalNativeTheme,   // Cross-platform native look
+  kaalIOSTheme,      // iOS-specific styling
+  kaalMaterialTheme, // Material Design 3
+} from '@dreamstack-us/kaal-themes';
+```
 
-const customLightTheme = {
-  ...lightTheme,
+## Custom Themes
+
+Create your own theme by extending the base:
+
+```tsx
+import { createKaalTheme } from '@dreamstack-us/kaal-themes';
+
+const customTheme = createKaalTheme({
   colors: {
-    ...lightTheme.colors,
-    primary: {
-      default: '#c41e3a',    // Your brand color
-      hover: '#e63950',
-      pressed: '#8b1a1a',
-    },
-    datepicker: {
-      ...lightTheme.colors.datepicker,
-      cellSelected: '#c41e3a',
-      cellToday: '#d4af37',
-    },
+    primary: '#c41e3a',    // Your brand color
+    background: '#fffbf5', // App background
+    surface: '#ffffff',    // Card/elevated surfaces
+    text: '#2d1810',       // Primary text
+    textSecondary: '#6b5344',
   },
-};
-
-const customDarkTheme = {
-  ...darkTheme,
-  colors: {
-    ...darkTheme.colors,
-    primary: {
-      default: '#e63950',
-      hover: '#f06070',
-      pressed: '#c41e3a',
-    },
+  datepicker: {
+    cellSelected: '#c41e3a',
+    cellToday: '#d4af37',
   },
-};
-
-UnistylesRegistry.addThemes({
-  light: customLightTheme,
-  dark: customDarkTheme,
+  timepicker: {
+    clockHand: '#c41e3a',
+    clockCenter: '#d4af37',
+  },
 });
 ```
 
@@ -93,21 +164,14 @@ UnistylesRegistry.addThemes({
 
 ```tsx
 datepicker: {
-  // Cell backgrounds
   cellBackground: string;
   cellSelected: string;
   cellToday: string;
-
-  // Text colors
   textDefault: string;
   textSelected: string;
   textDisabled: string;
   textWeekend: string;
-
-  // Header
   headerBackground: string;
-
-  // Wheel picker
   wheelHighlight: string;
 }
 ```
@@ -122,7 +186,6 @@ timepicker: {
   clockNumber: string;
   clockNumberSelected: string;
   clockCenter: string;
-  clockMarker: string;
 
   // AM/PM toggle
   periodBackground: string;
@@ -130,119 +193,34 @@ timepicker: {
   periodText: string;
   periodTextSelected: string;
 
-  // Time display
-  timeFieldBackground: string;
-  timeFieldBackgroundSelected: string;
-  timeFieldText: string;
-  timeFieldTextSelected: string;
-
   // Wheel picker
   wheelBackground: string;
-  wheelSeparator: string;
   wheelText: string;
   wheelTextSelected: string;
 }
 ```
 
-## Platform-Specific Themes
+## Dark Mode
 
-Apply different themes based on platform:
+Handle dark mode by switching themes based on color scheme:
 
 ```tsx
-import { Platform } from 'react-native';
-import { DatePicker } from '@dreamstack-us/kaal';
+import { useColorScheme } from 'react-native';
+import { kaalNativeTheme, kaalNativeDarkTheme } from '@dreamstack-us/kaal-themes';
 
-export function PlatformDatePicker() {
+export default function App() {
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === 'dark' ? kaalNativeDarkTheme : kaalNativeTheme;
+
   return (
-    <DatePicker
-      value={date}
-      onChange={setDate}
-      theme={Platform.select({
-        ios: 'ios',
-        android: 'android',
-        default: 'custom',
-      })}
-    />
+    <KaalProvider theme={theme}>
+      {/* Your app */}
+    </KaalProvider>
   );
 }
 ```
 
-## Dark Mode
+## Next Steps
 
-Kaal automatically responds to system dark mode when using Unistyles:
-
-```tsx
-import { UnistylesRuntime } from 'react-native-unistyles';
-
-// Manually toggle theme
-UnistylesRuntime.setTheme('dark');
-
-// Or let it follow system
-UnistylesRuntime.setAdaptiveThemes(true);
-```
-
-## Example: Custom Brand Theme
-
-```tsx
-import { lightTheme, darkTheme, primitiveTokens } from '@dreamstack-us/kaal-themes';
-import { UnistylesRegistry } from 'react-native-unistyles';
-
-// Custom brand colors
-const brandColors = {
-  crimson: '#c41e3a',
-  gold: '#d4af37',
-  charcoal: '#1a1f2e',
-  ivory: '#fffbf5',
-};
-
-const brandLightTheme = {
-  ...lightTheme,
-  colors: {
-    ...lightTheme.colors,
-    background: {
-      default: brandColors.ivory,
-      elevated: '#ffffff',
-      subtle: '#fff9e6',
-    },
-    primary: {
-      default: brandColors.crimson,
-      hover: '#e63950',
-      pressed: '#8b1a1a',
-    },
-    datepicker: {
-      ...lightTheme.colors.datepicker,
-      cellSelected: brandColors.crimson,
-      cellToday: brandColors.gold,
-    },
-    timepicker: {
-      ...lightTheme.colors.timepicker,
-      clockHand: brandColors.crimson,
-      clockCenter: brandColors.gold,
-    },
-  },
-};
-
-const brandDarkTheme = {
-  ...darkTheme,
-  colors: {
-    ...darkTheme.colors,
-    background: {
-      default: brandColors.charcoal,
-      elevated: '#242938',
-      subtle: '#2d3348',
-    },
-    primary: {
-      default: brandColors.crimson,
-      hover: '#e63950',
-      pressed: '#8b1a1a',
-    },
-  },
-};
-
-UnistylesRegistry.addThemes({
-  light: brandLightTheme,
-  dark: brandDarkTheme,
-}).addConfig({
-  adaptiveThemes: true,
-});
-```
+- [Basic DatePicker](/docs/examples/basic-datepicker) - Get started with date selection
+- [TimePicker iOS](/docs/examples/timepicker-ios) - iOS-style wheel picker
