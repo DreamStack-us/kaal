@@ -16,8 +16,9 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "turbo run build --filter='./packages/*' && changeset publish",
-    "ci:version": "changeset version && bun update",
-    "ci:publish": "turbo run build --filter='./packages/*' && changeset publish && changeset tag",
+    "ci:version": "changeset version",
+    "ci:publish": "turbo run build --filter='./packages/*' && changeset publish",
+    "ci:publish-unscoped": "node scripts/publish-unscoped.js",
     "size": "turbo run size"
   },
   "devDependencies": {
