@@ -1,5 +1,5 @@
-import React from "react";
-import styles from "./styles.module.css";
+import type React from 'react';
+import styles from './styles.module.css';
 
 interface ExpoSnackEmbedProps {
   /**
@@ -18,11 +18,11 @@ interface ExpoSnackEmbedProps {
   /**
    * Platform to preview: 'ios' | 'android' | 'web' (default: 'ios')
    */
-  platform?: "ios" | "android" | "web";
+  platform?: 'ios' | 'android' | 'web';
   /**
    * Theme: 'light' | 'dark' (default: follows Docusaurus theme)
    */
-  theme?: "light" | "dark";
+  theme?: 'light' | 'dark';
   /**
    * Whether to show the device frame in preview
    */
@@ -33,26 +33,26 @@ export default function ExpoSnackEmbed({
   snackId,
   height = 500,
   preview = true,
-  platform = "ios",
+  platform = 'ios',
   theme,
   deviceFrame = true,
 }: ExpoSnackEmbedProps): React.ReactElement {
   // Build the snack URL with parameters
-  const baseUrl = snackId.startsWith("http")
+  const baseUrl = snackId.startsWith('http')
     ? snackId
     : `https://snack.expo.dev/${snackId}`;
 
   const params = new URLSearchParams({
-    embed: "1",
-    preview: preview ? "true" : "false",
+    embed: '1',
+    preview: preview ? 'true' : 'false',
     platform,
-    hideQueryParams: "true",
-    deviceFrame: deviceFrame ? "true" : "false",
+    hideQueryParams: 'true',
+    deviceFrame: deviceFrame ? 'true' : 'false',
   });
 
   // Theme follows Docusaurus if not specified
   if (theme) {
-    params.set("theme", theme);
+    params.set('theme', theme);
   }
 
   const snackUrl = `${baseUrl}?${params.toString()}`;

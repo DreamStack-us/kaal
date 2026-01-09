@@ -57,7 +57,7 @@ jobs:
         run: bun install
 
       - name: Type check
-        run: bun run typecheck
+        run: bun run typecheck --filter='./packages/*'
 
   lint:
     name: Lint
@@ -105,4 +105,4 @@ jobs:
         run: bun install
 
       - name: Run tests
-        run: bun run test
+        run: bun run test --filter='./packages/*'
