@@ -10,7 +10,7 @@
       "inputs": ["src/**", "package.json", "tsconfig.json", "bob.config.js"]
     },
     "typecheck": {
-      "dependsOn": ["^typecheck"],
+      "dependsOn": ["^build"],
       "outputs": []
     },
     "lint": {
