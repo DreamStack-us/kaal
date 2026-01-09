@@ -13,7 +13,7 @@ Before publishing, ensure:
 - [ ] Bundle size within limits: `bun run size` (<25kB)
 - [ ] CHANGELOG is updated
 - [ ] README examples work
-- [ ] expo-example demonstrates new features
+- [ ] Snack embeds in docs demonstrate features
 
 ## Changeset Workflow
 

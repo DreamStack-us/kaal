@@ -104,7 +104,7 @@ Before merging any PR:
 - [ ] `bun run build` succeeds
 - [ ] `bun run size` within 25kB limit
 - [ ] `bun test` passes
-- [ ] Manual testing in expo-example
+- [ ] Manual testing via Snack embed or local build
 
 ## Best Practices
 

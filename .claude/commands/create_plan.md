@@ -80,7 +80,7 @@ status: draft
 - [ ] `bun test` passes
 
 ### Manual Verification
-- [ ] Component renders in expo-example
+- [ ] Component renders correctly (test via Snack embed)
 - [ ] Animations are smooth (60fps)
 - [ ] Platform behavior is correct
 - [ ] Theme switching works

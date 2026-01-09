@@ -7,7 +7,7 @@ You are tasked with conducting comprehensive research across the Kaal DatePicker
 Kaal is a high-performance React Native DatePicker library with:
 - **Core Library**: `packages/core` - Main DatePicker components
 - **Theme System**: `packages/themes` - Unistyles v3 theming
-- **Example App**: `apps/expo-example` - Demo and testing app
+- **Documentation**: `docs/` - Docusaurus site with Expo Snack embeds
 
 ## Key Areas to Research
 

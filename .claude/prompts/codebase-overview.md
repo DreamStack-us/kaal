@@ -11,8 +11,8 @@
 │          DatePicker, CalendarGrid, WheelPicker               │
 │          Platform: iOS / Android / Web                       │
 ├─────────────────────────────────────────────────────────────┤
-│                   apps/expo-example                          │
-│                   (Demo & Testing)                           │
+│                      docs/ site                              │
+│            (Docusaurus + SnackPlayer embeds)                 │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -59,17 +59,6 @@ packages/themes/
 └── package.json
 ```
 
-### apps/expo-example/ (Demo App)
-
-```
-apps/expo-example/
-├── app/
-│   └── index.tsx            # Demo screen
-├── unistyles.ts             # Theme configuration
-├── app.json                 # Expo config
-└── package.json
-```
-
 ## Styling Pattern
 
 Uses **react-native-unistyles** (NOT StyleSheet.create):
@@ -88,7 +77,6 @@ const styles = StyleSheet.create((theme) => ({
 ## Build Commands
 
 ```bash
-bun run dev:expo     # Start Expo example
 bun run build        # Build packages
 bun run typecheck    # TypeScript check
 bun run lint         # Biome lint
