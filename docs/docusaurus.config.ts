@@ -1,6 +1,7 @@
 import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import remarkSnackPlayer from './plugins/remark-snackplayer/src/index';
 
 const config: Config = {
   title: 'Kaal',
@@ -21,6 +22,14 @@ const config: Config = {
 
   onBrokenLinks: 'throw',
 
+  // Expo Snack integration
+  scripts: [
+    {
+      src: 'https://snack.expo.dev/embed.js',
+      async: true,
+    },
+  ],
+
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
@@ -33,6 +42,7 @@ const config: Config = {
         docs: {
           sidebarPath: './sidebars.ts',
           editUrl: 'https://github.com/DreamStack-us/kaal/tree/main/docs/',
+          remarkPlugins: [remarkSnackPlayer],
         },
         blog: false,
         theme: {

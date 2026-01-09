@@ -291,3 +291,15 @@ a:not(.button):not(.navbar__link):not(.menu__link):not(.footer__link-item):hover
 [data-theme='dark'] .clock-bg::after {
   opacity: 0.3;
 }
+
+/* ============================================
+   EXPO SNACK PLAYER
+   ============================================ */
+.snack-player {
+  height: 505px;
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 16px;
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: 8px;
+}
