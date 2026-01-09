@@ -14,5 +14,5 @@
     "version": true,
     "tag": false
   },
-  "ignore": ["expo-example", "web-example"]
+  "ignore": []
 }
