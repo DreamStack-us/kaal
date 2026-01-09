@@ -2,9 +2,15 @@
 sidebar_position: 1
 ---
 
+import ExpoSnackEmbed from '@site/src/components/ExpoSnackEmbed';
+
 # Basic DatePicker
 
 A simple date picker with calendar view.
+
+## Try it Live
+
+<ExpoSnackEmbed snackId="@dreamstack-us/kaal-basic-datepicker" />
 
 ## Calendar Variant
 

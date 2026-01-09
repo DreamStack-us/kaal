@@ -2,9 +2,15 @@
 sidebar_position: 5
 ---
 
+import ExpoSnackEmbed from '@site/src/components/ExpoSnackEmbed';
+
 # Theming
 
 Kaal uses react-native-unistyles v3 for theming. Customize colors, spacing, and typography to match your app's design.
+
+## Try it Live
+
+<ExpoSnackEmbed snackId="@dreamstack-us/kaal-theming" />
 
 ## Setup
 
