@@ -7,9 +7,6 @@ Help debug issues during Kaal development.
 ### Metro Bundler Issues
 
 ```bash
-# Clear Metro cache
-cd apps/expo-example && bun expo start --clear
-
 # Reset Metro completely
 rm -rf node_modules/.cache
 watchman watch-del-all  # if using watchman
@@ -88,5 +85,5 @@ bun run lint -- --write
 2. **Check error messages** - Read full stack trace
 3. **Identify the source** - Component, hook, or utility?
 4. **Add logging** - Use console.log strategically
-5. **Test fix** - Verify in expo-example
+5. **Test fix** - Verify via Snack embed or local build
 6. **Clean up** - Remove debug logs before committing

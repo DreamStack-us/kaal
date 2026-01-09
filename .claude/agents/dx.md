@@ -28,9 +28,9 @@ model: sonnet
 - JSDoc comments
 - Type documentation
 
-### Example App
+### Interactive Examples
 
-- apps/expo-example coverage
+- Expo Snack embeds in documentation
 - Real-world usage patterns
 - Edge case demonstrations
 
@@ -91,7 +91,7 @@ README.md
 When invoked, analyze:
 
 1. **Prop documentation** - Are props well-documented?
-2. **Example coverage** - Does expo-example show all features?
+2. **Example coverage** - Do Snack embeds show all features?
 3. **Error messages** - Are errors helpful?
 4. **TypeScript inference** - Do types provide good IntelliSense?
 5. **README accuracy** - Do examples actually work?

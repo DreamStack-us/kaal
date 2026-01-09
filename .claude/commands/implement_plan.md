@@ -70,8 +70,8 @@ bun run size            # Bundle size check (<25kB)
 ## Pause Points
 
 Pause for manual testing after:
-- Component renders in expo-example
+- Component renders correctly (verify via Snack embed or local build)
 - Animation implementations
 - Platform-specific code changes
 
-Ask user to test in the expo-example app before proceeding.
+Ask user to test via Snack embed or local build before proceeding.

@@ -88,7 +88,7 @@ Generate report to: `thoughts/shared/plans/YYYY-MM-DD-{plan-name}-validation.md`
 
 ## Manual Testing Required
 
-- [ ] Component renders in expo-example
+- [ ] Component renders correctly (test via Snack embed)
 - [ ] Animations smooth on device
 - [ ] Theme switching works
 - [ ] Edge cases handled

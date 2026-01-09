@@ -11,8 +11,6 @@
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules",
-    "dev:expo": "turbo run dev --filter=expo-example...",
-    "dev:web": "turbo run dev --filter=web-example...",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "turbo run build --filter='./packages/*' && changeset publish",
