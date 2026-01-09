@@ -1,3 +1,4 @@
+import { componentTokens } from '../tokens/component';
 import { primitiveTokens } from '../tokens/primitive';
 
 export const darkTheme = {
@@ -32,6 +33,7 @@ export const darkTheme = {
       headerBackground: '#1E1E1E',
       wheelHighlight: 'rgba(255, 255, 255, 0.08)',
     },
+    timepicker: componentTokens.timepicker.dark,
   },
   spacing: (multiplier: number) => multiplier * 4,
   radii: {

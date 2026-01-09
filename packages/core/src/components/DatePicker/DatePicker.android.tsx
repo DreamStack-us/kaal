@@ -1,25 +1,33 @@
-import React, { useCallback, Suspense } from 'react';
-import { View, ActivityIndicator } from 'react-native';
-import { Temporal } from '@js-temporal/polyfill';
-import type { KaalDatePickerProps } from './DatePicker';
+import React, { Suspense, useCallback } from 'react';
+import { ActivityIndicator, View } from 'react-native';
+import { toISODateString } from '../../utils/date';
 import { CalendarGrid } from '../CalendarGrid';
+import type { KaalDatePickerProps } from './DatePicker';
 import { styles } from './DatePicker.styles';
 
+interface ExpoDatePickerProps {
+  value: Date;
+  onChange: (date: Date) => void;
+}
+
+// @ts-expect-error - React.lazy fallback returns null when @expo/ui unavailable
 const ExpoDatePicker = React.lazy(async () => {
   try {
+    // @ts-expect-error - @expo/ui types not available
     const { DateTimePicker } = await import('@expo/ui/jetpack-compose');
     return {
-      default: ({ value, onChange }: any) => (
+      default: ({ value, onChange }: ExpoDatePickerProps) => (
         <DateTimePicker
           onDateSelected={onChange}
           displayedComponents="date"
-          initialDate={value.toString()}
+          initialDate={toISODateString(value)}
           variant="picker"
         />
       ),
     };
   } catch {
-    return { default: () => null };
+    // Fallback when @expo/ui is not available
+    return { default: (_props: ExpoDatePickerProps) => null };
   }
 });
 
@@ -32,14 +40,10 @@ export const DatePicker: React.FC<KaalDatePickerProps> = ({
   disabledDates,
 }) => {
   const handleDateChange = useCallback(
-    (date: Date | Temporal.PlainDate) => {
-      const plainDate =
-        date instanceof Date
-          ? Temporal.PlainDate.from(date.toISOString().split('T')[0])
-          : date;
-      onChange(plainDate);
+    (date: Date) => {
+      onChange(date);
     },
-    [onChange]
+    [onChange],
   );
 
   if (theme === 'native') {

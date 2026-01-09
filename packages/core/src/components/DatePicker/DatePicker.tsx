@@ -1,17 +1,15 @@
-import React from 'react';
-import { Platform } from 'react-native';
-import type { Temporal } from '@js-temporal/polyfill';
+import type React from 'react';
 import type { DatePickerMode } from '../../types';
 
 export interface KaalDatePickerProps {
-  value: Temporal.PlainDate;
-  onChange: (date: Temporal.PlainDate) => void;
+  value: Date;
+  onChange: (date: Date) => void;
   mode?: DatePickerMode;
   theme?: 'native' | 'ios' | 'android' | 'custom';
   variant?: 'wheel' | 'calendar' | 'compact';
-  minDate?: Temporal.PlainDate;
-  maxDate?: Temporal.PlainDate;
-  disabledDates?: Temporal.PlainDate[];
+  minDate?: Date;
+  maxDate?: Date;
+  disabledDates?: Date[];
   locale?: string;
 }
 

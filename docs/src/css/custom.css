@@ -1,0 +1,319 @@
+/**
+ * Kaal Documentation Theme
+ *
+ * Dark Theme: Kali-inspired (power, time, depth, mystery)
+ * Light Theme: Durga-inspired (radiance, warmth, golden light)
+ */
+
+/* ============================================
+   LIGHT THEME (Durga-inspired)
+   ============================================ */
+:root {
+  /* Primary Colors - Rich Crimson */
+  --ifm-color-primary: #b91c1c;
+  --ifm-color-primary-dark: #991b1b;
+  --ifm-color-primary-darker: #7f1d1d;
+  --ifm-color-primary-darkest: #450a0a;
+  --ifm-color-primary-light: #dc2626;
+  --ifm-color-primary-lighter: #ef4444;
+  --ifm-color-primary-lightest: #f87171;
+
+  /* Background - Warm ivory/cream */
+  --ifm-background-color: #fffbf5;
+  --ifm-background-surface-color: #ffffff;
+  --kaal-background-subtle: #fff9e6;
+
+  /* Accent - Dark gold */
+  --kaal-accent: #b8860b;
+  --kaal-accent-light: #d4af37;
+
+  /* Text - Deep warm brown */
+  --ifm-font-color-base: #2d1810;
+  --kaal-text-muted: #6b5344;
+
+  /* Borders */
+  --ifm-toc-border-color: #e7d5c4;
+  --docusaurus-highlighted-code-line-bg: rgba(185, 28, 28, 0.1);
+
+  /* Navbar */
+  --ifm-navbar-background-color: #fffbf5;
+  --ifm-navbar-shadow: 0 1px 2px 0 rgba(45, 24, 16, 0.05);
+
+  /* Footer */
+  --ifm-footer-background-color: #1a1f2e;
+
+  /* Code */
+  --ifm-code-font-size: 95%;
+}
+
+/* ============================================
+   DARK THEME (Kali-inspired)
+   ============================================ */
+[data-theme="dark"] {
+  /* Primary Colors - Deep Crimson */
+  --ifm-color-primary: #c41e3a;
+  --ifm-color-primary-dark: #b01a34;
+  --ifm-color-primary-darker: #8b1a1a;
+  --ifm-color-primary-darkest: #5c1111;
+  --ifm-color-primary-light: #e63950;
+  --ifm-color-primary-lighter: #f06070;
+  --ifm-color-primary-lightest: #f8a0a8;
+
+  /* Background - Deep charcoal with blue undertone */
+  --ifm-background-color: #1a1f2e;
+  --ifm-background-surface-color: #242938;
+  --kaal-background-subtle: #2d3348;
+
+  /* Accent - Gold/brass */
+  --kaal-accent: #d4af37;
+  --kaal-accent-light: #f0d77c;
+
+  /* Text - Warm off-white */
+  --ifm-font-color-base: #e8e6e3;
+  --kaal-text-muted: #9ca3af;
+
+  /* Borders */
+  --ifm-toc-border-color: #374151;
+  --docusaurus-highlighted-code-line-bg: rgba(196, 30, 58, 0.2);
+
+  /* Navbar */
+  --ifm-navbar-background-color: #1a1f2e;
+  --ifm-navbar-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+
+  /* Footer */
+  --ifm-footer-background-color: #0f1219;
+}
+
+/* ============================================
+   COMPONENT STYLING
+   ============================================ */
+
+/* Navbar */
+.navbar {
+  border-bottom: 1px solid var(--ifm-toc-border-color);
+}
+
+.navbar__logo {
+  border-radius: 6px;
+}
+
+.navbar__title {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(
+    135deg,
+    var(--ifm-background-color) 0%,
+    var(--kaal-background-subtle) 100%
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, var(--kaal-accent) 0%, transparent 70%);
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+.hero__title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(
+    135deg,
+    var(--ifm-color-primary) 0%,
+    var(--kaal-accent) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero__subtitle {
+  color: var(--kaal-text-muted);
+  font-size: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Feature Cards */
+.feature-card {
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .feature-card:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+}
+
+.feature-card__icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.feature-card__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--ifm-font-color-base);
+}
+
+.feature-card__description {
+  color: var(--kaal-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Accent highlights */
+.accent-text {
+  color: var(--kaal-accent);
+  font-weight: 600;
+}
+
+[data-theme="dark"] .accent-text {
+  color: var(--kaal-accent-light);
+}
+
+/* Buttons */
+.button--primary {
+  background: linear-gradient(
+    135deg,
+    var(--ifm-color-primary) 0%,
+    var(--ifm-color-primary-dark) 100%
+  );
+  border: none;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3);
+}
+
+.button--secondary {
+  border: 2px solid var(--kaal-accent);
+  color: var(--kaal-accent);
+  background: transparent;
+  font-weight: 600;
+}
+
+.button--secondary:hover {
+  background: var(--kaal-accent);
+  color: #1a1f2e;
+}
+
+/* Code blocks */
+.prism-code {
+  border-radius: 8px;
+}
+
+/* Sidebar */
+.menu__link--active:not(.menu__link--sublist) {
+  font-weight: 600;
+}
+
+/* TOC */
+.table-of-contents__link--active {
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+}
+
+/* Admonitions */
+.admonition {
+  border-radius: 8px;
+}
+
+/* Footer */
+.footer {
+  background: var(--ifm-footer-background-color);
+}
+
+.footer__title {
+  color: var(--kaal-accent-light);
+}
+
+.footer__link-item {
+  color: #9ca3af;
+  transition: color 0.2s ease;
+}
+
+.footer__link-item:hover {
+  color: #e8e6e3;
+  text-decoration: none;
+}
+
+/* Links */
+a:not(.button):not(.navbar__link):not(.menu__link):not(.footer__link-item) {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+a:not(.button):not(.navbar__link):not(.menu__link):not(
+    .footer__link-item
+  ):hover {
+  text-decoration: underline;
+}
+
+/* Smooth transitions */
+* {
+  transition-property: background-color, border-color, color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease;
+}
+
+/* ============================================
+   CLOCK MOTIF (Background Pattern)
+   ============================================ */
+.clock-bg {
+  position: relative;
+}
+
+.clock-bg::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 400px;
+  height: 400px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='none' stroke='%23d4af37' stroke-width='0.5' opacity='0.1'/%3E%3Ccircle cx='50' cy='50' r='35' fill='none' stroke='%23d4af37' stroke-width='0.3' opacity='0.1'/%3E%3Cline x1='50' y1='10' x2='50' y2='15' stroke='%23d4af37' stroke-width='0.5' opacity='0.15'/%3E%3Cline x1='50' y1='85' x2='50' y2='90' stroke='%23d4af37' stroke-width='0.5' opacity='0.15'/%3E%3Cline x1='10' y1='50' x2='15' y2='50' stroke='%23d4af37' stroke-width='0.5' opacity='0.15'/%3E%3Cline x1='85' y1='50' x2='90' y2='50' stroke='%23d4af37' stroke-width='0.5' opacity='0.15'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+[data-theme="dark"] .clock-bg::after {
+  opacity: 0.3;
+}
+
+/* ============================================
+   EXPO SNACK PLAYER
+   ============================================ */
+.snack-player {
+  height: 505px;
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 16px;
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: 8px;
+}

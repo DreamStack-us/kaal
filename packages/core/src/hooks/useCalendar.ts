@@ -1,34 +1,47 @@
-import { useState, useMemo, useCallback } from 'react';
-import { Temporal } from '@js-temporal/polyfill';
+import { useCallback, useMemo, useState } from 'react';
+import {
+  addMonths,
+  getDayOfWeek,
+  getFirstDayOfMonth,
+  getMonthDays,
+  today,
+} from '../utils/date';
 
-export const useCalendar = (initialDate?: Temporal.PlainDate) => {
-  const [currentMonth, setCurrentMonth] = useState(() =>
-    Temporal.PlainYearMonth.from(initialDate ?? Temporal.Now.plainDateISO())
-  );
+export const useCalendar = (initialDate?: Date) => {
+  const [currentMonth, setCurrentMonth] = useState(() => {
+    const date = initialDate ?? today();
+    return getFirstDayOfMonth(date);
+  });
 
   const navigateMonth = useCallback((direction: 1 | -1) => {
-    setCurrentMonth((prev) => prev.add({ months: direction }));
+    setCurrentMonth((prev) => addMonths(prev, direction));
   }, []);
 
-  const goToMonth = useCallback((yearMonth: Temporal.PlainYearMonth) => {
-    setCurrentMonth(yearMonth);
+  const goToMonth = useCallback((date: Date) => {
+    setCurrentMonth(getFirstDayOfMonth(date));
   }, []);
 
-  const goToDate = useCallback((date: Temporal.PlainDate) => {
-    setCurrentMonth(Temporal.PlainYearMonth.from(date));
+  const goToDate = useCallback((date: Date) => {
+    setCurrentMonth(getFirstDayOfMonth(date));
   }, []);
 
   const daysInMonth = useMemo(() => {
-    const firstDay = currentMonth.toPlainDate({ day: 1 });
-    const days: (Temporal.PlainDate | null)[] = [];
-    const paddingDays = firstDay.dayOfWeek - 1;
+    const days: (Date | null)[] = [];
+    const firstDay = getFirstDayOfMonth(currentMonth);
+    // getDayOfWeek returns 0 for Sunday, we want Monday = 0
+    const dayOfWeek = getDayOfWeek(firstDay);
+    const paddingDays = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
 
     for (let i = 0; i < paddingDays; i++) {
       days.push(null);
     }
 
-    for (let day = 1; day <= currentMonth.daysInMonth; day++) {
-      days.push(currentMonth.toPlainDate({ day }));
+    const monthDays = getMonthDays(
+      currentMonth.getUTCFullYear(),
+      currentMonth.getUTCMonth(),
+    );
+    for (const day of monthDays) {
+      days.push(day);
     }
 
     return days;

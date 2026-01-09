@@ -15,7 +15,6 @@
     "isolatedModules": true,
     "noUncheckedIndexedAccess": true,
     "verbatimModuleSyntax": true,
-    "noEmit": true,
-    "types": ["@js-temporal/polyfill"]
+    "noEmit": true
   }
 }

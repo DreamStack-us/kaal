@@ -13,8 +13,6 @@
     "android": {
       "package": "com.dreamstack.kaal.example"
     },
-    "plugins": [
-      "expo-router"
-    ]
+    "plugins": ["expo-router"]
   }
 }

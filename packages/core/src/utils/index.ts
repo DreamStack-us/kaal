@@ -1,2 +1,2 @@
-export * from './temporal';
+export * from './date';
 export * from './validation';

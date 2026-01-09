@@ -41,3 +41,13 @@ coverage/
 .env
 .env.local
 .env.*.local
+
+# Docusaurus
+.docusaurus/
+docs/.docusaurus/
+docs/build/
+
+# Claude workflow - personal thoughts
+thoughts/srihari/
+thoughts/*/personal/
+.claude/settings.local.json
