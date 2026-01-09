@@ -2,9 +2,15 @@
 sidebar_position: 3
 ---
 
+import ExpoSnackEmbed from '@site/src/components/ExpoSnackEmbed';
+
 # TimePicker (iOS Style)
 
 The iOS-style TimePicker uses spinning wheels for hour, minute, and AM/PM selection.
+
+## Try it Live
+
+<ExpoSnackEmbed snackId="@dreamstack-us/kaal-timepicker-ios" />
 
 ## Basic Usage
 

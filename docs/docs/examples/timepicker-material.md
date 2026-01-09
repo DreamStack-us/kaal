@@ -2,9 +2,15 @@
 sidebar_position: 4
 ---
 
+import ExpoSnackEmbed from '@site/src/components/ExpoSnackEmbed';
+
 # TimePicker (Material Style)
 
 The Material-style TimePicker uses a clock face for intuitive time selection, following Material Design 3 guidelines.
+
+## Try it Live
+
+<ExpoSnackEmbed snackId="@dreamstack-us/kaal-timepicker-material" />
 
 ## Basic Usage
 

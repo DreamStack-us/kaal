@@ -2,9 +2,15 @@
 sidebar_position: 2
 ---
 
+import ExpoSnackEmbed from '@site/src/components/ExpoSnackEmbed';
+
 # Date Range Selection
 
 Examples for selecting date ranges.
+
+## Try it Live
+
+<ExpoSnackEmbed snackId="@dreamstack-us/kaal-date-range" />
 
 ## Start and End Date Pickers
 
