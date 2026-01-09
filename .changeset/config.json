@@ -1,11 +1,18 @@
 {
-  "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
-  "changelog": ["@changesets/changelog-github", { "repo": "dreamstack/kaal" }],
+  "$schema": "https://unpkg.com/@changesets/config@3.0.5/schema.json",
+  "changelog": [
+    "@changesets/changelog-github",
+    { "repo": "DreamStack-us/kaal" }
+  ],
   "commit": false,
   "fixed": [],
-  "linked": [["@dreamstack/kaal", "@dreamstack/kaal-themes"]],
+  "linked": [["@dreamstack-us/kaal", "@dreamstack-us/kaal-themes"]],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
+  "privatePackages": {
+    "version": true,
+    "tag": false
+  },
   "ignore": ["expo-example", "web-example"]
 }

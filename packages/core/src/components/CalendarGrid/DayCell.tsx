@@ -1,10 +1,10 @@
-import React, { memo } from 'react';
+import type React from 'react';
+import { memo } from 'react';
 import { Pressable, Text } from 'react-native';
-import type { Temporal } from '@js-temporal/polyfill';
 import { StyleSheet } from 'react-native-unistyles';
 
 interface DayCellProps {
-  date: Temporal.PlainDate | null;
+  date: Date | null;
   isSelected: boolean;
   isToday: boolean;
   isDisabled: boolean;
@@ -18,11 +18,9 @@ const styles = StyleSheet.create((theme) => ({
     height: 44,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: theme.colors.datepicker.cellBackground,
     variants: {
       state: {
-        default: {
-          backgroundColor: theme.colors.datepicker.cellBackground,
-        },
         selected: {
           backgroundColor: theme.colors.datepicker.cellSelected,
           borderRadius: theme.radii.cell,
@@ -36,17 +34,16 @@ const styles = StyleSheet.create((theme) => ({
         disabled: {
           opacity: 0.4,
         },
+        weekend: {},
       },
     },
   },
   text: {
     fontSize: theme.typography.dayCell.fontSize,
     fontWeight: theme.typography.dayCell.fontWeight,
+    color: theme.colors.datepicker.textDefault,
     variants: {
       state: {
-        default: {
-          color: theme.colors.datepicker.textDefault,
-        },
         selected: {
           color: theme.colors.datepicker.textSelected,
           fontWeight: '600',
@@ -75,12 +72,12 @@ export const DayCell: React.FC<DayCellProps> = memo(
     const state = isDisabled
       ? 'disabled'
       : isSelected
-      ? 'selected'
-      : isToday
-      ? 'today'
-      : isWeekend
-      ? 'weekend'
-      : 'default';
+        ? 'selected'
+        : isToday
+          ? 'today'
+          : isWeekend
+            ? 'weekend'
+            : undefined;
 
     styles.useVariants({ state });
 
@@ -90,22 +87,22 @@ export const DayCell: React.FC<DayCellProps> = memo(
         onPress={onPress}
         disabled={isDisabled}
         accessibilityRole="button"
-        accessibilityLabel={date.toLocaleString('en-US', {
+        accessibilityLabel={new Intl.DateTimeFormat('en-US', {
           weekday: 'long',
           month: 'long',
           day: 'numeric',
-        })}
+        }).format(date)}
         accessibilityState={{ selected: isSelected, disabled: isDisabled }}
       >
-        <Text style={styles.text}>{date.day}</Text>
+        <Text style={styles.text}>{date.getUTCDate()}</Text>
       </Pressable>
     );
   },
   (prev, next) =>
-    prev.date?.toString() === next.date?.toString() &&
+    prev.date?.getTime() === next.date?.getTime() &&
     prev.isSelected === next.isSelected &&
     prev.isToday === next.isToday &&
-    prev.isDisabled === next.isDisabled
+    prev.isDisabled === next.isDisabled,
 );
 
 DayCell.displayName = 'DayCell';

@@ -2,7 +2,8 @@
   "extends": "typescript-config/react-library.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "lib/typescript"
+    "outDir": "lib/typescript",
+    "types": []
   },
   "include": ["src"],
   "exclude": ["node_modules", "lib"]
