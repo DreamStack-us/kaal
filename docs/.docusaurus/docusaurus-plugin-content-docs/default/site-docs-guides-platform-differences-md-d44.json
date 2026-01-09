@@ -1,0 +1,27 @@
+{
+  "id": "guides/platform-differences",
+  "title": "Platform Differences",
+  "description": "Kaal provides consistent APIs across platforms while respecting platform conventions.",
+  "source": "@site/docs/guides/platform-differences.md",
+  "sourceDirName": "guides",
+  "slug": "/guides/platform-differences",
+  "permalink": "/kaal/docs/guides/platform-differences",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/DreamStack-us/kaal/tree/main/docs/docs/guides/platform-differences.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "sidebar_position": 3
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Theming Guide",
+    "permalink": "/kaal/docs/guides/theming"
+  },
+  "next": {
+    "title": "Migration from Temporal",
+    "permalink": "/kaal/docs/guides/migration-from-temporal"
+  }
+}

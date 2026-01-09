@@ -1,0 +1,27 @@
+{
+  "id": "guides/installation",
+  "title": "Installation",
+  "description": "Detailed installation guide for Kaal.",
+  "source": "@site/docs/guides/installation.md",
+  "sourceDirName": "guides",
+  "slug": "/guides/installation",
+  "permalink": "/kaal/docs/guides/installation",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/DreamStack-us/kaal/tree/main/docs/docs/guides/installation.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Theming",
+    "permalink": "/kaal/docs/examples/theming"
+  },
+  "next": {
+    "title": "Theming Guide",
+    "permalink": "/kaal/docs/guides/theming"
+  }
+}

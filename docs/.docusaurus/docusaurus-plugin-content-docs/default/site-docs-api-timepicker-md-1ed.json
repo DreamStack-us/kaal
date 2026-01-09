@@ -1,0 +1,27 @@
+{
+  "id": "api/timepicker",
+  "title": "TimePicker",
+  "description": "The TimePicker component provides time selection with iOS wheel style or Material Design 3 clock face.",
+  "source": "@site/docs/api/timepicker.md",
+  "sourceDirName": "api",
+  "slug": "/api/timepicker",
+  "permalink": "/kaal/docs/api/timepicker",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/DreamStack-us/kaal/tree/main/docs/docs/api/timepicker.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "sidebar_position": 2
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "DatePicker",
+    "permalink": "/kaal/docs/api/datepicker"
+  },
+  "next": {
+    "title": "CalendarGrid",
+    "permalink": "/kaal/docs/api/calendar-grid"
+  }
+}
