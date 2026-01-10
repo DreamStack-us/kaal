@@ -1,12 +1,7 @@
+/// <reference lib="dom" />
 import type React from 'react';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { StyleSheet as RNStyleSheet, Text, View } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
 
 const ITEM_HEIGHT = 44;
 const VISIBLE_ITEMS = 5;
@@ -60,56 +55,100 @@ const WheelColumn: React.FC<{
   selectedIndex: number;
   onSelect: (index: number) => void;
 }> = ({ items, selectedIndex, onSelect }) => {
-  const translateY = useSharedValue(-selectedIndex * ITEM_HEIGHT);
-  const velocity = useSharedValue(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const isScrolling = useRef(false);
+  const scrollTimeout = useRef<ReturnType<typeof setTimeout>>();
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Reanimated shared values are stable refs
-  const panGesture = useMemo(
-    () =>
-      Gesture.Pan()
-        .onUpdate((e) => {
-          'worklet';
-          translateY.value = e.translationY + -selectedIndex * ITEM_HEIGHT;
-          velocity.value = e.velocityY;
-        })
-        .onEnd(() => {
-          'worklet';
-          const targetIndex = Math.round(-translateY.value / ITEM_HEIGHT);
-          const clampedIndex = Math.max(
-            0,
-            Math.min(items.length - 1, targetIndex),
-          );
+  // Scroll to selected item on mount and when selection changes externally
+  useEffect(() => {
+    if (scrollRef.current && !isScrolling.current) {
+      scrollRef.current.scrollTop = selectedIndex * ITEM_HEIGHT;
+    }
+  }, [selectedIndex]);
 
-          translateY.value = withSpring(-clampedIndex * ITEM_HEIGHT, {
-            velocity: velocity.value,
-            damping: 20,
-            stiffness: 200,
-          });
-        }),
-    [selectedIndex, items.length],
-  );
+  const handleScroll = useCallback(() => {
+    if (!scrollRef.current) return;
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: translateY.value }],
-  }));
+    isScrolling.current = true;
+
+    // Clear existing timeout
+    if (scrollTimeout.current) {
+      clearTimeout(scrollTimeout.current);
+    }
+
+    // Debounce scroll end detection
+    scrollTimeout.current = setTimeout(() => {
+      if (!scrollRef.current) return;
+
+      const scrollTop = scrollRef.current.scrollTop;
+      const newIndex = Math.round(scrollTop / ITEM_HEIGHT);
+      const clampedIndex = Math.max(0, Math.min(items.length - 1, newIndex));
+
+      // Snap to nearest item
+      scrollRef.current.scrollTop = clampedIndex * ITEM_HEIGHT;
+
+      if (clampedIndex !== selectedIndex) {
+        onSelect(clampedIndex);
+      }
+
+      isScrolling.current = false;
+    }, 100);
+  }, [items.length, selectedIndex, onSelect]);
 
   return (
     <View style={webStyles.column}>
       <View style={webStyles.selectionHighlight} />
 
-      <GestureDetector gesture={panGesture}>
-        <Animated.View style={[webStyles.itemsContainer, animatedStyle]}>
-          <View style={{ height: ITEM_HEIGHT * 2 }} />
+      <div
+        ref={scrollRef}
+        onScroll={handleScroll}
+        style={{
+          height: CONTAINER_HEIGHT,
+          overflowY: 'auto',
+          scrollSnapType: 'y mandatory',
+          scrollBehavior: 'smooth',
+          position: 'relative',
+          zIndex: 1,
+          // Hide scrollbar
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+        }}
+      >
+        {/* @ts-ignore - webkit scrollbar hiding */}
+        <style>{`
+          div::-webkit-scrollbar {
+            display: none;
+          }
+        `}</style>
 
-          {items.map((item) => (
-            <View key={item.value} style={webStyles.item}>
-              <Text style={webStyles.itemText}>{item.label}</Text>
-            </View>
-          ))}
+        {/* Top padding */}
+        <div style={{ height: ITEM_HEIGHT * 2, flexShrink: 0 }} />
 
-          <View style={{ height: ITEM_HEIGHT * 2 }} />
-        </Animated.View>
-      </GestureDetector>
+        {items.map((item, index) => (
+          <div
+            key={item.value}
+            style={{
+              height: ITEM_HEIGHT,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              scrollSnapAlign: 'center',
+              cursor: 'pointer',
+            }}
+            onClick={() => {
+              if (scrollRef.current) {
+                scrollRef.current.scrollTop = index * ITEM_HEIGHT;
+              }
+              onSelect(index);
+            }}
+          >
+            <Text style={webStyles.itemText}>{item.label}</Text>
+          </div>
+        ))}
+
+        {/* Bottom padding */}
+        <div style={{ height: ITEM_HEIGHT * 2, flexShrink: 0 }} />
+      </div>
     </View>
   );
 };
@@ -210,6 +249,7 @@ const webStyles = RNStyleSheet.create({
     flex: 1,
     height: CONTAINER_HEIGHT,
     overflow: 'hidden',
+    position: 'relative',
   },
   selectionHighlight: {
     position: 'absolute',
@@ -220,14 +260,6 @@ const webStyles = RNStyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.04)',
     borderRadius: 8,
     zIndex: 0,
-  },
-  itemsContainer: {
-    zIndex: 1,
-  },
-  item: {
-    height: ITEM_HEIGHT,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   itemText: {
     fontSize: 21,
