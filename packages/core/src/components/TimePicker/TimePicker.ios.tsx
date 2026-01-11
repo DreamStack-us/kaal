@@ -1,5 +1,6 @@
 import React, { Suspense, useCallback } from 'react';
 import { ActivityIndicator, View } from 'react-native';
+import { ThemeOverrideProvider } from '../../context/ThemeOverrideContext';
 import type { TimePickerProps, TimeValue } from '../../types/timepicker';
 import { styles } from './TimePicker.styles';
 import { TimeWheelPicker } from './TimeWheelPicker';
@@ -53,6 +54,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   theme = 'native',
   is24Hour = false,
   minuteInterval = 1,
+  themeOverrides,
 }) => {
   const handleTimeChange = useCallback(
     (time: TimeValue) => {
@@ -78,11 +80,13 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 
   // Fallback to wheel picker for other themes
   return (
-    <TimeWheelPicker
-      value={value}
-      onChange={onChange}
-      is24Hour={is24Hour}
-      minuteInterval={minuteInterval}
-    />
+    <ThemeOverrideProvider value={{ timePicker: themeOverrides }}>
+      <TimeWheelPicker
+        value={value}
+        onChange={onChange}
+        is24Hour={is24Hour}
+        minuteInterval={minuteInterval}
+      />
+    </ThemeOverrideProvider>
   );
 };

@@ -2,8 +2,9 @@
 import type React from 'react';
 import { memo, useCallback, useMemo, useRef } from 'react';
 import { View } from 'react-native';
+import { useTimePickerOverrides } from '../../context/ThemeOverrideContext';
 import { to12Hour, to24Hour } from '../../hooks/useTimePicker';
-import type { ClockMode, TimePeriod, TimeValue } from '../../types/timepicker';
+import type { ClockMode, TimeValue } from '../../types/timepicker';
 import { styles } from './TimePicker.styles';
 
 // Clock dimensions
@@ -16,6 +17,15 @@ const CENTER_DOT_RADIUS = 4;
 // Hour positions (12 at top, clockwise)
 const HOURS_12 = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 const MINUTE_LABELS = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+
+// Default colors (dark theme)
+const DEFAULT_COLORS = {
+  clockBackground: '#3F384C',
+  handColor: '#4DA6FF',
+  selectionDotColor: '#4DA6FF',
+  textColor: '#E6E1E5',
+  textSelectedColor: '#FFFFFF',
+};
 
 /**
  * Converts clock position (0-11 for hours, 0-59 for minutes) to angle in degrees
@@ -52,9 +62,25 @@ interface ClockFaceProps {
 
 export const ClockFace: React.FC<ClockFaceProps> = memo(
   ({ value, onChange, mode, onModeChange, is24Hour = false }) => {
+    const overrides = useTimePickerOverrides();
     const svgRef = useRef<SVGSVGElement>(null);
     const isDragging = useRef(false);
     const { hour: hour12, period } = to12Hour(value.hours);
+
+    // Build colors from overrides
+    const colors = useMemo(
+      () => ({
+        clockBackground:
+          overrides?.clockBackground ?? DEFAULT_COLORS.clockBackground,
+        handColor: overrides?.clockHandColor ?? DEFAULT_COLORS.handColor,
+        selectionDotColor:
+          overrides?.clockSelectionColor ?? DEFAULT_COLORS.selectionDotColor,
+        textColor: overrides?.clockTextColor ?? DEFAULT_COLORS.textColor,
+        textSelectedColor:
+          overrides?.clockTextSelectedColor ?? DEFAULT_COLORS.textSelectedColor,
+      }),
+      [overrides],
+    );
 
     // Calculate hand end position based on current value
     const handAngle = useMemo(() => {
@@ -177,7 +203,7 @@ export const ClockFace: React.FC<ClockFaceProps> = memo(
               dominantBaseline="central"
               fontSize={14}
               fontWeight={isSelected ? '500' : '400'}
-              fill={isSelected ? '#FFFFFF' : '#E6E1E5'}
+              fill={isSelected ? colors.textSelectedColor : colors.textColor}
               style={{ userSelect: 'none' }}
             >
               {hour}
@@ -200,14 +226,14 @@ export const ClockFace: React.FC<ClockFaceProps> = memo(
             dominantBaseline="central"
             fontSize={14}
             fontWeight={isSelected ? '500' : '400'}
-            fill={isSelected ? '#FFFFFF' : '#E6E1E5'}
+            fill={isSelected ? colors.textSelectedColor : colors.textColor}
             style={{ userSelect: 'none' }}
           >
             {minute.toString().padStart(2, '0')}
           </text>
         );
       });
-    }, [mode, hour12, value.minutes]);
+    }, [mode, hour12, value.minutes, colors]);
 
     return (
       <View style={styles.clockContainer}>
@@ -230,7 +256,7 @@ export const ClockFace: React.FC<ClockFaceProps> = memo(
             cx={CLOCK_CENTER}
             cy={CLOCK_CENTER}
             r={CLOCK_SIZE / 2 - 4}
-            fill="#3F384C"
+            fill={colors.clockBackground}
           />
 
           {/* Selection dot (behind numbers) */}
@@ -238,7 +264,7 @@ export const ClockFace: React.FC<ClockFaceProps> = memo(
             cx={handEndPos.x}
             cy={handEndPos.y}
             r={SELECTION_DOT_RADIUS}
-            fill="#4DA6FF"
+            fill={colors.selectionDotColor}
           />
 
           {/* Clock hand */}
@@ -247,7 +273,7 @@ export const ClockFace: React.FC<ClockFaceProps> = memo(
             y1={CLOCK_CENTER}
             x2={handEndPos.x}
             y2={handEndPos.y}
-            stroke="#4DA6FF"
+            stroke={colors.handColor}
             strokeWidth={2}
           />
 
@@ -256,7 +282,7 @@ export const ClockFace: React.FC<ClockFaceProps> = memo(
             cx={CLOCK_CENTER}
             cy={CLOCK_CENTER}
             r={CENTER_DOT_RADIUS}
-            fill="#4DA6FF"
+            fill={colors.handColor}
           />
 
           {/* Numbers */}
