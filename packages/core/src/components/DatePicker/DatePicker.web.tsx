@@ -1,4 +1,5 @@
 import type React from 'react';
+import { ThemeOverrideProvider } from '../../context/ThemeOverrideContext';
 import { CalendarGrid } from '../CalendarGrid';
 import { WheelPicker } from '../WheelPicker';
 import type { KaalDatePickerProps } from './DatePicker';
@@ -11,26 +12,33 @@ export const DatePicker: React.FC<KaalDatePickerProps> = ({
   minDate,
   maxDate,
   disabledDates,
+  themeOverrides,
+  weekStartsOn = 0,
 }) => {
   if (theme === 'ios' && variant === 'wheel') {
     return (
-      <WheelPicker
-        value={value}
-        onChange={onChange}
-        minDate={minDate}
-        maxDate={maxDate}
-      />
+      <ThemeOverrideProvider value={{ datePicker: themeOverrides }}>
+        <WheelPicker
+          value={value}
+          onChange={onChange}
+          minDate={minDate}
+          maxDate={maxDate}
+        />
+      </ThemeOverrideProvider>
     );
   }
 
   return (
-    <CalendarGrid
-      value={value}
-      onChange={onChange}
-      minDate={minDate}
-      maxDate={maxDate}
-      disabledDates={disabledDates}
-      themeMode={theme === 'native' ? 'ios' : theme}
-    />
+    <ThemeOverrideProvider value={{ datePicker: themeOverrides }}>
+      <CalendarGrid
+        value={value}
+        onChange={onChange}
+        minDate={minDate}
+        maxDate={maxDate}
+        disabledDates={disabledDates}
+        themeMode={theme === 'native' ? 'ios' : theme}
+        weekStartsOn={weekStartsOn}
+      />
+    </ThemeOverrideProvider>
   );
 };

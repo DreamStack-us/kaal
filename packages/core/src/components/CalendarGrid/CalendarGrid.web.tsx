@@ -1,6 +1,7 @@
 /// <reference lib="dom" />
 import React, { memo, useCallback, useMemo } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useDatePickerOverrides } from '../../context/ThemeOverrideContext';
 import {
   addMonths,
   compareDates,
@@ -20,15 +21,54 @@ interface CalendarGridProps {
   maxDate?: Date;
   disabledDates?: Date[];
   themeMode: 'ios' | 'android' | 'custom';
+  /**
+   * First day of the week: 0 = Sunday, 1 = Monday
+   * @default 0 (Sunday)
+   *
+   * TODO: This is a temporary solution. In the future, we need to add full
+   * locale support to handle different calendar formats, layouts, and
+   * localized day/month names across different regions.
+   */
+  weekStartsOn?: 0 | 1;
 }
 
 const CELL_SIZE = 44;
-const WEEK_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-const generateMonthDays = (currentMonth: Date): (Date | null)[] => {
+// Week day labels starting from Sunday
+const WEEK_DAYS_SUNDAY_START = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const WEEK_DAYS_MONDAY_START = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+// Default colors (light theme for web)
+const DEFAULT_COLORS = {
+  backgroundColor: '#FFFFFF',
+  primaryColor: '#007AFF',
+  textColor: '#1C1C1E',
+  weekdayColor: '#8E8E93',
+  borderRadius: 14,
+  padding: 16,
+};
+
+/**
+ * Generate padding days for the month grid based on week start day
+ * TODO: This logic should be refactored when adding locale support
+ */
+const generateMonthDays = (
+  currentMonth: Date,
+  weekStartsOn: 0 | 1,
+): (Date | null)[] => {
   const firstDay = getFirstDayOfMonth(currentMonth);
-  const startOfWeek = getDayOfWeek(firstDay);
-  const paddingDays = startOfWeek === 0 ? 6 : startOfWeek - 1;
+  // getDayOfWeek returns 0 for Sunday, 1 for Monday, etc.
+  const dayOfWeek = getDayOfWeek(firstDay);
+
+  // Calculate padding days based on week start
+  let paddingDays: number;
+  if (weekStartsOn === 0) {
+    // Sunday start: Sunday = 0 padding, Monday = 1, etc.
+    paddingDays = dayOfWeek;
+  } else {
+    // Monday start: Monday = 0 padding, Sunday = 6 padding
+    paddingDays = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+  }
 
   const days: (Date | null)[] = [];
 
@@ -99,12 +139,18 @@ const webStyles = StyleSheet.create({
 });
 
 export const CalendarGrid: React.FC<CalendarGridProps> = memo(
-  ({ value, onChange, minDate, maxDate, disabledDates, themeMode }) => {
+  ({ value, onChange, minDate, maxDate, disabledDates, themeMode, weekStartsOn = 0 }) => {
+    const overrides = useDatePickerOverrides();
     const [currentMonth, setCurrentMonth] = React.useState(() =>
       getFirstDayOfMonth(value),
     );
 
-    const days = useMemo(() => generateMonthDays(currentMonth), [currentMonth]);
+    const days = useMemo(
+      () => generateMonthDays(currentMonth, weekStartsOn),
+      [currentMonth, weekStartsOn],
+    );
+
+    const weekDays = weekStartsOn === 0 ? WEEK_DAYS_SUNDAY_START : WEEK_DAYS_MONDAY_START;
 
     const todayDate = useMemo(() => today(), []);
 
@@ -154,29 +200,61 @@ export const CalendarGrid: React.FC<CalendarGridProps> = memo(
       [],
     );
 
+    // Build override styles
+    const containerStyle = useMemo(
+      () => ({
+        backgroundColor:
+          overrides?.backgroundColor ?? DEFAULT_COLORS.backgroundColor,
+        borderRadius: overrides?.borderRadius ?? DEFAULT_COLORS.borderRadius,
+        padding: overrides?.padding ?? DEFAULT_COLORS.padding,
+      }),
+      [overrides],
+    );
+
+    const navTextStyle = useMemo(
+      () => ({
+        color: overrides?.primaryColor ?? DEFAULT_COLORS.primaryColor,
+      }),
+      [overrides],
+    );
+
+    const monthTitleStyle = useMemo(
+      () => ({
+        color: overrides?.textColor ?? DEFAULT_COLORS.textColor,
+      }),
+      [overrides],
+    );
+
+    const weekDayTextStyle = useMemo(
+      () => ({
+        color: overrides?.textWeekendColor ?? DEFAULT_COLORS.weekdayColor,
+      }),
+      [overrides],
+    );
+
     return (
-      <View style={webStyles.container}>
+      <View style={[webStyles.container, containerStyle]}>
         <View style={webStyles.header}>
           <Pressable
             onPress={() => navigateMonth(-1)}
             style={webStyles.navButton}
           >
-            <Text style={webStyles.navText}>‹</Text>
+            <Text style={[webStyles.navText, navTextStyle]}>‹</Text>
           </Pressable>
-          <Text style={webStyles.monthTitle}>
+          <Text style={[webStyles.monthTitle, monthTitleStyle]}>
             {formatYearMonth(currentMonth)}
           </Text>
           <Pressable
             onPress={() => navigateMonth(1)}
             style={webStyles.navButton}
           >
-            <Text style={webStyles.navText}>›</Text>
+            <Text style={[webStyles.navText, navTextStyle]}>›</Text>
           </Pressable>
         </View>
 
         <View style={webStyles.weekDays}>
-          {WEEK_DAYS.map((day) => (
-            <Text key={day} style={webStyles.weekDayText}>
+          {weekDays.map((day) => (
+            <Text key={day} style={[webStyles.weekDayText, weekDayTextStyle]}>
               {day}
             </Text>
           ))}

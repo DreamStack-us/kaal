@@ -1,7 +1,8 @@
 /// <reference lib="dom" />
 import type React from 'react';
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
+import { useDatePickerOverrides } from '../../context/ThemeOverrideContext';
 
 interface DayCellProps {
   date: Date | null;
@@ -12,6 +13,19 @@ interface DayCellProps {
   onPress?: () => void;
 }
 
+// Default colors (light theme for web)
+const DEFAULT_COLORS = {
+  cellBackground: 'transparent',
+  cellSelected: '#007AFF',
+  cellToday: 'rgba(0, 122, 255, 0.1)',
+  textDefault: '#1C1C1E',
+  textSelected: '#FFFFFF',
+  textDisabled: '#8E8E93',
+  textWeekend: '#8E8E93',
+  primary: '#007AFF',
+  cellBorderRadius: 22,
+};
+
 // Web-compatible styles (no unistyles dependency)
 const webStyles = StyleSheet.create({
   cell: {
@@ -19,66 +33,73 @@ const webStyles = StyleSheet.create({
     height: 44,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'transparent',
-  },
-  cellSelected: {
-    backgroundColor: '#007AFF',
-    borderRadius: 22,
-  },
-  cellToday: {
-    backgroundColor: 'rgba(0, 122, 255, 0.1)',
-    borderRadius: 22,
-    borderWidth: 1,
-    borderColor: '#007AFF',
-  },
-  cellDisabled: {
-    opacity: 0.4,
   },
   text: {
     fontSize: 17,
     fontWeight: '400',
-    color: '#1C1C1E',
-  },
-  textSelected: {
-    color: '#FFFFFF',
-    fontWeight: '600',
-  },
-  textToday: {
-    color: '#007AFF',
-    fontWeight: '600',
-  },
-  textDisabled: {
-    color: '#8E8E93',
-  },
-  textWeekend: {
-    color: '#8E8E93',
   },
 });
 
 export const DayCell: React.FC<DayCellProps> = memo(
   ({ date, isSelected, isToday, isDisabled, isWeekend, onPress }) => {
+    const overrides = useDatePickerOverrides();
+
+    // Build cell style based on state and overrides
+    // Use primaryColor as fallback for cellSelectedColor (consumer expectation)
+    const cellStyle = useMemo(() => {
+      const style: Record<string, any> = {
+        backgroundColor: DEFAULT_COLORS.cellBackground,
+      };
+
+      if (isSelected) {
+        style.backgroundColor =
+          overrides?.cellSelectedColor ??
+          overrides?.primaryColor ??
+          DEFAULT_COLORS.cellSelected;
+        style.borderRadius = overrides?.cellBorderRadius ?? DEFAULT_COLORS.cellBorderRadius;
+      } else if (isToday) {
+        style.backgroundColor = overrides?.cellTodayColor ?? DEFAULT_COLORS.cellToday;
+        style.borderRadius = overrides?.cellBorderRadius ?? DEFAULT_COLORS.cellBorderRadius;
+        style.borderWidth = 1;
+        style.borderColor = overrides?.primaryColor ?? DEFAULT_COLORS.primary;
+      }
+
+      if (isDisabled) {
+        style.opacity = 0.4;
+      }
+
+      return style;
+    }, [overrides, isSelected, isToday, isDisabled]);
+
+    // Build text style based on state and overrides
+    const textStyle = useMemo(() => {
+      const style: Record<string, any> = {
+        color: overrides?.textColor ?? DEFAULT_COLORS.textDefault,
+        fontWeight: '400' as const,
+      };
+
+      if (isSelected) {
+        style.color = overrides?.textSelectedColor ?? DEFAULT_COLORS.textSelected;
+        style.fontWeight = '600';
+      } else if (isToday) {
+        style.color = overrides?.primaryColor ?? DEFAULT_COLORS.primary;
+        style.fontWeight = '600';
+      } else if (isDisabled) {
+        style.color = overrides?.textDisabledColor ?? DEFAULT_COLORS.textDisabled;
+      } else if (isWeekend) {
+        style.color = overrides?.textWeekendColor ?? DEFAULT_COLORS.textWeekend;
+      }
+
+      return style;
+    }, [overrides, isSelected, isToday, isDisabled, isWeekend]);
+
     if (!date) {
       return <Pressable style={webStyles.cell} disabled />;
     }
 
-    const cellStyle = [
-      webStyles.cell,
-      isSelected && webStyles.cellSelected,
-      isToday && !isSelected && webStyles.cellToday,
-      isDisabled && webStyles.cellDisabled,
-    ];
-
-    const textStyle = [
-      webStyles.text,
-      isSelected && webStyles.textSelected,
-      isToday && !isSelected && webStyles.textToday,
-      isDisabled && webStyles.textDisabled,
-      isWeekend && !isSelected && !isToday && webStyles.textWeekend,
-    ];
-
     return (
       <Pressable
-        style={cellStyle}
+        style={[webStyles.cell, cellStyle]}
         onPress={onPress}
         disabled={isDisabled}
         accessibilityRole="button"
@@ -89,7 +110,7 @@ export const DayCell: React.FC<DayCellProps> = memo(
         }).format(date)}
         accessibilityState={{ selected: isSelected, disabled: isDisabled }}
       >
-        <Text style={textStyle}>{date.getUTCDate()}</Text>
+        <Text style={[webStyles.text, textStyle]}>{date.getUTCDate()}</Text>
       </Pressable>
     );
   },

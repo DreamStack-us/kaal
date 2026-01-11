@@ -1,44 +1,48 @@
-import { StyleSheet } from 'react-native-unistyles';
+import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create((theme) => ({
+/**
+ * Default styles for CalendarGrid using plain React Native StyleSheet.
+ * Colors use dark theme defaults - consumers override via themeOverrides prop.
+ */
+export const styles = StyleSheet.create({
   container: {
-    backgroundColor: theme.colors.background.default,
-    borderRadius: theme.radii.card,
-    padding: theme.spacing(4),
+    backgroundColor: '#1E1E1E',
+    borderRadius: 16,
+    padding: 16,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: theme.spacing(4),
-    paddingHorizontal: theme.spacing(2),
+    marginBottom: 16,
+    paddingHorizontal: 8,
   },
   navButton: {
     width: 40,
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: theme.radii.button,
+    borderRadius: 8,
   },
   navText: {
     fontSize: 24,
-    color: theme.colors.primary.default,
+    color: '#4DA6FF',
     fontWeight: '600',
   },
   monthTitle: {
-    fontSize: theme.typography.monthHeader.fontSize,
-    fontWeight: theme.typography.monthHeader.fontWeight,
-    color: theme.colors.foreground.default,
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   weekDays: {
     flexDirection: 'row',
-    marginBottom: theme.spacing(2),
+    marginBottom: 8,
   },
   weekDayText: {
     flex: 1,
     textAlign: 'center',
-    fontSize: theme.typography.dayHeader.fontSize,
-    fontWeight: theme.typography.dayHeader.fontWeight,
-    color: theme.colors.foreground.muted,
+    fontSize: 13,
+    fontWeight: '500',
+    color: '#8E8E93',
   },
-}));
+});
