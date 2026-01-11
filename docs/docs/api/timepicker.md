@@ -112,6 +112,83 @@ The maximum selectable time.
 />
 ```
 
+### `themeOverrides`
+
+**Type:** `TimePickerThemeOverrides`
+**Default:** `undefined`
+
+Custom theme overrides for styling the TimePicker without using a theme provider. This is the recommended approach for web apps and when you want to integrate with your existing design system.
+
+```tsx
+<TimePicker
+  value={time}
+  onChange={setTime}
+  themeOverrides={{
+    primaryColor: '#22d3ee',
+    backgroundColor: '#1f2937',
+
+    // Wheel picker (iOS style)
+    wheelContainerBackground: '#1f2937',
+    wheelTextColor: '#FFFFFF',
+    wheelSeparatorColor: '#374151',
+
+    // Clock face (Material style)
+    clockBackground: '#374151',
+    clockHandColor: '#22d3ee',
+    clockTextColor: '#FFFFFF',
+    clockTextSelectedColor: '#FFFFFF',
+    clockCenterColor: '#22d3ee',
+
+    // Period toggle (AM/PM)
+    periodBackground: '#374151',
+    periodActiveBackground: 'rgba(34, 211, 238, 0.2)',
+    periodTextColor: '#9ca3af',
+    periodTextActiveColor: '#22d3ee',
+
+    // Time field display
+    timeFieldBackground: '#374151',
+    timeFieldActiveBackground: '#22d3ee',
+    textColor: '#FFFFFF',
+    textActiveColor: '#FFFFFF',
+
+    borderRadius: 16,
+  }}
+/>
+```
+
+#### TimePickerThemeOverrides Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `primaryColor` | `string` | Primary accent color |
+| `backgroundColor` | `string` | Container background color |
+| `borderRadius` | `number` | Border radius for container |
+| **Wheel Picker (iOS style)** | | |
+| `wheelContainerBackground` | `string` | Background of the wheel picker |
+| `wheelTextColor` | `string` | Text color in wheel |
+| `wheelTextSelectedColor` | `string` | Text color of selected item |
+| `wheelSeparatorColor` | `string` | Color of the colon separator |
+| `wheelSelectionHighlight` | `string` | Background of selection indicator |
+| **Clock Face (Material style)** | | |
+| `clockBackground` | `string` | Background of the clock face |
+| `clockHandColor` | `string` | Color of the clock hand |
+| `clockTextColor` | `string` | Color of clock numbers |
+| `clockTextSelectedColor` | `string` | Color of selected number |
+| `clockCenterColor` | `string` | Color of the center dot |
+| `clockSelectionColor` | `string` | Color of selection dot on edge |
+| **Period Toggle (AM/PM)** | | |
+| `periodBackground` | `string` | Background of period buttons |
+| `periodActiveBackground` | `string` | Background of active period |
+| `periodBorderColor` | `string` | Border color of period buttons |
+| `periodTextColor` | `string` | Text color of period buttons |
+| `periodTextActiveColor` | `string` | Text color of active period |
+| **Time Field Display** | | |
+| `timeFieldBackground` | `string` | Background of time fields |
+| `timeFieldActiveBackground` | `string` | Background of active time field |
+| `textColor` | `string` | Text color of time fields |
+| `textActiveColor` | `string` | Text color of active time field |
+| `separatorColor` | `string` | Color of the colon separator |
+
 ## Examples
 
 ### iOS Wheel Picker
@@ -179,7 +256,7 @@ function BusinessHoursPicker() {
 ## TypeScript
 
 ```tsx
-import type { TimePickerProps, TimeValue } from '@dreamstack-us/kaal';
+import type { TimePickerProps, TimeValue, TimePickerThemeOverrides } from '@dreamstack-us/kaal';
 
 // TimeValue type
 type TimeValue = {
@@ -196,6 +273,44 @@ interface TimePickerProps {
   minuteInterval?: 1 | 5 | 10 | 15 | 30;
   minTime?: TimeValue;
   maxTime?: TimeValue;
+  themeOverrides?: TimePickerThemeOverrides;
+}
+
+// TimePickerThemeOverrides interface
+interface TimePickerThemeOverrides {
+  // General
+  primaryColor?: string;
+  backgroundColor?: string;
+  borderRadius?: number;
+  textColor?: string;
+
+  // Wheel picker
+  wheelContainerBackground?: string;
+  wheelSelectionHighlight?: string;
+  wheelSeparatorColor?: string;
+  wheelTextColor?: string;
+  wheelTextSelectedColor?: string;
+
+  // Clock face
+  clockBackground?: string;
+  clockHandColor?: string;
+  clockTextColor?: string;
+  clockTextSelectedColor?: string;
+  clockCenterColor?: string;
+  clockSelectionColor?: string;
+
+  // Period toggle
+  periodBackground?: string;
+  periodActiveBackground?: string;
+  periodBorderColor?: string;
+  periodTextColor?: string;
+  periodTextActiveColor?: string;
+
+  // Time field
+  timeFieldBackground?: string;
+  timeFieldActiveBackground?: string;
+  textActiveColor?: string;
+  separatorColor?: string;
 }
 ```
 

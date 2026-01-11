@@ -8,11 +8,10 @@ The Material-style TimePicker uses a clock face for intuitive time selection, fo
 
 ## Live Example
 
-```SnackPlayer name=Material%20TimePicker&dependencies=@dreamstack-us/kaal,@dreamstack-us/kaal-themes,react-native-unistyles
+```SnackPlayer name=Material%20TimePicker&dependencies=@dreamstack-us/kaal
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { TimePicker, KaalProvider } from '@dreamstack-us/kaal';
-import { kaalMaterialTheme } from '@dreamstack-us/kaal-themes';
+import { TimePicker } from '@dreamstack-us/kaal';
 
 export default function App() {
   const [time, setTime] = useState({
@@ -28,18 +27,35 @@ export default function App() {
   };
 
   return (
-    <KaalProvider theme={kaalMaterialTheme}>
-      <View style={styles.container}>
-        <Text style={styles.label}>Selected Time</Text>
-        <Text style={styles.time}>{formatDisplay(time)}</Text>
+    <View style={styles.container}>
+      <Text style={styles.label}>Selected Time</Text>
+      <Text style={styles.time}>{formatDisplay(time)}</Text>
 
-        <TimePicker
-          value={time}
-          onChange={setTime}
-          is24Hour={false}
-        />
-      </View>
-    </KaalProvider>
+      <TimePicker
+        value={time}
+        onChange={setTime}
+        theme="android"
+        is24Hour={false}
+        themeOverrides={{
+          primaryColor: '#6366f1',
+          backgroundColor: '#ffffff',
+          clockBackground: '#f1f5f9',
+          clockHandColor: '#6366f1',
+          clockTextColor: '#1e293b',
+          clockTextSelectedColor: '#ffffff',
+          clockCenterColor: '#6366f1',
+          periodBackground: '#f1f5f9',
+          periodActiveBackground: '#e0e7ff',
+          periodTextColor: '#64748b',
+          periodTextActiveColor: '#6366f1',
+          timeFieldBackground: '#f1f5f9',
+          timeFieldActiveBackground: '#6366f1',
+          textColor: '#1e293b',
+          textActiveColor: '#ffffff',
+          borderRadius: 16,
+        }}
+      />
+    </View>
   );
 }
 
@@ -59,17 +75,17 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: '600',
     marginBottom: 24,
+    color: '#1e293b',
   },
 });
 ```
 
-## 24-Hour Clock Face
+## Dark Theme Clock
 
-```SnackPlayer name=Material%20TimePicker%2024h&dependencies=@dreamstack-us/kaal,@dreamstack-us/kaal-themes,react-native-unistyles
+```SnackPlayer name=Material%20TimePicker%20Dark&dependencies=@dreamstack-us/kaal
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { TimePicker, KaalProvider } from '@dreamstack-us/kaal';
-import { kaalMaterialTheme } from '@dreamstack-us/kaal-themes';
+import { TimePicker } from '@dreamstack-us/kaal';
 
 export default function App() {
   const [time, setTime] = useState({
@@ -78,21 +94,38 @@ export default function App() {
   });
 
   return (
-    <KaalProvider theme={kaalMaterialTheme}>
-      <View style={styles.container}>
-        <Text style={styles.label}>24-Hour Clock</Text>
-        <Text style={styles.time}>
-          {time.hours.toString().padStart(2, '0')}:
-          {time.minutes.toString().padStart(2, '0')}
-        </Text>
+    <View style={styles.container}>
+      <Text style={styles.label}>24-Hour Clock</Text>
+      <Text style={styles.time}>
+        {time.hours.toString().padStart(2, '0')}:
+        {time.minutes.toString().padStart(2, '0')}
+      </Text>
 
-        <TimePicker
-          value={time}
-          onChange={setTime}
-          is24Hour={true}
-        />
-      </View>
-    </KaalProvider>
+      <TimePicker
+        value={time}
+        onChange={setTime}
+        theme="android"
+        is24Hour={true}
+        themeOverrides={{
+          primaryColor: '#a855f7',
+          backgroundColor: '#0f172a',
+          clockBackground: '#1e293b',
+          clockHandColor: '#a855f7',
+          clockTextColor: '#f8fafc',
+          clockTextSelectedColor: '#ffffff',
+          clockCenterColor: '#a855f7',
+          periodBackground: '#1e293b',
+          periodActiveBackground: 'rgba(168, 85, 247, 0.2)',
+          periodTextColor: '#94a3b8',
+          periodTextActiveColor: '#a855f7',
+          timeFieldBackground: '#1e293b',
+          timeFieldActiveBackground: '#a855f7',
+          textColor: '#f8fafc',
+          textActiveColor: '#ffffff',
+          borderRadius: 16,
+        }}
+      />
+    </View>
   );
 }
 
@@ -101,11 +134,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     alignItems: 'center',
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#0f172a',
   },
   label: {
     fontSize: 14,
-    color: '#666',
+    color: '#94a3b8',
     marginBottom: 4,
   },
   time: {
@@ -113,17 +146,17 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontVariant: ['tabular-nums'],
     marginBottom: 24,
+    color: '#f8fafc',
   },
 });
 ```
 
 ## Business Hours Constraint
 
-```SnackPlayer name=Business%20Hours%20TimePicker&dependencies=@dreamstack-us/kaal,@dreamstack-us/kaal-themes,react-native-unistyles
+```SnackPlayer name=Business%20Hours%20TimePicker&dependencies=@dreamstack-us/kaal
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { TimePicker, KaalProvider } from '@dreamstack-us/kaal';
-import { kaalMaterialTheme } from '@dreamstack-us/kaal-themes';
+import { TimePicker } from '@dreamstack-us/kaal';
 
 export default function App() {
   const [time, setTime] = useState({
@@ -139,22 +172,39 @@ export default function App() {
   };
 
   return (
-    <KaalProvider theme={kaalMaterialTheme}>
-      <View style={styles.container}>
-        <Text style={styles.label}>
-          Business Hours: 9:00 AM - 5:00 PM
-        </Text>
-        <Text style={styles.time}>{formatDisplay(time)}</Text>
+    <View style={styles.container}>
+      <Text style={styles.label}>
+        Business Hours: 9:00 AM - 5:00 PM
+      </Text>
+      <Text style={styles.time}>{formatDisplay(time)}</Text>
 
-        <TimePicker
-          value={time}
-          onChange={setTime}
-          minTime={{ hours: 9, minutes: 0 }}
-          maxTime={{ hours: 17, minutes: 0 }}
-          is24Hour={false}
-        />
-      </View>
-    </KaalProvider>
+      <TimePicker
+        value={time}
+        onChange={setTime}
+        theme="android"
+        minTime={{ hours: 9, minutes: 0 }}
+        maxTime={{ hours: 17, minutes: 0 }}
+        is24Hour={false}
+        themeOverrides={{
+          primaryColor: '#f97316',
+          backgroundColor: '#fffbeb',
+          clockBackground: '#fef3c7',
+          clockHandColor: '#f97316',
+          clockTextColor: '#78350f',
+          clockTextSelectedColor: '#ffffff',
+          clockCenterColor: '#f97316',
+          periodBackground: '#fef3c7',
+          periodActiveBackground: '#fed7aa',
+          periodTextColor: '#92400e',
+          periodTextActiveColor: '#f97316',
+          timeFieldBackground: '#fef3c7',
+          timeFieldActiveBackground: '#f97316',
+          textColor: '#78350f',
+          textActiveColor: '#ffffff',
+          borderRadius: 16,
+        }}
+      />
+    </View>
   );
 }
 
@@ -163,17 +213,18 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     alignItems: 'center',
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#fffbeb',
   },
   label: {
     fontSize: 14,
-    color: '#666',
+    color: '#92400e',
     marginBottom: 4,
   },
   time: {
     fontSize: 32,
     fontWeight: '600',
     marginBottom: 24,
+    color: '#78350f',
   },
 });
 ```
