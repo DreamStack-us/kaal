@@ -15,12 +15,14 @@
 .featureCol {
   flex: 0 0 calc(33.333% - 1rem);
   max-width: calc(33.333% - 1rem);
+  display: flex;
 }
 
 @media (max-width: 996px) {
   .featureCol {
     flex: 0 0 calc(50% - 0.75rem);
     max-width: calc(50% - 0.75rem);
+    display: flex;
   }
 }
 
@@ -28,5 +30,6 @@
   .featureCol {
     flex: 0 0 100%;
     max-width: 100%;
+    display: flex;
   }
 }
