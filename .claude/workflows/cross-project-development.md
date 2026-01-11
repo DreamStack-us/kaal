@@ -23,12 +23,14 @@ git checkout -b feat/KAAL-123/feature-name
 # 2. Build the library
 bun run build
 
-# 3. Link for local testing
-bun link
-# For specific package:
-cd packages/agenda && bun link
+# 3. Register packages as linkable (run from package directory)
+cd ~/workspace/kaal/packages/core
+bun link  # Registers @dreamstack-us/kaal
+# For agenda package:
+cd ~/workspace/kaal/packages/agenda
+bun link  # Registers @dreamstack-us/kaal-agenda
 
-# 4. In consumer project, link the local version
+# 4. In consumer project, link the registered packages
 cd ~/workspace/dreamstack-hq
 bun link @dreamstack-us/kaal
 # or
@@ -37,9 +39,13 @@ bun link @dreamstack-us/kaal-agenda
 # 5. Test in consumer
 bun run dev
 
-# 6. When done, unlink
-bun unlink @dreamstack-us/kaal
-bun install  # restore npm version
+# 6. When done, unregister the local packages
+cd ~/workspace/kaal/packages/core
+bun unlink  # Unregisters the package
+
+# 7. In consumer, reinstall from npm
+cd ~/workspace/dreamstack-hq
+bun install  # Restores npm version
 ```
 
 ### 3. Branch Naming Convention

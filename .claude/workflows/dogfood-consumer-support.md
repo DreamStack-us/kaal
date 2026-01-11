@@ -93,10 +93,16 @@ Use this workflow when handling issues, feature requests, or improvements report
 
 4. **Test in consumer project**
    ```bash
-   # In kaal
-   bun link
+   # Register kaal packages as linkable (run from package directory)
+   cd ~/workspace/kaal/packages/core
+   bun link  # Registers @dreamstack-us/kaal
 
-   # In consumer (dreamstack-hq, etc.)
+   # For agenda package:
+   cd ~/workspace/kaal/packages/agenda
+   bun link  # Registers @dreamstack-us/kaal-agenda
+
+   # In consumer (dreamstack-hq, etc.), link the registered packages
+   cd ~/workspace/dreamstack-hq
    bun link @dreamstack-us/kaal
    # or for specific package
    bun link @dreamstack-us/kaal-agenda
