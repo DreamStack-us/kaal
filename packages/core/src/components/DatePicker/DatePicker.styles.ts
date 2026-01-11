@@ -1,35 +1,31 @@
-import { Platform } from 'react-native';
-import { StyleSheet, type UnistylesVariants } from 'react-native-unistyles';
+import { Platform, StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create((theme) => ({
+/**
+ * Default styles for DatePicker using plain React Native StyleSheet.
+ * Colors use dark theme defaults - consumers override via themeOverrides prop.
+ */
+export const styles = StyleSheet.create({
   container: {
-    backgroundColor: theme.colors.background.default,
-    borderRadius: theme.radii.card,
+    backgroundColor: '#1E1E1E',
+    borderRadius: 16,
     overflow: 'hidden',
-    variants: {
-      size: {
-        compact: {
-          padding: theme.spacing(2),
-        },
-        default: {
-          padding: theme.spacing(4),
-        },
-        large: {
-          padding: theme.spacing(6),
-        },
-      },
-    },
+    padding: 16,
+  },
+  containerCompact: {
+    padding: 8,
+  },
+  containerLarge: {
+    padding: 24,
   },
   backdrop: Platform.select({
     web: {
+      // @ts-ignore - web-only properties
       backdropFilter: 'blur(20px) saturate(180%)',
       WebkitBackdropFilter: 'blur(20px) saturate(180%)',
       backgroundColor: 'rgba(255, 255, 255, 0.7)',
     },
     default: {
-      backgroundColor: theme.colors.background.elevated,
+      backgroundColor: '#2C2C2E',
     },
   }),
-}));
-
-export type DatePickerVariants = UnistylesVariants<typeof styles>;
+});

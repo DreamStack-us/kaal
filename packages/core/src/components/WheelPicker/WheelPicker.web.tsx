@@ -1,12 +1,7 @@
+/// <reference lib="dom" />
 import type React from 'react';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { StyleSheet as RNStyleSheet, Text, View } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
 
 const ITEM_HEIGHT = 44;
 const VISIBLE_ITEMS = 5;
@@ -59,57 +54,162 @@ const WheelColumn: React.FC<{
   items: { value: number; label: string }[];
   selectedIndex: number;
   onSelect: (index: number) => void;
-}> = ({ items, selectedIndex, onSelect }) => {
-  const translateY = useSharedValue(-selectedIndex * ITEM_HEIGHT);
-  const velocity = useSharedValue(0);
+  label?: string;
+}> = ({ items, selectedIndex, onSelect, label = 'Select value' }) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const isScrolling = useRef(false);
+  const scrollTimeout = useRef<ReturnType<typeof setTimeout>>();
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Reanimated shared values are stable refs
-  const panGesture = useMemo(
-    () =>
-      Gesture.Pan()
-        .onUpdate((e) => {
-          'worklet';
-          translateY.value = e.translationY + -selectedIndex * ITEM_HEIGHT;
-          velocity.value = e.velocityY;
-        })
-        .onEnd(() => {
-          'worklet';
-          const targetIndex = Math.round(-translateY.value / ITEM_HEIGHT);
-          const clampedIndex = Math.max(
-            0,
-            Math.min(items.length - 1, targetIndex),
-          );
+  // Scroll to selected item on mount and when selection changes externally
+  useEffect(() => {
+    if (scrollRef.current && !isScrolling.current) {
+      scrollRef.current.scrollTop = selectedIndex * ITEM_HEIGHT;
+    }
+  }, [selectedIndex]);
 
-          translateY.value = withSpring(-clampedIndex * ITEM_HEIGHT, {
-            velocity: velocity.value,
-            damping: 20,
-            stiffness: 200,
-          });
-        }),
-    [selectedIndex, items.length],
+  const handleScroll = useCallback(() => {
+    if (!scrollRef.current) return;
+
+    isScrolling.current = true;
+
+    // Clear existing timeout
+    if (scrollTimeout.current) {
+      clearTimeout(scrollTimeout.current);
+    }
+
+    // Debounce scroll end detection
+    scrollTimeout.current = setTimeout(() => {
+      if (!scrollRef.current) return;
+
+      const scrollTop = scrollRef.current.scrollTop;
+      const newIndex = Math.round(scrollTop / ITEM_HEIGHT);
+      const clampedIndex = Math.max(0, Math.min(items.length - 1, newIndex));
+
+      // Snap to nearest item
+      scrollRef.current.scrollTop = clampedIndex * ITEM_HEIGHT;
+
+      if (clampedIndex !== selectedIndex) {
+        onSelect(clampedIndex);
+      }
+
+      isScrolling.current = false;
+    }, 100);
+  }, [items.length, selectedIndex, onSelect]);
+
+  // Keyboard navigation for spinbutton behavior (like native input[type="time"])
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      let newIndex = selectedIndex;
+
+      switch (e.key) {
+        case 'ArrowUp':
+          e.preventDefault();
+          newIndex = Math.max(0, selectedIndex - 1);
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          newIndex = Math.min(items.length - 1, selectedIndex + 1);
+          break;
+        case 'Home':
+          e.preventDefault();
+          newIndex = 0;
+          break;
+        case 'End':
+          e.preventDefault();
+          newIndex = items.length - 1;
+          break;
+        case 'PageUp':
+          e.preventDefault();
+          newIndex = Math.max(0, selectedIndex - 5);
+          break;
+        case 'PageDown':
+          e.preventDefault();
+          newIndex = Math.min(items.length - 1, selectedIndex + 5);
+          break;
+        default:
+          return;
+      }
+
+      if (newIndex !== selectedIndex) {
+        if (scrollRef.current) {
+          scrollRef.current.scrollTop = newIndex * ITEM_HEIGHT;
+        }
+        onSelect(newIndex);
+      }
+    },
+    [selectedIndex, items.length, onSelect],
   );
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: translateY.value }],
-  }));
+  const currentItem = items[selectedIndex];
 
   return (
     <View style={webStyles.column}>
       <View style={webStyles.selectionHighlight} />
 
-      <GestureDetector gesture={panGesture}>
-        <Animated.View style={[webStyles.itemsContainer, animatedStyle]}>
-          <View style={{ height: ITEM_HEIGHT * 2 }} />
+      {/* Spinbutton container - mimics input[type="time"] accessibility */}
+      <div
+        ref={scrollRef}
+        role="spinbutton"
+        tabIndex={0}
+        aria-label={label}
+        aria-valuenow={currentItem?.value}
+        aria-valuemin={items[0]?.value}
+        aria-valuemax={items[items.length - 1]?.value}
+        aria-valuetext={currentItem?.label}
+        onScroll={handleScroll}
+        onKeyDown={handleKeyDown}
+        onClick={(e) => {
+          const target = e.target as HTMLElement;
+          const item = target.closest('[data-index]') as HTMLElement | null;
+          if (item && scrollRef.current) {
+            const index = Number(item.dataset.index);
+            scrollRef.current.scrollTop = index * ITEM_HEIGHT;
+            onSelect(index);
+          }
+        }}
+        style={{
+          height: CONTAINER_HEIGHT,
+          overflowY: 'auto',
+          scrollSnapType: 'y mandatory',
+          scrollBehavior: 'smooth',
+          position: 'relative',
+          zIndex: 1,
+          outline: 'none',
+          // Hide scrollbar
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+        }}
+      >
+        {/* @ts-ignore - webkit scrollbar hiding */}
+        <style>{`
+          div::-webkit-scrollbar {
+            display: none;
+          }
+        `}</style>
 
-          {items.map((item) => (
-            <View key={item.value} style={webStyles.item}>
-              <Text style={webStyles.itemText}>{item.label}</Text>
-            </View>
-          ))}
+        {/* Top padding */}
+        <div style={{ height: ITEM_HEIGHT * 2, flexShrink: 0 }} />
 
-          <View style={{ height: ITEM_HEIGHT * 2 }} />
-        </Animated.View>
-      </GestureDetector>
+        {items.map((item, index) => (
+          <div
+            key={item.value}
+            data-index={index}
+            style={{
+              height: ITEM_HEIGHT,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              scrollSnapAlign: 'center',
+              cursor: 'pointer',
+            }}
+          >
+            <Text style={webStyles.itemText}>{item.label}</Text>
+          </div>
+        ))}
+
+        {/* Bottom padding */}
+        <div style={{ height: ITEM_HEIGHT * 2, flexShrink: 0 }} />
+      </div>
     </View>
   );
 };
@@ -179,11 +279,13 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
         items={months}
         selectedIndex={value.getUTCMonth()}
         onSelect={handleMonthChange}
+        label="Month"
       />
       <WheelColumn
         items={days}
         selectedIndex={value.getUTCDate() - 1}
         onSelect={handleDayChange}
+        label="Day"
       />
       <WheelColumn
         items={years}
@@ -191,6 +293,7 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
           (y) => y.value === value.getUTCFullYear(),
         )}
         onSelect={handleYearChange}
+        label="Year"
       />
     </View>
   );
@@ -210,6 +313,7 @@ const webStyles = RNStyleSheet.create({
     flex: 1,
     height: CONTAINER_HEIGHT,
     overflow: 'hidden',
+    position: 'relative',
   },
   selectionHighlight: {
     position: 'absolute',
@@ -220,14 +324,6 @@ const webStyles = RNStyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.04)',
     borderRadius: 8,
     zIndex: 0,
-  },
-  itemsContainer: {
-    zIndex: 1,
-  },
-  item: {
-    height: ITEM_HEIGHT,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   itemText: {
     fontSize: 21,

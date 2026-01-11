@@ -1,9 +1,7 @@
+/// <reference lib="dom" />
 import type React from 'react';
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useCallback, useMemo, useRef } from 'react';
 import { View } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { runOnJS } from 'react-native-reanimated';
-import Svg, { Circle, G, Line, Text as SvgText } from 'react-native-svg';
 import { useTimePickerOverrides } from '../../context/ThemeOverrideContext';
 import { to12Hour, to24Hour } from '../../hooks/useTimePicker';
 import type { ClockMode, TimeValue } from '../../types/timepicker';
@@ -65,6 +63,8 @@ interface ClockFaceProps {
 export const ClockFace: React.FC<ClockFaceProps> = memo(
   ({ value, onChange, mode, onModeChange, is24Hour = false }) => {
     const overrides = useTimePickerOverrides();
+    const svgRef = useRef<SVGSVGElement>(null);
+    const isDragging = useRef(false);
     const { hour: hour12, period } = to12Hour(value.hours);
 
     // Build colors from overrides
@@ -94,7 +94,13 @@ export const ClockFace: React.FC<ClockFaceProps> = memo(
     const handEndPos = getPointOnCircle(handAngle, OUTER_RADIUS);
 
     const handleInteraction = useCallback(
-      (x: number, y: number) => {
+      (clientX: number, clientY: number) => {
+        if (!svgRef.current) return;
+
+        const rect = svgRef.current.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+
         // Convert touch coordinates to angle
         const dx = x - CLOCK_CENTER;
         const dy = y - CLOCK_CENTER;
@@ -128,35 +134,57 @@ export const ClockFace: React.FC<ClockFaceProps> = memo(
       }
     }, [mode, onModeChange]);
 
-    const panGesture = useMemo(
-      () =>
-        Gesture.Pan()
-          .onStart((e) => {
-            'worklet';
-            runOnJS(handleInteraction)(e.x, e.y);
-          })
-          .onUpdate((e) => {
-            'worklet';
-            runOnJS(handleInteraction)(e.x, e.y);
-          })
-          .onEnd(() => {
-            'worklet';
-            runOnJS(handleInteractionEnd)();
-          }),
-      [handleInteraction, handleInteractionEnd],
+    const handleMouseDown = useCallback(
+      (e: React.MouseEvent<SVGSVGElement>) => {
+        isDragging.current = true;
+        handleInteraction(e.clientX, e.clientY);
+      },
+      [handleInteraction],
     );
 
-    const tapGesture = useMemo(
-      () =>
-        Gesture.Tap().onEnd((e) => {
-          'worklet';
-          runOnJS(handleInteraction)(e.x, e.y);
-          runOnJS(handleInteractionEnd)();
-        }),
-      [handleInteraction, handleInteractionEnd],
+    const handleMouseMove = useCallback(
+      (e: React.MouseEvent<SVGSVGElement>) => {
+        if (!isDragging.current) return;
+        handleInteraction(e.clientX, e.clientY);
+      },
+      [handleInteraction],
     );
 
-    const combinedGesture = Gesture.Race(panGesture, tapGesture);
+    const handleMouseUp = useCallback(() => {
+      if (isDragging.current) {
+        isDragging.current = false;
+        handleInteractionEnd();
+      }
+    }, [handleInteractionEnd]);
+
+    const handleTouchStart = useCallback(
+      (e: React.TouchEvent<SVGSVGElement>) => {
+        isDragging.current = true;
+        const touch = e.touches[0];
+        if (touch) {
+          handleInteraction(touch.clientX, touch.clientY);
+        }
+      },
+      [handleInteraction],
+    );
+
+    const handleTouchMove = useCallback(
+      (e: React.TouchEvent<SVGSVGElement>) => {
+        if (!isDragging.current) return;
+        const touch = e.touches[0];
+        if (touch) {
+          handleInteraction(touch.clientX, touch.clientY);
+        }
+      },
+      [handleInteraction],
+    );
+
+    const handleTouchEnd = useCallback(() => {
+      if (isDragging.current) {
+        isDragging.current = false;
+        handleInteractionEnd();
+      }
+    }, [handleInteractionEnd]);
 
     // Render clock numbers
     const numbers = useMemo(() => {
@@ -167,18 +195,19 @@ export const ClockFace: React.FC<ClockFaceProps> = memo(
           const isSelected = hour12 === hour;
 
           return (
-            <SvgText
+            <text
               key={hour}
               x={pos.x}
               y={pos.y}
               textAnchor="middle"
-              alignmentBaseline="central"
+              dominantBaseline="central"
               fontSize={14}
               fontWeight={isSelected ? '500' : '400'}
               fill={isSelected ? colors.textSelectedColor : colors.textColor}
+              style={{ userSelect: 'none' }}
             >
               {hour}
-            </SvgText>
+            </text>
           );
         });
       }
@@ -189,68 +218,83 @@ export const ClockFace: React.FC<ClockFaceProps> = memo(
         const isSelected = value.minutes === minute;
 
         return (
-          <SvgText
+          <text
             key={minute}
             x={pos.x}
             y={pos.y}
             textAnchor="middle"
-            alignmentBaseline="central"
+            dominantBaseline="central"
             fontSize={14}
             fontWeight={isSelected ? '500' : '400'}
             fill={isSelected ? colors.textSelectedColor : colors.textColor}
+            style={{ userSelect: 'none' }}
           >
             {minute.toString().padStart(2, '0')}
-          </SvgText>
+          </text>
         );
       });
     }, [mode, hour12, value.minutes, colors]);
 
     return (
       <View style={styles.clockContainer}>
-        <GestureDetector gesture={combinedGesture}>
-          <Svg
-            width={CLOCK_SIZE}
-            height={CLOCK_SIZE}
-            viewBox={`0 0 ${CLOCK_SIZE} ${CLOCK_SIZE}`}
-          >
-            {/* Background circle */}
-            <Circle
-              cx={CLOCK_CENTER}
-              cy={CLOCK_CENTER}
-              r={CLOCK_SIZE / 2 - 4}
-              fill={colors.clockBackground}
-            />
+        <svg
+          ref={svgRef}
+          width={CLOCK_SIZE}
+          height={CLOCK_SIZE}
+          viewBox={`0 0 ${CLOCK_SIZE} ${CLOCK_SIZE}`}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          style={{ cursor: 'pointer', touchAction: 'none' }}
+          role="img"
+          aria-label={`Clock face for selecting ${mode === 'hours' ? 'hours' : 'minutes'}`}
+        >
+          <title>
+            {mode === 'hours'
+              ? 'Hour selection clock'
+              : 'Minute selection clock'}
+          </title>
+          {/* Background circle */}
+          <circle
+            cx={CLOCK_CENTER}
+            cy={CLOCK_CENTER}
+            r={CLOCK_SIZE / 2 - 4}
+            fill={colors.clockBackground}
+          />
 
-            {/* Selection dot (behind numbers) */}
-            <Circle
-              cx={handEndPos.x}
-              cy={handEndPos.y}
-              r={SELECTION_DOT_RADIUS}
-              fill={colors.selectionDotColor}
-            />
+          {/* Selection dot (behind numbers) */}
+          <circle
+            cx={handEndPos.x}
+            cy={handEndPos.y}
+            r={SELECTION_DOT_RADIUS}
+            fill={colors.selectionDotColor}
+          />
 
-            {/* Clock hand */}
-            <Line
-              x1={CLOCK_CENTER}
-              y1={CLOCK_CENTER}
-              x2={handEndPos.x}
-              y2={handEndPos.y}
-              stroke={colors.handColor}
-              strokeWidth={2}
-            />
+          {/* Clock hand */}
+          <line
+            x1={CLOCK_CENTER}
+            y1={CLOCK_CENTER}
+            x2={handEndPos.x}
+            y2={handEndPos.y}
+            stroke={colors.handColor}
+            strokeWidth={2}
+          />
 
-            {/* Center dot */}
-            <Circle
-              cx={CLOCK_CENTER}
-              cy={CLOCK_CENTER}
-              r={CENTER_DOT_RADIUS}
-              fill={colors.handColor}
-            />
+          {/* Center dot */}
+          <circle
+            cx={CLOCK_CENTER}
+            cy={CLOCK_CENTER}
+            r={CENTER_DOT_RADIUS}
+            fill={colors.handColor}
+          />
 
-            {/* Numbers */}
-            <G>{numbers}</G>
-          </Svg>
-        </GestureDetector>
+          {/* Numbers */}
+          <g>{numbers}</g>
+        </svg>
       </View>
     );
   },

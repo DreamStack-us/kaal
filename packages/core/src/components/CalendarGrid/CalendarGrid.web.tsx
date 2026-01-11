@@ -1,5 +1,6 @@
+/// <reference lib="dom" />
 import React, { memo, useCallback, useMemo } from 'react';
-import { FlatList, Pressable, Text, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useDatePickerOverrides } from '../../context/ThemeOverrideContext';
 import {
   addMonths,
@@ -11,7 +12,6 @@ import {
   isSameDay,
   today,
 } from '../../utils/date';
-import { styles } from './CalendarGrid.styles';
 import { DayCell } from './DayCell';
 
 interface CalendarGridProps {
@@ -53,6 +53,16 @@ const WEEK_DAYS_MONDAY_START = [
   'Sat',
   'Sun',
 ];
+
+// Default colors (light theme for web)
+const DEFAULT_COLORS = {
+  backgroundColor: '#FFFFFF',
+  primaryColor: '#007AFF',
+  textColor: '#1C1C1E',
+  weekdayColor: '#8E8E93',
+  borderRadius: 14,
+  padding: 16,
+};
 
 /**
  * Generate padding days for the month grid based on week start day
@@ -99,6 +109,50 @@ const generateMonthDays = (
 
   return days;
 };
+
+// Web-compatible styles (no unistyles dependency)
+const webStyles = StyleSheet.create({
+  container: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 14,
+    padding: 16,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+    paddingHorizontal: 8,
+  },
+  navButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+  },
+  navText: {
+    fontSize: 24,
+    color: '#007AFF',
+    fontWeight: '600',
+  },
+  monthTitle: {
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#1C1C1E',
+  },
+  weekDays: {
+    flexDirection: 'row',
+    marginBottom: 8,
+  },
+  weekDayText: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#8E8E93',
+  },
+});
 
 export const CalendarGrid: React.FC<CalendarGridProps> = memo(
   ({
@@ -171,47 +225,61 @@ export const CalendarGrid: React.FC<CalendarGridProps> = memo(
       [],
     );
 
-    // Build override styles from themeOverrides
+    // Build override styles
     const containerStyle = useMemo(
       () => ({
-        backgroundColor: overrides?.backgroundColor ?? '#1E1E1E',
-        borderRadius: overrides?.borderRadius ?? 16,
-        padding: overrides?.padding ?? 16,
+        backgroundColor:
+          overrides?.backgroundColor ?? DEFAULT_COLORS.backgroundColor,
+        borderRadius: overrides?.borderRadius ?? DEFAULT_COLORS.borderRadius,
+        padding: overrides?.padding ?? DEFAULT_COLORS.padding,
       }),
       [overrides],
     );
 
     const navTextStyle = useMemo(
       () => ({
-        color: overrides?.primaryColor ?? '#4DA6FF',
+        color: overrides?.primaryColor ?? DEFAULT_COLORS.primaryColor,
       }),
       [overrides],
     );
 
     const monthTitleStyle = useMemo(
       () => ({
-        color: overrides?.textColor ?? '#FFFFFF',
+        color: overrides?.textColor ?? DEFAULT_COLORS.textColor,
+      }),
+      [overrides],
+    );
+
+    const weekDayTextStyle = useMemo(
+      () => ({
+        color: overrides?.textWeekendColor ?? DEFAULT_COLORS.weekdayColor,
       }),
       [overrides],
     );
 
     return (
-      <View style={[styles.container, containerStyle]}>
-        <View style={styles.header}>
-          <Pressable onPress={() => navigateMonth(-1)} style={styles.navButton}>
-            <Text style={[styles.navText, navTextStyle]}>‹</Text>
+      <View style={[webStyles.container, containerStyle]}>
+        <View style={webStyles.header}>
+          <Pressable
+            onPress={() => navigateMonth(-1)}
+            style={webStyles.navButton}
+          >
+            <Text style={[webStyles.navText, navTextStyle]}>‹</Text>
           </Pressable>
-          <Text style={[styles.monthTitle, monthTitleStyle]}>
+          <Text style={[webStyles.monthTitle, monthTitleStyle]}>
             {formatYearMonth(currentMonth)}
           </Text>
-          <Pressable onPress={() => navigateMonth(1)} style={styles.navButton}>
-            <Text style={[styles.navText, navTextStyle]}>›</Text>
+          <Pressable
+            onPress={() => navigateMonth(1)}
+            style={webStyles.navButton}
+          >
+            <Text style={[webStyles.navText, navTextStyle]}>›</Text>
           </Pressable>
         </View>
 
-        <View style={styles.weekDays}>
+        <View style={webStyles.weekDays}>
           {weekDays.map((day) => (
-            <Text key={day} style={styles.weekDayText}>
+            <Text key={day} style={[webStyles.weekDayText, weekDayTextStyle]}>
               {day}
             </Text>
           ))}

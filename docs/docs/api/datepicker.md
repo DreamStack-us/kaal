@@ -129,6 +129,68 @@ The locale to use for formatting. Accepts any valid Unicode locale identifier.
 />
 ```
 
+### `weekStartsOn`
+
+**Type:** `0 | 1`
+**Default:** `0`
+
+The first day of the week. `0` = Sunday, `1` = Monday.
+
+```tsx
+// Calendar starts on Monday
+<DatePicker
+  value={date}
+  onChange={setDate}
+  weekStartsOn={1}
+/>
+```
+
+:::note
+This is a temporary solution for week start configuration. Full locale support with automatic detection of week start day, localized day/month names, and RTL support is planned for a future release.
+:::
+
+### `themeOverrides`
+
+**Type:** `DatePickerThemeOverrides`
+**Default:** `undefined`
+
+Custom theme overrides for styling the DatePicker without using a theme provider. This is the recommended approach for web apps and when you want to integrate with your existing design system.
+
+```tsx
+<DatePicker
+  value={date}
+  onChange={setDate}
+  themeOverrides={{
+    primaryColor: '#22d3ee',
+    cellSelectedColor: '#22d3ee',
+    cellTodayColor: 'rgba(34, 211, 238, 0.2)',
+    textColor: '#FFFFFF',
+    textSelectedColor: '#FFFFFF',
+    textDisabledColor: '#6b7280',
+    textWeekendColor: '#9ca3af',
+    backgroundColor: '#1f2937',
+    borderRadius: 16,
+  }}
+/>
+```
+
+#### DatePickerThemeOverrides Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `primaryColor` | `string` | Primary accent color for navigation and highlights |
+| `cellSelectedColor` | `string` | Background color of the selected date cell |
+| `cellTodayColor` | `string` | Background color of today's date cell |
+| `cellBorderRadius` | `number` | Border radius for date cells |
+| `textColor` | `string` | Default text color for dates |
+| `textSelectedColor` | `string` | Text color for the selected date |
+| `textDisabledColor` | `string` | Text color for disabled dates |
+| `textWeekendColor` | `string` | Text color for weekend dates |
+| `backgroundColor` | `string` | Container background color |
+| `headerBackground` | `string` | Header/navigation background color |
+| `borderRadius` | `number` | Border radius for the calendar container |
+| `padding` | `number` | Padding for the calendar container |
+
 ## Examples
 
 ### Basic Calendar
@@ -176,7 +238,7 @@ function WheelPickerWithRange() {
 ## TypeScript
 
 ```tsx
-import type { DatePickerProps } from '@dreamstack-us/kaal';
+import type { DatePickerProps, DatePickerThemeOverrides } from '@dreamstack-us/kaal';
 
 // DatePickerProps interface
 interface DatePickerProps {
@@ -189,5 +251,23 @@ interface DatePickerProps {
   maxDate?: Date;
   disabledDates?: Date[];
   locale?: string;
+  weekStartsOn?: 0 | 1;
+  themeOverrides?: DatePickerThemeOverrides;
+}
+
+// DatePickerThemeOverrides interface
+interface DatePickerThemeOverrides {
+  primaryColor?: string;
+  cellSelectedColor?: string;
+  cellTodayColor?: string;
+  cellBorderRadius?: number;
+  textColor?: string;
+  textSelectedColor?: string;
+  textDisabledColor?: string;
+  textWeekendColor?: string;
+  backgroundColor?: string;
+  headerBackground?: string;
+  borderRadius?: number;
+  padding?: number;
 }
 ```

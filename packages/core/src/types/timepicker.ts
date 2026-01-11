@@ -19,6 +19,78 @@ export type TimePickerTheme = 'native' | 'ios' | 'android';
 export type MinuteInterval = 1 | 5 | 10 | 15 | 30;
 
 /**
+ * Theme overrides for TimePicker components.
+ * These allow customizing colors without matching Kaal's internal theme structure.
+ */
+export interface TimePickerThemeOverrides {
+  // Clock face (Material style)
+  /** Background color of the clock face */
+  clockBackground?: string;
+  /** Color of the clock hand */
+  clockHandColor?: string;
+  /** Color of clock numbers */
+  clockTextColor?: string;
+  /** Color of selected clock number */
+  clockTextSelectedColor?: string;
+  /** Color of the center dot */
+  clockCenterColor?: string;
+  /** Color of the selection dot on clock edge */
+  clockSelectionColor?: string;
+
+  // Period toggle (AM/PM)
+  /** Background color of period buttons */
+  periodBackground?: string;
+  /** Background color of active period button */
+  periodActiveBackground?: string;
+  /** Border color of period buttons */
+  periodBorderColor?: string;
+  /** Text color of period buttons */
+  periodTextColor?: string;
+  /** Text color of active period button */
+  periodTextActiveColor?: string;
+
+  // Time field (header display)
+  /** Background color of time fields */
+  timeFieldBackground?: string;
+  /** Background color of active time field */
+  timeFieldActiveBackground?: string;
+  /** Text color of time fields */
+  textColor?: string;
+  /** Text color of active time field */
+  textActiveColor?: string;
+  /** Color of the colon separator */
+  separatorColor?: string;
+
+  // Wheel picker (iOS style)
+  /** Background color of wheel picker */
+  wheelContainerBackground?: string;
+  /** Color of wheel selection highlight */
+  wheelSelectionHighlight?: string;
+  /** Color of wheel separator */
+  wheelSeparatorColor?: string;
+  /** Text color in wheel */
+  wheelTextColor?: string;
+  /** Text color of selected wheel item */
+  wheelTextSelectedColor?: string;
+
+  // Material container
+  /** Container background color */
+  containerBackground?: string;
+  /** Header text color */
+  headerColor?: string;
+  /** Action button text color */
+  actionButtonColor?: string;
+
+  // General
+  /** Primary accent color */
+  primaryColor?: string;
+  /** Border radius for container */
+  borderRadius?: number;
+  /** Generic background color (fallback for all container backgrounds) */
+  backgroundColor?: string;
+}
+
+/**
  * Props for the TimePicker component
  */
 export interface TimePickerProps {
@@ -36,6 +108,8 @@ export interface TimePickerProps {
   minTime?: TimeValue;
   /** Maximum selectable time */
   maxTime?: TimeValue;
+  /** Custom theme overrides for styling without matching Kaal's theme structure */
+  themeOverrides?: TimePickerThemeOverrides;
 }
 
 /**

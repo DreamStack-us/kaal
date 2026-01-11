@@ -56,3 +56,5 @@ export const darkTheme = {
     },
   },
 } as const;
+
+export type DarkTheme = typeof darkTheme;

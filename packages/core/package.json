@@ -29,9 +29,7 @@
     "clean": "rm -rf lib",
     "size": "size-limit"
   },
-  "dependencies": {
-    "valibot": "^1.0.0"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "react": ">=18.2.0",
     "react-native": ">=0.78.0",
@@ -39,15 +37,18 @@
     "react-native-nitro-modules": "0.31.4",
     "react-native-reanimated": ">=3.17.0",
     "react-native-gesture-handler": ">=2.20.0",
-    "react-native-svg": ">=13.0.0"
+    "react-native-svg": ">=13.0.0",
+    "@dreamstack-us/kaal-themes": ">=0.0.1"
   },
   "peerDependenciesMeta": {
     "@expo/ui": {
       "optional": true
+    },
+    "@dreamstack-us/kaal-themes": {
+      "optional": true
     }
   },
   "devDependencies": {
-    "@dreamstack-us/kaal-themes": "workspace:*",
     "@types/react": "^18.3.0",
     "react": "18.3.1",
     "react-native": "0.78.0",
@@ -57,8 +58,7 @@
     "react-native-reanimated": "^3.17.0",
     "react-native-svg": "^15.15.1",
     "react-native-unistyles": "^3.0.0",
-    "typescript": "^5.7.0",
-    "typescript-config": "workspace:*"
+    "typescript": "^5.7.0"
   },
   "react-native-builder-bob": {
     "source": "src",

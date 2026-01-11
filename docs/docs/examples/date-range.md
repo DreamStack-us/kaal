@@ -8,11 +8,21 @@ Examples for selecting date ranges.
 
 ## Live Example
 
-```SnackPlayer name=Date%20Range%20Picker&dependencies=@dreamstack-us/kaal,@dreamstack-us/kaal-themes,react-native-unistyles
+```SnackPlayer name=Date%20Range%20Picker&dependencies=@dreamstack-us/kaal
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { DatePicker, toISODateString, addDays, KaalProvider } from '@dreamstack-us/kaal';
-import { kaalNativeTheme } from '@dreamstack-us/kaal-themes';
+import { DatePicker, toISODateString, addDays } from '@dreamstack-us/kaal';
+
+const pickerTheme = {
+  primaryColor: '#3b82f6',
+  cellSelectedColor: '#3b82f6',
+  cellTodayColor: 'rgba(59, 130, 246, 0.15)',
+  textColor: '#1e293b',
+  textSelectedColor: '#ffffff',
+  textDisabledColor: '#cbd5e1',
+  backgroundColor: '#ffffff',
+  borderRadius: 16,
+};
 
 export default function App() {
   const today = new Date();
@@ -28,32 +38,34 @@ export default function App() {
   };
 
   return (
-    <KaalProvider theme={kaalNativeTheme}>
-      <ScrollView style={styles.container}>
-        <Text style={styles.title}>Select Date Range</Text>
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>Select Date Range</Text>
 
-        <View style={styles.section}>
-          <Text style={styles.label}>Start Date</Text>
-          <Text style={styles.value}>{toISODateString(startDate)}</Text>
-          <DatePicker
-            value={startDate}
-            onChange={handleStartDateChange}
-            variant="calendar"
-          />
-        </View>
+      <View style={styles.section}>
+        <Text style={styles.label}>Start Date</Text>
+        <Text style={styles.value}>{toISODateString(startDate)}</Text>
+        <DatePicker
+          value={startDate}
+          onChange={handleStartDateChange}
+          variant="calendar"
+          weekStartsOn={0}
+          themeOverrides={pickerTheme}
+        />
+      </View>
 
-        <View style={styles.section}>
-          <Text style={styles.label}>End Date</Text>
-          <Text style={styles.value}>{toISODateString(endDate)}</Text>
-          <DatePicker
-            value={endDate}
-            onChange={setEndDate}
-            minDate={addDays(startDate, 1)}
-            variant="calendar"
-          />
-        </View>
-      </ScrollView>
-    </KaalProvider>
+      <View style={styles.section}>
+        <Text style={styles.label}>End Date</Text>
+        <Text style={styles.value}>{toISODateString(endDate)}</Text>
+        <DatePicker
+          value={endDate}
+          onChange={setEndDate}
+          minDate={addDays(startDate, 1)}
+          variant="calendar"
+          weekStartsOn={0}
+          themeOverrides={pickerTheme}
+        />
+      </View>
+    </ScrollView>
   );
 }
 
@@ -67,6 +79,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '600',
     marginBottom: 16,
+    color: '#1e293b',
   },
   section: {
     marginBottom: 24,
@@ -80,6 +93,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     marginBottom: 12,
+    color: '#1e293b',
   },
 });
 ```
@@ -108,16 +122,17 @@ Use `minDate` to prevent selecting an end date before the start:
   value={endDate}
   onChange={setEndDate}
   minDate={addDays(startDate, 1)}
+  weekStartsOn={0}
+  themeOverrides={pickerTheme}
 />
 ```
 
 ## With Disabled Dates
 
-```SnackPlayer name=Disabled%20Dates&dependencies=@dreamstack-us/kaal,@dreamstack-us/kaal-themes,react-native-unistyles
+```SnackPlayer name=Disabled%20Dates&dependencies=@dreamstack-us/kaal
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { DatePicker, toISODateString, parseISODate, KaalProvider } from '@dreamstack-us/kaal';
-import { kaalNativeTheme } from '@dreamstack-us/kaal-themes';
+import { DatePicker, toISODateString, parseISODate } from '@dreamstack-us/kaal';
 
 export default function App() {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -130,23 +145,32 @@ export default function App() {
   ];
 
   return (
-    <KaalProvider theme={kaalNativeTheme}>
-      <View style={styles.container}>
-        <Text style={styles.label}>
-          Holidays are disabled
-        </Text>
-        <Text style={styles.selected}>
-          Selected: {toISODateString(selectedDate)}
-        </Text>
+    <View style={styles.container}>
+      <Text style={styles.label}>
+        Holidays are disabled
+      </Text>
+      <Text style={styles.selected}>
+        Selected: {toISODateString(selectedDate)}
+      </Text>
 
-        <DatePicker
-          value={selectedDate}
-          onChange={setSelectedDate}
-          disabledDates={disabledDates}
-          variant="calendar"
-        />
-      </View>
-    </KaalProvider>
+      <DatePicker
+        value={selectedDate}
+        onChange={setSelectedDate}
+        disabledDates={disabledDates}
+        variant="calendar"
+        weekStartsOn={0}
+        themeOverrides={{
+          primaryColor: '#ef4444',
+          cellSelectedColor: '#ef4444',
+          cellTodayColor: 'rgba(239, 68, 68, 0.15)',
+          textColor: '#1e293b',
+          textSelectedColor: '#ffffff',
+          textDisabledColor: '#fca5a5',
+          backgroundColor: '#ffffff',
+          borderRadius: 16,
+        }}
+      />
+    </View>
   );
 }
 
@@ -164,6 +188,7 @@ const styles = StyleSheet.create({
   selected: {
     fontSize: 16,
     marginBottom: 16,
+    color: '#1e293b',
   },
 });
 ```
