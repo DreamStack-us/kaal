@@ -60,7 +60,7 @@ export default function App() {
         startDate={range.startDate}
         endDate={range.endDate}
         onRangeChange={setRange}
-        variant="calendar"
+        theme="ios"
         weekStartsOn={0}
         themeOverrides={pickerTheme}
       />
@@ -193,7 +193,7 @@ export default function App() {
         value={selectedDate}
         onChange={setSelectedDate}
         disabledDates={disabledDates}
-        variant="calendar"
+        theme="ios"
         weekStartsOn={0}
         themeOverrides={{
           primaryColor: '#ef4444',

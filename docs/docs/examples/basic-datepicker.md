@@ -25,7 +25,7 @@ export default function App() {
       <DatePicker
         value={selectedDate}
         onChange={setSelectedDate}
-        variant="calendar"
+        theme="ios"
         weekStartsOn={0}
         themeOverrides={{
           primaryColor: '#3b82f6',
@@ -109,7 +109,7 @@ export default function App() {
       <DatePicker
         value={selectedDate}
         onChange={setSelectedDate}
-        variant="calendar"
+        theme="ios"
         weekStartsOn={0}
         themeOverrides={{
           primaryColor: '#22d3ee',
@@ -168,6 +168,7 @@ export default function App() {
       <DatePicker
         value={selectedDate}
         onChange={setSelectedDate}
+        theme="ios"
         minDate={minDate}
         maxDate={maxDate}
         weekStartsOn={0}

@@ -92,7 +92,7 @@ export default function App() {
       <DatePicker
         value={selectedDate}
         onChange={setSelectedDate}
-        variant="calendar"
+        theme="ios"
         weekStartsOn={0}
         themeOverrides={datePickerOverrides}
       />
@@ -224,7 +224,7 @@ export default function App() {
       <DatePicker
         value={selectedDate}
         onChange={setSelectedDate}
-        variant="calendar"
+        theme="ios"
         weekStartsOn={0}
         themeOverrides={holidayTheme}
       />
