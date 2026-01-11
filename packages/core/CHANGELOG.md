@@ -1,5 +1,19 @@
 # @dreamstack-us/kaal
 
+## 0.0.3
+
+### Patch Changes
+
+- [#9](https://github.com/DreamStack-us/kaal/pull/9) [`1268843`](https://github.com/DreamStack-us/kaal/commit/1268843abcc51cf29e03eb0985af8275a61d1e1e) Thanks [@hariDasu](https://github.com/hariDasu)! - Add date range selection mode to DatePicker
+
+  - New `selectionMode="range"` prop for date range selection
+  - New props: `startDate`, `endDate`, `onRangeChange`
+  - New theme overrides: `cellInRangeColor`, `textInRangeColor`
+  - Visual highlighting for dates between start and end
+  - Fix Expo Snack embeds (URL encoding)
+  - Add README for npm package display
+  - Update root README with current architecture
+
 ## 0.0.2
 
 ### Minor Changes
