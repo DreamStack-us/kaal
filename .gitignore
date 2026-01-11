@@ -47,7 +47,6 @@ coverage/
 docs/.docusaurus/
 docs/build/
 
-# Claude workflow - personal thoughts
-thoughts/srihari/
-thoughts/*/personal/
-.claude/settings.local.json
+# Claude Code - AI workflows and personal thoughts (not for public)
+.claude/
+thoughts/
