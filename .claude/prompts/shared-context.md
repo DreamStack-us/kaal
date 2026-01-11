@@ -1,5 +1,21 @@
 # Kaal Shared Context
 
+## CRITICAL: Node Version Management
+
+**ALWAYS run `nvm use` before any Node/npm/bun commands.**
+
+This project uses nvm to manage Node versions. The `.nvmrc` file specifies the required version. Running commands with the wrong Node version will either fail or corrupt the setup.
+
+```bash
+# ALWAYS do this first in any terminal session
+nvm use
+
+# Then run your commands
+bun install
+bun run build
+bun run dev
+```
+
 ## Project Overview
 
 **Kaal** is a high-performance React Native DatePicker library featuring:
