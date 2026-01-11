@@ -7,7 +7,59 @@ You are tasked with creating a complete pull request, including committing/pushi
 
 ## Process:
 
-### Phase 1: Commit & Push All Changes
+### Phase 1: Check if Changeset is Needed
+
+**Changeset is REQUIRED when changes affect the published npm package.**
+
+1. **Check what files changed:**
+   ```bash
+   git diff --name-only main..HEAD
+   ```
+
+2. **Changeset REQUIRED if ANY of these changed:**
+   - `packages/core/src/**` (component code)
+   - `packages/core/package.json` (dependencies, exports)
+   - Any file that affects the published `@dreamstack-us/kaal` package
+
+3. **Changeset NOT needed for:**
+   - `docs/**` (documentation site only)
+   - `.github/**` (CI/workflows)
+   - `.claude/**` (Claude commands)
+   - Root `README.md` (repo readme, not npm readme)
+   - `*.md` files outside packages/core
+   - Config files (biome.json, tsconfig, etc.)
+
+4. **If changeset is needed, check if one exists:**
+   ```bash
+   ls .changeset/*.md 2>/dev/null | grep -v README
+   ```
+
+5. **If no changeset exists and one is needed, create it:**
+   ```bash
+   bun changeset
+   ```
+   Or manually create `.changeset/<descriptive-name>.md`:
+   ```markdown
+   ---
+   "@dreamstack-us/kaal": patch|minor|major
+   ---
+
+   Brief description of changes
+   ```
+
+   **Version bump guide (0.x.x alpha phase):**
+   - `patch`: Everything during alpha - features, fixes, changes (0.0.2 → 0.0.3)
+   - `minor`: Reserved for significant milestones or breaking changes (0.0.x → 0.1.0)
+   - `major`: Reserved for stable release (0.x.x → 1.0.0)
+
+   See `docs/SEMVER.md` for full guide.
+
+6. **Stage the changeset (if created):**
+   ```bash
+   git add .changeset/
+   ```
+
+### Phase 2: Commit & Push All Changes
 
 1. **Review current state:**
    ```bash
@@ -20,13 +72,14 @@ You are tasked with creating a complete pull request, including committing/pushi
    - Group related changes into logical commits
    - Use conventional commit format: `type(scope): description`
    - **NEVER add co-author or Claude attribution**
+   - **ENSURE changeset is included in commits!**
 
 3. **Push to remote:**
    ```bash
    git push -u origin HEAD
    ```
 
-### Phase 2: Create or Update PR
+### Phase 3: Create or Update PR
 
 1. **Check if PR exists:**
    ```bash
@@ -45,7 +98,7 @@ You are tasked with creating a complete pull request, including committing/pushi
    gh pr create --title "feat(scope): description" --body-file /tmp/pr_body.md
    ```
 
-### Phase 3: Add Stacked Ticket Comments
+### Phase 4: Add Stacked Ticket Comments
 
 For each **meaningful commit** in the PR, add a comment using `.github/STACKED_TICKET_COMMENT_TEMPLATE.md`.
 
@@ -118,7 +171,7 @@ These are considered housekeeping and don't need individual ticket comments.
    gh pr comment {number} --body-file /tmp/ticket_comment.md
    ```
 
-### Phase 4: Summary
+### Phase 5: Summary
 
 1. **Display the PR URL**
 2. **List all tickets documented:**
