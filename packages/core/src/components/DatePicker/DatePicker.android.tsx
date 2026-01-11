@@ -1,5 +1,6 @@
 import React, { Suspense, useCallback } from 'react';
 import { ActivityIndicator, View } from 'react-native';
+import { ThemeOverrideProvider } from '../../context/ThemeOverrideContext';
 import { toISODateString } from '../../utils/date';
 import { CalendarGrid } from '../CalendarGrid';
 import type { KaalDatePickerProps } from './DatePicker';
@@ -38,6 +39,8 @@ export const DatePicker: React.FC<KaalDatePickerProps> = ({
   minDate,
   maxDate,
   disabledDates,
+  themeOverrides,
+  weekStartsOn = 0,
 }) => {
   const handleDateChange = useCallback(
     (date: Date) => {
@@ -57,13 +60,16 @@ export const DatePicker: React.FC<KaalDatePickerProps> = ({
   }
 
   return (
-    <CalendarGrid
-      value={value}
-      onChange={onChange}
-      minDate={minDate}
-      maxDate={maxDate}
-      disabledDates={disabledDates}
-      themeMode={theme}
-    />
+    <ThemeOverrideProvider value={{ datePicker: themeOverrides }}>
+      <CalendarGrid
+        value={value}
+        onChange={onChange}
+        minDate={minDate}
+        maxDate={maxDate}
+        disabledDates={disabledDates}
+        themeMode={theme}
+        weekStartsOn={weekStartsOn}
+      />
+    </ThemeOverrideProvider>
   );
 };
