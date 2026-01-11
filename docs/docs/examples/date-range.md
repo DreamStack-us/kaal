@@ -8,7 +8,7 @@ Select a date range with visual highlighting between start and end dates.
 
 ## Live Example
 
-```SnackPlayer name=Date%20Range%20Picker&dependencies=@dreamstack-us/kaal
+```SnackPlayer name=Date%20Range%20Picker&dependencies=@dreamstack-us/kaal,react-native-svg
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { DatePicker, toISODateString } from '@dreamstack-us/kaal';
@@ -153,7 +153,7 @@ const [range, setRange] = useState({
 
 ## With Disabled Dates
 
-```SnackPlayer name=Disabled%20Dates&dependencies=@dreamstack-us/kaal
+```SnackPlayer name=Disabled%20Dates&dependencies=@dreamstack-us/kaal,react-native-svg
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { DatePicker, toISODateString } from '@dreamstack-us/kaal';

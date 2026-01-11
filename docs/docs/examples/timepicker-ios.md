@@ -8,7 +8,7 @@ The iOS-style TimePicker uses spinning wheels for hour, minute, and AM/PM select
 
 ## Live Example
 
-```SnackPlayer name=iOS%20TimePicker&dependencies=@dreamstack-us/kaal
+```SnackPlayer name=iOS%20TimePicker&dependencies=@dreamstack-us/kaal,react-native-svg
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { TimePicker } from '@dreamstack-us/kaal';
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
 
 ## Dark Theme Example
 
-```SnackPlayer name=iOS%20TimePicker%20Dark&dependencies=@dreamstack-us/kaal
+```SnackPlayer name=iOS%20TimePicker%20Dark&dependencies=@dreamstack-us/kaal,react-native-svg
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { TimePicker } from '@dreamstack-us/kaal';
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
 
 ## With Minute Intervals
 
-```SnackPlayer name=TimePicker%20Intervals&dependencies=@dreamstack-us/kaal
+```SnackPlayer name=TimePicker%20Intervals&dependencies=@dreamstack-us/kaal,react-native-svg
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { TimePicker } from '@dreamstack-us/kaal';
