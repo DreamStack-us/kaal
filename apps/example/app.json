@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "Kaal Example",
+    "slug": "kaal-example",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "scheme": "kaal-example",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#3b82f6"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#3b82f6"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
