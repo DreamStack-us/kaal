@@ -1,3 +1,6 @@
+// Auto-initialize unistyles with defaults if not configured
+import './utils/initUnistyles';
+
 // Date picker components
 export { DatePicker, type KaalDatePickerProps } from './components';
 export { CalendarGrid } from './components';

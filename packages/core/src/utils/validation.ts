@@ -1,76 +1,122 @@
-import * as v from 'valibot';
-
 /**
- * Helper to parse ISO date string parts
- * Assumes input is already validated by regex pattern
+ * Simple validation utilities for date/time pickers
+ * No external dependencies - just inline checks
  */
-const parseISOParts = (val: string): [number, number, number] => {
-  const parts = val.split('-').map(Number) as [number, number, number];
-  return parts;
-};
+
+// ISO date regex pattern
+const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+const ISO_DATETIME_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?(Z|[+-]\d{2}:\d{2})?$/;
 
 /**
  * Validates an ISO 8601 date string (YYYY-MM-DD)
  */
-export const isoDateSchema = v.pipe(
-  v.string(),
-  v.regex(/^\d{4}-\d{2}-\d{2}$/, 'Must be in YYYY-MM-DD format'),
-  v.check((val) => {
-    const [year, month, day] = parseISOParts(val);
-    const date = new Date(Date.UTC(year, month - 1, day));
-    return (
-      date.getUTCFullYear() === year &&
-      date.getUTCMonth() === month - 1 &&
-      date.getUTCDate() === day
-    );
-  }, 'Invalid ISO 8601 date format'),
-);
+export function isValidISODate(value: string): boolean {
+  if (!ISO_DATE_PATTERN.test(value)) return false;
+
+  const [year, month, day] = value.split('-').map(Number) as [number, number, number];
+  const date = new Date(Date.UTC(year, month - 1, day));
+
+  return (
+    date.getUTCFullYear() === year &&
+    date.getUTCMonth() === month - 1 &&
+    date.getUTCDate() === day
+  );
+}
 
 /**
- * Validates an ISO 8601 datetime string with timezone offset
+ * Validates an ISO 8601 datetime string
  */
-export const isoDateTimeSchema = v.pipe(v.string(), v.isoTimestamp());
+export function isValidISODateTime(value: string): boolean {
+  if (!ISO_DATETIME_PATTERN.test(value)) return false;
+  const date = new Date(value);
+  return !isNaN(date.getTime());
+}
+
+/**
+ * Validates a time value (24-hour format)
+ */
+export function isValidTime(hours: number, minutes: number): boolean {
+  return (
+    Number.isInteger(hours) &&
+    Number.isInteger(minutes) &&
+    hours >= 0 &&
+    hours <= 23 &&
+    minutes >= 0 &&
+    minutes <= 59
+  );
+}
 
 /**
  * Validates a date range where start <= end
  */
-export const dateRangeSchema = v.pipe(
-  v.object({
-    start: isoDateSchema,
-    end: isoDateSchema,
-  }),
-  v.check((data) => {
-    return data.start <= data.end;
-  }, 'Start date must be before or equal to end date'),
-);
-
-/**
- * Validates date picker configuration
- */
-export const datePickerValueSchema = v.object({
-  selectedDate: isoDateSchema,
-  minDate: v.optional(isoDateSchema),
-  maxDate: v.optional(isoDateSchema),
-  disabledDates: v.optional(v.array(isoDateSchema)),
-});
+export function isValidDateRange(start: string, end: string): boolean {
+  if (!isValidISODate(start) || !isValidISODate(end)) return false;
+  return start <= end;
+}
 
 /**
  * Parses an ISO date string to a Date object
- * @deprecated Use parseISODate from date utils instead. Kept for backward compatibility.
+ * Returns null if invalid
  */
-export const dateSchema = v.pipe(
-  v.string(),
-  v.regex(/^\d{4}-\d{2}-\d{2}$/, 'Must be in YYYY-MM-DD format'),
-  v.transform((val) => {
-    const [year, month, day] = parseISOParts(val);
-    return new Date(Date.UTC(year, month - 1, day));
-  }),
-);
+export function parseISODateSafe(value: string): Date | null {
+  if (!isValidISODate(value)) return null;
+  const [year, month, day] = value.split('-').map(Number) as [number, number, number];
+  return new Date(Date.UTC(year, month - 1, day));
+}
 
-/**
- * @deprecated Alias for dateSchema for backward compatibility
- */
+// Types for date picker values
+export interface DatePickerValue {
+  selectedDate: string;
+  minDate?: string;
+  maxDate?: string;
+  disabledDates?: string[];
+}
+
+export interface DateRange {
+  start: string;
+  end: string;
+}
+
+// Legacy schema exports for backward compatibility
+// These are now simple validation functions, not valibot schemas
+
+/** @deprecated Use isValidISODate() instead */
+export const isoDateSchema = {
+  parse: (value: string) => {
+    if (!isValidISODate(value)) throw new Error('Invalid ISO date');
+    return value;
+  },
+};
+
+/** @deprecated Use isValidISODateTime() instead */
+export const isoDateTimeSchema = {
+  parse: (value: string) => {
+    if (!isValidISODateTime(value)) throw new Error('Invalid ISO datetime');
+    return value;
+  },
+};
+
+/** @deprecated Use isValidDateRange() instead */
+export const dateRangeSchema = {
+  parse: (value: DateRange) => {
+    if (!isValidDateRange(value.start, value.end)) throw new Error('Invalid date range');
+    return value;
+  },
+};
+
+/** @deprecated Use DatePickerValue type instead */
+export const datePickerValueSchema = {
+  parse: (value: DatePickerValue) => value,
+};
+
+/** @deprecated Use parseISODateSafe() instead */
+export const dateSchema = {
+  parse: (value: string) => {
+    const date = parseISODateSafe(value);
+    if (!date) throw new Error('Invalid date');
+    return date;
+  },
+};
+
+/** @deprecated Alias for dateSchema */
 export const temporalDateSchema = dateSchema;
-
-export type DatePickerValue = v.InferOutput<typeof datePickerValueSchema>;
-export type DateRange = v.InferOutput<typeof dateRangeSchema>;

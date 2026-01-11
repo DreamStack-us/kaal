@@ -29,9 +29,7 @@
     "clean": "rm -rf lib",
     "size": "size-limit"
   },
-  "dependencies": {
-    "valibot": "^1.0.0"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "react": ">=18.2.0",
     "react-native": ">=0.78.0",
