@@ -1,7 +1,7 @@
 {
   "name": "@dreamstack-us/kaal",
   "version": "0.0.4",
-  "description": "High-performance React Native DatePicker with Unistyles v3",
+  "description": "High-performance React Native DatePicker and TimePicker",
   "type": "module",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/index.d.ts",
@@ -33,18 +33,18 @@
   "peerDependencies": {
     "react": ">=18.2.0",
     "react-native": ">=0.78.0",
-    "react-native-unistyles": "^3.0.0",
-    "react-native-nitro-modules": "0.31.4",
-    "react-native-reanimated": ">=3.17.0",
-    "react-native-gesture-handler": ">=2.20.0",
     "react-native-svg": ">=13.0.0",
-    "@dreamstack-us/kaal-themes": ">=1.0.0"
+    "react-native-reanimated": ">=3.17.0",
+    "react-native-gesture-handler": ">=2.20.0"
   },
   "peerDependenciesMeta": {
     "@expo/ui": {
       "optional": true
     },
     "@dreamstack-us/kaal-themes": {
+      "optional": true
+    },
+    "react-native-nitro-modules": {
       "optional": true
     }
   },
@@ -57,7 +57,6 @@
     "react-native-nitro-modules": "0.31.4",
     "react-native-reanimated": "^3.17.0",
     "react-native-svg": "^15.15.1",
-    "react-native-unistyles": "^3.0.0",
     "typescript": "^5.7.0"
   },
   "react-native-builder-bob": {
@@ -94,7 +93,7 @@
     "datepicker",
     "timepicker",
     "calendar",
-    "unistyles",
+    "expo",
     "new-architecture"
   ],
   "license": "MIT"
