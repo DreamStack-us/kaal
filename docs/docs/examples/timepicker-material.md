@@ -8,7 +8,7 @@ The Material-style TimePicker uses a clock face for intuitive time selection, fo
 
 ## Live Example
 
-```SnackPlayer name=Material%20TimePicker&dependencies=@dreamstack-us/kaal
+```SnackPlayer name=Material%20TimePicker&dependencies=@dreamstack-us/kaal,react-native-svg
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { TimePicker } from '@dreamstack-us/kaal';
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
 
 ## Dark Theme Clock
 
-```SnackPlayer name=Material%20TimePicker%20Dark&dependencies=@dreamstack-us/kaal
+```SnackPlayer name=Material%20TimePicker%20Dark&dependencies=@dreamstack-us/kaal,react-native-svg
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { TimePicker } from '@dreamstack-us/kaal';
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
 
 ## Business Hours Constraint
 
-```SnackPlayer name=Business%20Hours%20TimePicker&dependencies=@dreamstack-us/kaal
+```SnackPlayer name=Business%20Hours%20TimePicker&dependencies=@dreamstack-us/kaal,react-native-svg
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { TimePicker } from '@dreamstack-us/kaal';

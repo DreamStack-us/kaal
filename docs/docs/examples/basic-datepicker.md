@@ -8,7 +8,7 @@ A simple date picker with calendar view.
 
 ## Live Example
 
-```SnackPlayer name=Basic%20DatePicker&dependencies=@dreamstack-us/kaal
+```SnackPlayer name=Basic%20DatePicker&dependencies=@dreamstack-us/kaal,react-native-svg
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { DatePicker, toISODateString } from '@dreamstack-us/kaal';
@@ -92,7 +92,7 @@ Set which day starts the week using `weekStartsOn`:
 
 ## Dark Theme Example
 
-```SnackPlayer name=Dark%20DatePicker&dependencies=@dreamstack-us/kaal
+```SnackPlayer name=Dark%20DatePicker&dependencies=@dreamstack-us/kaal,react-native-svg
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { DatePicker, toISODateString } from '@dreamstack-us/kaal';
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
 
 ## With Min/Max Date
 
-```SnackPlayer name=DatePicker%20with%20Range&dependencies=@dreamstack-us/kaal
+```SnackPlayer name=DatePicker%20with%20Range&dependencies=@dreamstack-us/kaal,react-native-svg
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { DatePicker, toISODateString, addDays } from '@dreamstack-us/kaal';

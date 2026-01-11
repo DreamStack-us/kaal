@@ -15,7 +15,7 @@ The `themeOverrides` prop lets you customize colors directly on the component wi
 
 ## Live Example - Light/Dark Mode Toggle
 
-```SnackPlayer name=Theme%20Toggle%20Example&dependencies=@dreamstack-us/kaal
+```SnackPlayer name=Theme%20Toggle%20Example&dependencies=@dreamstack-us/kaal,react-native-svg
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { DatePicker, TimePicker, toISODateString } from '@dreamstack-us/kaal';
@@ -193,7 +193,7 @@ function ScheduleModal() {
 
 Customize the pickers to match your brand:
 
-```SnackPlayer name=Brand%20Colors&dependencies=@dreamstack-us/kaal
+```SnackPlayer name=Brand%20Colors&dependencies=@dreamstack-us/kaal,react-native-svg
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { DatePicker, toISODateString } from '@dreamstack-us/kaal';
