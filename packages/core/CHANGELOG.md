@@ -1,5 +1,15 @@
 # @dreamstack-us/kaal
 
+## 0.0.4
+
+### Patch Changes
+
+- [#11](https://github.com/DreamStack-us/kaal/pull/11) [`ce4bda8`](https://github.com/DreamStack-us/kaal/commit/ce4bda877e1ca12b85b84f3499417fe937da5f04) Thanks [@hariDasu](https://github.com/hariDasu)! - Fix CalendarGrid crash when date prop is undefined
+
+  - Add defensive null check in `getFirstDayOfMonth` utility
+  - Use `||` fallback operator in CalendarGrid state initialization
+  - Fallback to `today()` helper for consistent UTC date handling
+
 ## 0.0.3
 
 ### Patch Changes
