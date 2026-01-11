@@ -154,6 +154,9 @@
   border-radius: 12px;
   padding: 1.5rem;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .feature-card:hover {
@@ -181,6 +184,8 @@
   color: var(--kaal-text-muted);
   font-size: 0.95rem;
   line-height: 1.6;
+  flex-grow: 1;
+  margin: 0;
 }
 
 /* Accent highlights */

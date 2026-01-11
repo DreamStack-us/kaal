@@ -64,8 +64,10 @@ export type {
   DatePickerMode,
   DatePickerTheme,
   DatePickerVariant,
+  DatePickerSelectionMode,
   DatePickerProps,
   DatePickerThemeOverrides,
+  DateRange as DatePickerDateRange,
 } from './types';
 
 // Time picker types

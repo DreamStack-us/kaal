@@ -10,6 +10,9 @@ interface DayCellProps {
   isToday: boolean;
   isDisabled: boolean;
   isWeekend: boolean;
+  isRangeStart?: boolean;
+  isRangeEnd?: boolean;
+  isInRange?: boolean;
   onPress?: () => void;
 }
 
@@ -18,10 +21,12 @@ const DEFAULT_COLORS = {
   cellBackground: 'transparent',
   cellSelected: '#007AFF',
   cellToday: 'rgba(0, 122, 255, 0.1)',
+  cellInRange: 'rgba(0, 122, 255, 0.15)',
   textDefault: '#1C1C1E',
   textSelected: '#FFFFFF',
   textDisabled: '#8E8E93',
   textWeekend: '#8E8E93',
+  textInRange: '#1C1C1E',
   primary: '#007AFF',
   cellBorderRadius: 22,
 };
@@ -41,7 +46,17 @@ const webStyles = StyleSheet.create({
 });
 
 export const DayCell: React.FC<DayCellProps> = memo(
-  ({ date, isSelected, isToday, isDisabled, isWeekend, onPress }) => {
+  ({
+    date,
+    isSelected,
+    isToday,
+    isDisabled,
+    isWeekend,
+    isRangeStart,
+    isRangeEnd,
+    isInRange,
+    onPress,
+  }) => {
     const overrides = useDatePickerOverrides();
 
     // Build cell style based on state and overrides
@@ -51,13 +66,18 @@ export const DayCell: React.FC<DayCellProps> = memo(
         backgroundColor: DEFAULT_COLORS.cellBackground,
       };
 
-      if (isSelected) {
+      // Range start/end get selected styling
+      if (isRangeStart || isRangeEnd || isSelected) {
         style.backgroundColor =
           overrides?.cellSelectedColor ??
           overrides?.primaryColor ??
           DEFAULT_COLORS.cellSelected;
         style.borderRadius =
           overrides?.cellBorderRadius ?? DEFAULT_COLORS.cellBorderRadius;
+      } else if (isInRange) {
+        // Dates in range get lighter background
+        style.backgroundColor =
+          overrides?.cellInRangeColor ?? DEFAULT_COLORS.cellInRange;
       } else if (isToday) {
         style.backgroundColor =
           overrides?.cellTodayColor ?? DEFAULT_COLORS.cellToday;
@@ -72,7 +92,15 @@ export const DayCell: React.FC<DayCellProps> = memo(
       }
 
       return style;
-    }, [overrides, isSelected, isToday, isDisabled]);
+    }, [
+      overrides,
+      isSelected,
+      isToday,
+      isDisabled,
+      isRangeStart,
+      isRangeEnd,
+      isInRange,
+    ]);
 
     // Build text style based on state and overrides
     const textStyle = useMemo(() => {
@@ -81,10 +109,12 @@ export const DayCell: React.FC<DayCellProps> = memo(
         fontWeight: '400' as const,
       };
 
-      if (isSelected) {
+      if (isRangeStart || isRangeEnd || isSelected) {
         style.color =
           overrides?.textSelectedColor ?? DEFAULT_COLORS.textSelected;
         style.fontWeight = '600';
+      } else if (isInRange) {
+        style.color = overrides?.textInRangeColor ?? DEFAULT_COLORS.textInRange;
       } else if (isToday) {
         style.color = overrides?.primaryColor ?? DEFAULT_COLORS.primary;
         style.fontWeight = '600';
@@ -96,7 +126,16 @@ export const DayCell: React.FC<DayCellProps> = memo(
       }
 
       return style;
-    }, [overrides, isSelected, isToday, isDisabled, isWeekend]);
+    }, [
+      overrides,
+      isSelected,
+      isToday,
+      isDisabled,
+      isWeekend,
+      isRangeStart,
+      isRangeEnd,
+      isInRange,
+    ]);
 
     if (!date) {
       return <Pressable style={webStyles.cell} disabled />;
@@ -123,7 +162,10 @@ export const DayCell: React.FC<DayCellProps> = memo(
     prev.date?.getTime() === next.date?.getTime() &&
     prev.isSelected === next.isSelected &&
     prev.isToday === next.isToday &&
-    prev.isDisabled === next.isDisabled,
+    prev.isDisabled === next.isDisabled &&
+    prev.isRangeStart === next.isRangeStart &&
+    prev.isRangeEnd === next.isRangeEnd &&
+    prev.isInRange === next.isInRange,
 );
 
 DayCell.displayName = 'DayCell';
