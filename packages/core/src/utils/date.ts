@@ -157,9 +157,11 @@ export const getMonthDays = (year: number, month: number): Date[] => {
 
 /**
  * Gets the first day of the month
+ * Falls back to today if date is undefined/null
  */
-export const getFirstDayOfMonth = (date: Date): Date => {
-  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1));
+export const getFirstDayOfMonth = (date: Date | null | undefined): Date => {
+  const d = date ?? today();
+  return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1));
 };
 
 /**

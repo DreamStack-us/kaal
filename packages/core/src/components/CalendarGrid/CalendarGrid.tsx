@@ -135,7 +135,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = memo((props) => {
 
   const overrides = useDatePickerOverrides();
   const [currentMonth, setCurrentMonth] = React.useState(() =>
-    getFirstDayOfMonth(singleValue ?? rangeStart ?? new Date()),
+    getFirstDayOfMonth(singleValue || rangeStart || today()),
   );
 
   const days = useMemo(
