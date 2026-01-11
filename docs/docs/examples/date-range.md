@@ -4,68 +4,67 @@ sidebar_position: 2
 
 # Date Range Selection
 
-Examples for selecting date ranges.
+Select a date range with visual highlighting between start and end dates.
 
 ## Live Example
 
 ```SnackPlayer name=Date%20Range%20Picker&dependencies=@dreamstack-us/kaal
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { DatePicker, toISODateString, addDays } from '@dreamstack-us/kaal';
+import { View, Text, StyleSheet } from 'react-native';
+import { DatePicker, toISODateString } from '@dreamstack-us/kaal';
 
 const pickerTheme = {
   primaryColor: '#3b82f6',
   cellSelectedColor: '#3b82f6',
-  cellTodayColor: 'rgba(59, 130, 246, 0.15)',
+  cellInRangeColor: 'rgba(59, 130, 246, 0.15)',
+  cellTodayColor: 'rgba(59, 130, 246, 0.1)',
   textColor: '#1e293b',
   textSelectedColor: '#ffffff',
+  textInRangeColor: '#3b82f6',
   textDisabledColor: '#cbd5e1',
   backgroundColor: '#ffffff',
   borderRadius: 16,
 };
 
 export default function App() {
-  const today = new Date();
-  const [startDate, setStartDate] = useState(today);
-  const [endDate, setEndDate] = useState(addDays(today, 7));
-
-  const handleStartDateChange = (date) => {
-    setStartDate(date);
-    // If start date is after end date, update end date
-    if (date > endDate) {
-      setEndDate(addDays(date, 1));
-    }
-  };
+  const [range, setRange] = useState({
+    startDate: new Date(),
+    endDate: null,
+  });
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.title}>Select Date Range</Text>
+      <Text style={styles.hint}>
+        Tap to select start date, then tap again for end date
+      </Text>
 
-      <View style={styles.section}>
-        <Text style={styles.label}>Start Date</Text>
-        <Text style={styles.value}>{toISODateString(startDate)}</Text>
-        <DatePicker
-          value={startDate}
-          onChange={handleStartDateChange}
-          variant="calendar"
-          weekStartsOn={0}
-          themeOverrides={pickerTheme}
-        />
+      <View style={styles.rangeDisplay}>
+        <View style={styles.dateBox}>
+          <Text style={styles.label}>Start</Text>
+          <Text style={styles.value}>
+            {range.startDate ? toISODateString(range.startDate) : '—'}
+          </Text>
+        </View>
+        <Text style={styles.arrow}>→</Text>
+        <View style={styles.dateBox}>
+          <Text style={styles.label}>End</Text>
+          <Text style={styles.value}>
+            {range.endDate ? toISODateString(range.endDate) : '—'}
+          </Text>
+        </View>
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.label}>End Date</Text>
-        <Text style={styles.value}>{toISODateString(endDate)}</Text>
-        <DatePicker
-          value={endDate}
-          onChange={setEndDate}
-          minDate={addDays(startDate, 1)}
-          variant="calendar"
-          weekStartsOn={0}
-          themeOverrides={pickerTheme}
-        />
-      </View>
-    </ScrollView>
+      <DatePicker
+        selectionMode="range"
+        startDate={range.startDate}
+        endDate={range.endDate}
+        onRangeChange={setRange}
+        variant="calendar"
+        weekStartsOn={0}
+        themeOverrides={pickerTheme}
+      />
+    </View>
   );
 }
 
@@ -78,54 +77,79 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '600',
-    marginBottom: 16,
+    marginBottom: 4,
     color: '#1e293b',
   },
-  section: {
-    marginBottom: 24,
+  hint: {
+    fontSize: 14,
+    color: '#64748b',
+    marginBottom: 16,
+  },
+  rangeDisplay: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+    gap: 12,
+  },
+  dateBox: {
+    backgroundColor: '#ffffff',
+    padding: 12,
+    borderRadius: 8,
+    minWidth: 120,
+    alignItems: 'center',
   },
   label: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: 12,
+    color: '#64748b',
     marginBottom: 4,
   },
   value: {
     fontSize: 16,
-    fontWeight: '500',
-    marginBottom: 12,
+    fontWeight: '600',
     color: '#1e293b',
+  },
+  arrow: {
+    fontSize: 20,
+    color: '#94a3b8',
   },
 });
 ```
 
 ## Code Breakdown
 
-### Linked Date Pickers
+### Range Selection Mode
 
-When using two date pickers for a range, link them so the end date is always after the start:
-
-```tsx
-const handleStartDateChange = (date: Date) => {
-  setStartDate(date);
-  if (date > endDate) {
-    setEndDate(addDays(date, 1));
-  }
-};
-```
-
-### Constraining End Date
-
-Use `minDate` to prevent selecting an end date before the start:
+Use `selectionMode="range"` to enable range selection:
 
 ```tsx
 <DatePicker
-  value={endDate}
-  onChange={setEndDate}
-  minDate={addDays(startDate, 1)}
+  selectionMode="range"
+  startDate={range.startDate}
+  endDate={range.endDate}
+  onRangeChange={setRange}
   weekStartsOn={0}
   themeOverrides={pickerTheme}
 />
 ```
+
+### Range State
+
+The `onRangeChange` callback receives an object with `startDate` and `endDate`:
+
+```tsx
+const [range, setRange] = useState({
+  startDate: new Date(),
+  endDate: null,
+});
+```
+
+### Selection UX
+
+1. First tap sets the start date
+2. Second tap sets the end date (if after start)
+3. Tapping before start resets to new start
+4. Dates between are visually highlighted
 
 ## With Disabled Dates
 
