@@ -1,6 +1,6 @@
 {
   "name": "@dreamstack-us/kaal-themes",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Theme system for @dreamstack-us/kaal",
   "type": "module",
   "main": "./lib/module/index.js",
@@ -33,7 +33,15 @@
   "react-native-builder-bob": {
     "source": "src",
     "output": "lib",
-    "targets": [["module", { "esm": true }], "typescript"]
+    "targets": [
+      [
+        "module",
+        {
+          "esm": true
+        }
+      ],
+      "typescript"
+    ]
   },
   "publishConfig": {
     "access": "public",
