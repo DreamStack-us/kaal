@@ -35,7 +35,11 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   // Android/native theme uses Material clock face
   return (
     <ThemeOverrideProvider value={{ timePicker: themeOverrides }}>
-      <MaterialTimePicker value={value} onChange={onChange} is24Hour={is24Hour} />
+      <MaterialTimePicker
+        value={value}
+        onChange={onChange}
+        is24Hour={is24Hour}
+      />
     </ThemeOverrideProvider>
   );
 };

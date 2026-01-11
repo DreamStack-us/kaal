@@ -162,7 +162,10 @@ export const MaterialTimePicker: React.FC<MaterialTimePickerProps> = memo(
               style={[
                 styles.timeField,
                 timeFieldStyle,
-                mode === 'hours' && [styles.timeFieldActive, timeFieldActiveStyle],
+                mode === 'hours' && [
+                  styles.timeFieldActive,
+                  timeFieldActiveStyle,
+                ],
               ]}
             >
               <Text
@@ -185,7 +188,10 @@ export const MaterialTimePicker: React.FC<MaterialTimePickerProps> = memo(
               style={[
                 styles.timeField,
                 timeFieldStyle,
-                mode === 'minutes' && [styles.timeFieldActive, timeFieldActiveStyle],
+                mode === 'minutes' && [
+                  styles.timeFieldActive,
+                  timeFieldActiveStyle,
+                ],
               ]}
             >
               <Text
@@ -208,14 +214,20 @@ export const MaterialTimePicker: React.FC<MaterialTimePickerProps> = memo(
                 style={[
                   styles.periodButton,
                   styles.periodButtonTop,
-                  period === 'AM' && [styles.periodButtonActive, periodActiveStyle],
+                  period === 'AM' && [
+                    styles.periodButtonActive,
+                    periodActiveStyle,
+                  ],
                 ]}
               >
                 <Text
                   style={[
                     styles.periodButtonText,
                     periodTextStyle,
-                    period === 'AM' && [styles.periodButtonTextActive, periodTextActiveStyle],
+                    period === 'AM' && [
+                      styles.periodButtonTextActive,
+                      periodTextActiveStyle,
+                    ],
                   ]}
                 >
                   AM
@@ -225,14 +237,20 @@ export const MaterialTimePicker: React.FC<MaterialTimePickerProps> = memo(
                 onPress={() => handlePeriodChange('PM')}
                 style={[
                   styles.periodButton,
-                  period === 'PM' && [styles.periodButtonActive, periodActiveStyle],
+                  period === 'PM' && [
+                    styles.periodButtonActive,
+                    periodActiveStyle,
+                  ],
                 ]}
               >
                 <Text
                   style={[
                     styles.periodButtonText,
                     periodTextStyle,
-                    period === 'PM' && [styles.periodButtonTextActive, periodTextActiveStyle],
+                    period === 'PM' && [
+                      styles.periodButtonTextActive,
+                      periodTextActiveStyle,
+                    ],
                   ]}
                 >
                   PM
