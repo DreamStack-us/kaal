@@ -1,11 +1,15 @@
-import { StyleSheet } from 'react-native-unistyles';
+import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create((theme) => ({
+/**
+ * Default styles for WheelPicker using plain React Native StyleSheet.
+ * Colors use dark theme defaults - consumers override via themeOverrides prop.
+ */
+export const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     height: 220,
-    backgroundColor: theme.colors.background.elevated,
-    borderRadius: theme.radii.card,
+    backgroundColor: '#2C2C2E',
+    borderRadius: 16,
     overflow: 'hidden',
   },
   column: {
@@ -19,8 +23,8 @@ export const styles = StyleSheet.create((theme) => ({
     left: 4,
     right: 4,
     height: 44,
-    backgroundColor: theme.colors.datepicker.wheelHighlight,
-    borderRadius: theme.radii.button,
+    backgroundColor: 'rgba(120, 120, 128, 0.24)',
+    borderRadius: 8,
     zIndex: 0,
   },
   itemsContainer: {
@@ -33,7 +37,7 @@ export const styles = StyleSheet.create((theme) => ({
   },
   itemText: {
     fontSize: 21,
-    color: theme.colors.foreground.default,
+    color: '#FFFFFF',
     fontWeight: '400',
   },
-}));
+});

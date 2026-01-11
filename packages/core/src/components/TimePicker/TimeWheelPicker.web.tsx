@@ -2,6 +2,7 @@
 import type React from 'react';
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { StyleSheet as RNStyleSheet, Text, View } from 'react-native';
+import { useTimePickerOverrides } from '../../context/ThemeOverrideContext';
 import { to12Hour, to24Hour } from '../../hooks/useTimePicker';
 import type { TimePeriod, TimeValue } from '../../types/timepicker';
 
@@ -9,14 +10,24 @@ const ITEM_HEIGHT = 44;
 const VISIBLE_ITEMS = 5;
 const CONTAINER_HEIGHT = ITEM_HEIGHT * VISIBLE_ITEMS;
 
+// Default colors (dark theme)
+const DEFAULT_COLORS = {
+  containerBackground: '#2C2C2E',
+  selectionHighlight: 'rgba(120, 120, 128, 0.24)',
+  textColor: '#FFFFFF',
+  separatorColor: '#FFFFFF',
+};
+
 interface WheelColumnProps {
   items: { value: number | string; label: string }[];
   selectedIndex: number;
   onSelect: (index: number) => void;
+  textColor: string;
+  highlightColor: string;
 }
 
 const WheelColumn: React.FC<WheelColumnProps> = memo(
-  ({ items, selectedIndex, onSelect }) => {
+  ({ items, selectedIndex, onSelect, textColor, highlightColor }) => {
     const scrollRef = useRef<HTMLDivElement>(null);
     const isScrolling = useRef(false);
     const scrollTimeout = useRef<ReturnType<typeof setTimeout>>();
@@ -59,7 +70,12 @@ const WheelColumn: React.FC<WheelColumnProps> = memo(
 
     return (
       <View style={webStyles.column}>
-        <View style={webStyles.selectionHighlight} />
+        <View
+          style={[
+            webStyles.selectionHighlight,
+            { backgroundColor: highlightColor },
+          ]}
+        />
 
         <div
           ref={scrollRef}
@@ -109,6 +125,7 @@ const WheelColumn: React.FC<WheelColumnProps> = memo(
                 <Text
                   style={[
                     webStyles.itemText,
+                    { color: textColor },
                     isSelected && webStyles.itemTextSelected,
                   ]}
                 >
@@ -137,6 +154,30 @@ interface TimeWheelPickerProps {
 
 export const TimeWheelPicker: React.FC<TimeWheelPickerProps> = memo(
   ({ value, onChange, is24Hour = false, minuteInterval = 1 }) => {
+    const overrides = useTimePickerOverrides();
+
+    // Build colors from overrides (use backgroundColor as fallback for wheelContainerBackground)
+    const colors = useMemo(
+      () => ({
+        containerBackground:
+          overrides?.wheelContainerBackground ??
+          overrides?.backgroundColor ??
+          DEFAULT_COLORS.containerBackground,
+        selectionHighlight:
+          overrides?.wheelSelectionHighlight ??
+          DEFAULT_COLORS.selectionHighlight,
+        textColor:
+          overrides?.wheelTextColor ??
+          overrides?.textColor ??
+          DEFAULT_COLORS.textColor,
+        separatorColor:
+          overrides?.wheelSeparatorColor ??
+          overrides?.textColor ??
+          DEFAULT_COLORS.separatorColor,
+      }),
+      [overrides],
+    );
+
     // Generate hour items
     const hourItems = useMemo(() => {
       if (is24Hour) {
@@ -211,19 +252,30 @@ export const TimeWheelPicker: React.FC<TimeWheelPickerProps> = memo(
     );
 
     return (
-      <View style={webStyles.container}>
+      <View
+        style={[
+          webStyles.container,
+          { backgroundColor: colors.containerBackground },
+        ]}
+      >
         <WheelColumn
           items={hourItems}
           selectedIndex={hourIndex}
           onSelect={handleHourChange}
+          textColor={colors.textColor}
+          highlightColor={colors.selectionHighlight}
         />
 
-        <Text style={webStyles.separator}>:</Text>
+        <Text style={[webStyles.separator, { color: colors.separatorColor }]}>
+          :
+        </Text>
 
         <WheelColumn
           items={minuteItems}
           selectedIndex={minuteIndex}
           onSelect={handleMinuteChange}
+          textColor={colors.textColor}
+          highlightColor={colors.selectionHighlight}
         />
 
         {!is24Hour && (
@@ -231,6 +283,8 @@ export const TimeWheelPicker: React.FC<TimeWheelPickerProps> = memo(
             items={periodItems}
             selectedIndex={periodIndex}
             onSelect={handlePeriodChange}
+            textColor={colors.textColor}
+            highlightColor={colors.selectionHighlight}
           />
         )}
       </View>
@@ -244,9 +298,6 @@ const webStyles = RNStyleSheet.create({
   container: {
     flexDirection: 'row',
     height: CONTAINER_HEIGHT,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    // @ts-ignore - web-only property
-    backdropFilter: 'blur(20px)',
     borderRadius: 14,
     overflow: 'hidden',
     alignItems: 'center',
@@ -264,7 +315,6 @@ const webStyles = RNStyleSheet.create({
     left: 4,
     right: 4,
     height: ITEM_HEIGHT,
-    backgroundColor: 'rgba(0, 0, 0, 0.04)',
     borderRadius: 8,
     zIndex: 0,
   },
