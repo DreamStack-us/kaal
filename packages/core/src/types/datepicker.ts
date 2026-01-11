@@ -4,6 +4,13 @@ export type DatePickerTheme = 'native' | 'ios' | 'android' | 'custom';
 
 export type DatePickerVariant = 'wheel' | 'calendar' | 'compact';
 
+export type DatePickerSelectionMode = 'single' | 'range';
+
+export interface DateRange {
+  startDate: Date;
+  endDate: Date | null;
+}
+
 /**
  * Theme overrides for DatePicker components.
  * These allow customizing colors without matching Kaal's internal theme structure.
@@ -35,11 +42,16 @@ export interface DatePickerThemeOverrides {
   cellBorderRadius?: number;
   /** Padding for calendar container */
   padding?: number;
+  /** Background color for dates in range (between start and end) */
+  cellInRangeColor?: string;
+  /** Text color for dates in range */
+  textInRangeColor?: string;
 }
 
-export interface DatePickerProps {
-  value: Date;
-  onChange: (date: Date) => void;
+/**
+ * Base props shared between single and range selection modes
+ */
+interface DatePickerBaseProps {
   mode?: DatePickerMode;
   theme?: DatePickerTheme;
   variant?: DatePickerVariant;
@@ -59,3 +71,31 @@ export interface DatePickerProps {
   /** Custom theme overrides for styling without matching Kaal's theme structure */
   themeOverrides?: DatePickerThemeOverrides;
 }
+
+/**
+ * Props for single date selection mode (default)
+ */
+interface DatePickerSingleProps extends DatePickerBaseProps {
+  selectionMode?: 'single';
+  value: Date;
+  onChange: (date: Date) => void;
+  // Range props should not be present
+  startDate?: never;
+  endDate?: never;
+  onRangeChange?: never;
+}
+
+/**
+ * Props for range selection mode
+ */
+interface DatePickerRangeProps extends DatePickerBaseProps {
+  selectionMode: 'range';
+  startDate: Date | null;
+  endDate: Date | null;
+  onRangeChange: (range: DateRange) => void;
+  // Single props should not be present
+  value?: never;
+  onChange?: never;
+}
+
+export type DatePickerProps = DatePickerSingleProps | DatePickerRangeProps;

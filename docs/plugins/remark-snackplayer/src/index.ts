@@ -44,7 +44,7 @@ async function toJsxNode(node: Code) {
       attr('className', 'snack-player'),
       attr('data-snack-name', name),
       attr('data-snack-description', description),
-      attr('data-snack-code', node.value),
+      attr('data-snack-code', encodeURIComponent(node.value)),
       attr('data-snack-dependencies', dependencies),
       attr('data-snack-platform', platform),
       attr('data-snack-supported-platforms', supportedPlatforms),

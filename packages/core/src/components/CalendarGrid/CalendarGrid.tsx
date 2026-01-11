@@ -14,9 +14,9 @@ import {
 import { styles } from './CalendarGrid.styles';
 import { DayCell } from './DayCell';
 
-interface CalendarGridProps {
-  value: Date;
-  onChange: (date: Date) => void;
+import type { DateRange } from '../../types/datepicker';
+
+interface CalendarGridBaseProps {
   minDate?: Date;
   maxDate?: Date;
   disabledDates?: Date[];
@@ -24,13 +24,29 @@ interface CalendarGridProps {
   /**
    * First day of the week: 0 = Sunday, 1 = Monday
    * @default 0 (Sunday)
-   *
-   * TODO: This is a temporary solution. In the future, we need to add full
-   * locale support to handle different calendar formats, layouts, and
-   * localized day/month names across different regions.
    */
   weekStartsOn?: 0 | 1;
 }
+
+interface CalendarGridSingleProps extends CalendarGridBaseProps {
+  selectionMode?: 'single';
+  value: Date;
+  onChange: (date: Date) => void;
+  startDate?: never;
+  endDate?: never;
+  onRangeChange?: never;
+}
+
+interface CalendarGridRangeProps extends CalendarGridBaseProps {
+  selectionMode: 'range';
+  startDate: Date | null;
+  endDate: Date | null;
+  onRangeChange: (range: DateRange) => void;
+  value?: never;
+  onChange?: never;
+}
+
+type CalendarGridProps = CalendarGridSingleProps | CalendarGridRangeProps;
 
 const CELL_SIZE = 44;
 
@@ -100,138 +116,216 @@ const generateMonthDays = (
   return days;
 };
 
-export const CalendarGrid: React.FC<CalendarGridProps> = memo(
-  ({
-    value,
-    onChange,
+export const CalendarGrid: React.FC<CalendarGridProps> = memo((props) => {
+  const {
     minDate,
     maxDate,
     disabledDates,
     themeMode,
     weekStartsOn = 0,
-  }) => {
-    const overrides = useDatePickerOverrides();
-    const [currentMonth, setCurrentMonth] = React.useState(() =>
-      getFirstDayOfMonth(value),
-    );
+    selectionMode = 'single',
+  } = props;
 
-    const days = useMemo(
-      () => generateMonthDays(currentMonth, weekStartsOn),
-      [currentMonth, weekStartsOn],
-    );
+  // Extract mode-specific props
+  const singleValue = selectionMode === 'single' ? props.value : null;
+  const singleOnChange = selectionMode === 'single' ? props.onChange : null;
+  const rangeStart = selectionMode === 'range' ? props.startDate : null;
+  const rangeEnd = selectionMode === 'range' ? props.endDate : null;
+  const rangeOnChange = selectionMode === 'range' ? props.onRangeChange : null;
 
-    const weekDays =
-      weekStartsOn === 0 ? WEEK_DAYS_SUNDAY_START : WEEK_DAYS_MONDAY_START;
+  const overrides = useDatePickerOverrides();
+  const [currentMonth, setCurrentMonth] = React.useState(() =>
+    getFirstDayOfMonth(singleValue ?? rangeStart ?? new Date()),
+  );
 
-    const todayDate = useMemo(() => today(), []);
+  const days = useMemo(
+    () => generateMonthDays(currentMonth, weekStartsOn),
+    [currentMonth, weekStartsOn],
+  );
 
-    const isDisabled = useCallback(
-      (date: Date | null): boolean => {
-        if (!date) return true;
-        if (minDate && compareDates(date, minDate) < 0) return true;
-        if (maxDate && compareDates(date, maxDate) > 0) return true;
-        if (disabledDates?.some((d) => isSameDay(date, d))) return true;
+  const weekDays =
+    weekStartsOn === 0 ? WEEK_DAYS_SUNDAY_START : WEEK_DAYS_MONDAY_START;
+
+  const todayDate = useMemo(() => today(), []);
+
+  const isDisabled = useCallback(
+    (date: Date | null): boolean => {
+      if (!date) return true;
+      if (minDate && compareDates(date, minDate) < 0) return true;
+      if (maxDate && compareDates(date, maxDate) > 0) return true;
+      if (disabledDates?.some((d) => isSameDay(date, d))) return true;
+      return false;
+    },
+    [minDate, maxDate, disabledDates],
+  );
+
+  const navigateMonth = useCallback((direction: 1 | -1) => {
+    setCurrentMonth((prev) => addMonths(prev, direction));
+  }, []);
+
+  // Handle date press for both single and range modes
+  const handleDatePress = useCallback(
+    (date: Date) => {
+      if (selectionMode === 'single' && singleOnChange) {
+        singleOnChange(date);
+      } else if (selectionMode === 'range' && rangeOnChange) {
+        // Range selection logic:
+        // 1. If no start date, set start date
+        // 2. If start date but no end date, set end date (if after start)
+        // 3. If both dates exist, reset to new start date
+        if (!rangeStart || (rangeStart && rangeEnd)) {
+          rangeOnChange({ startDate: date, endDate: null });
+        } else {
+          // Have start but no end
+          if (compareDates(date, rangeStart) < 0) {
+            // Clicked before start - make this the new start
+            rangeOnChange({ startDate: date, endDate: null });
+          } else if (isSameDay(date, rangeStart)) {
+            // Clicked same day - clear selection
+            rangeOnChange({ startDate: date, endDate: null });
+          } else {
+            // Clicked after start - set as end date
+            rangeOnChange({ startDate: rangeStart, endDate: date });
+          }
+        }
+      }
+    },
+    [selectionMode, singleOnChange, rangeOnChange, rangeStart, rangeEnd],
+  );
+
+  // Check if date is in range (between start and end)
+  const isDateInRange = useCallback(
+    (date: Date | null): boolean => {
+      if (!date || selectionMode !== 'range' || !rangeStart || !rangeEnd) {
         return false;
-      },
-      [minDate, maxDate, disabledDates],
-    );
+      }
+      return (
+        compareDates(date, rangeStart) > 0 && compareDates(date, rangeEnd) < 0
+      );
+    },
+    [selectionMode, rangeStart, rangeEnd],
+  );
 
-    const navigateMonth = useCallback((direction: 1 | -1) => {
-      setCurrentMonth((prev) => addMonths(prev, direction));
-    }, []);
+  const renderDay = useCallback(
+    ({ item }: { item: Date | null }) => {
+      const isRangeStart =
+        selectionMode === 'range' && item && rangeStart
+          ? isSameDay(item, rangeStart)
+          : false;
+      const isRangeEnd =
+        selectionMode === 'range' && item && rangeEnd
+          ? isSameDay(item, rangeEnd)
+          : false;
+      const isSelected =
+        selectionMode === 'single' && item && singleValue
+          ? isSameDay(item, singleValue)
+          : false;
 
-    const renderDay = useCallback(
-      ({ item }: { item: Date | null }) => (
+      return (
         <DayCell
           date={item}
-          isSelected={item ? isSameDay(item, value) : false}
+          isSelected={isSelected}
           isToday={item ? isSameDay(item, todayDate) : false}
           isDisabled={isDisabled(item)}
           isWeekend={
             item ? getDayOfWeek(item) === 0 || getDayOfWeek(item) === 6 : false
           }
-          onPress={item && !isDisabled(item) ? () => onChange(item) : undefined}
+          isRangeStart={isRangeStart}
+          isRangeEnd={isRangeEnd}
+          isInRange={isDateInRange(item)}
+          onPress={
+            item && !isDisabled(item) ? () => handleDatePress(item) : undefined
+          }
         />
-      ),
-      [value, todayDate, isDisabled, onChange],
-    );
+      );
+    },
+    [
+      selectionMode,
+      singleValue,
+      rangeStart,
+      rangeEnd,
+      todayDate,
+      isDisabled,
+      isDateInRange,
+      handleDatePress,
+    ],
+  );
 
-    const keyExtractor = useCallback(
-      (item: Date | null, index: number) =>
-        item?.toISOString() ?? `empty-${index}`,
-      [],
-    );
+  const keyExtractor = useCallback(
+    (item: Date | null, index: number) =>
+      item?.toISOString() ?? `empty-${index}`,
+    [],
+  );
 
-    const getItemLayout = useCallback(
-      (_data: ArrayLike<Date | null> | null | undefined, index: number) => ({
-        length: CELL_SIZE,
-        offset: CELL_SIZE * Math.floor(index / 7),
-        index,
-      }),
-      [],
-    );
+  const getItemLayout = useCallback(
+    (_data: ArrayLike<Date | null> | null | undefined, index: number) => ({
+      length: CELL_SIZE,
+      offset: CELL_SIZE * Math.floor(index / 7),
+      index,
+    }),
+    [],
+  );
 
-    // Build override styles from themeOverrides
-    const containerStyle = useMemo(
-      () => ({
-        backgroundColor: overrides?.backgroundColor ?? '#1E1E1E',
-        borderRadius: overrides?.borderRadius ?? 16,
-        padding: overrides?.padding ?? 16,
-      }),
-      [overrides],
-    );
+  // Build override styles from themeOverrides
+  const containerStyle = useMemo(
+    () => ({
+      backgroundColor: overrides?.backgroundColor ?? '#1E1E1E',
+      borderRadius: overrides?.borderRadius ?? 16,
+      padding: overrides?.padding ?? 16,
+    }),
+    [overrides],
+  );
 
-    const navTextStyle = useMemo(
-      () => ({
-        color: overrides?.primaryColor ?? '#4DA6FF',
-      }),
-      [overrides],
-    );
+  const navTextStyle = useMemo(
+    () => ({
+      color: overrides?.primaryColor ?? '#4DA6FF',
+    }),
+    [overrides],
+  );
 
-    const monthTitleStyle = useMemo(
-      () => ({
-        color: overrides?.textColor ?? '#FFFFFF',
-      }),
-      [overrides],
-    );
+  const monthTitleStyle = useMemo(
+    () => ({
+      color: overrides?.textColor ?? '#FFFFFF',
+    }),
+    [overrides],
+  );
 
-    return (
-      <View style={[styles.container, containerStyle]}>
-        <View style={styles.header}>
-          <Pressable onPress={() => navigateMonth(-1)} style={styles.navButton}>
-            <Text style={[styles.navText, navTextStyle]}>‹</Text>
-          </Pressable>
-          <Text style={[styles.monthTitle, monthTitleStyle]}>
-            {formatYearMonth(currentMonth)}
-          </Text>
-          <Pressable onPress={() => navigateMonth(1)} style={styles.navButton}>
-            <Text style={[styles.navText, navTextStyle]}>›</Text>
-          </Pressable>
-        </View>
-
-        <View style={styles.weekDays}>
-          {weekDays.map((day) => (
-            <Text key={day} style={styles.weekDayText}>
-              {day}
-            </Text>
-          ))}
-        </View>
-
-        <FlatList
-          data={days}
-          renderItem={renderDay}
-          keyExtractor={keyExtractor}
-          getItemLayout={getItemLayout}
-          numColumns={7}
-          scrollEnabled={false}
-          removeClippedSubviews={true}
-          maxToRenderPerBatch={14}
-          windowSize={3}
-          initialNumToRender={42}
-        />
+  return (
+    <View style={[styles.container, containerStyle]}>
+      <View style={styles.header}>
+        <Pressable onPress={() => navigateMonth(-1)} style={styles.navButton}>
+          <Text style={[styles.navText, navTextStyle]}>‹</Text>
+        </Pressable>
+        <Text style={[styles.monthTitle, monthTitleStyle]}>
+          {formatYearMonth(currentMonth)}
+        </Text>
+        <Pressable onPress={() => navigateMonth(1)} style={styles.navButton}>
+          <Text style={[styles.navText, navTextStyle]}>›</Text>
+        </Pressable>
       </View>
-    );
-  },
-);
+
+      <View style={styles.weekDays}>
+        {weekDays.map((day) => (
+          <Text key={day} style={styles.weekDayText}>
+            {day}
+          </Text>
+        ))}
+      </View>
+
+      <FlatList
+        data={days}
+        renderItem={renderDay}
+        keyExtractor={keyExtractor}
+        getItemLayout={getItemLayout}
+        numColumns={7}
+        scrollEnabled={false}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={14}
+        windowSize={3}
+        initialNumToRender={42}
+      />
+    </View>
+  );
+});
 
 CalendarGrid.displayName = 'CalendarGrid';
