@@ -156,22 +156,34 @@ const [range, setRange] = useState({
 ```SnackPlayer name=Disabled%20Dates&dependencies=@dreamstack-us/kaal
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { DatePicker, toISODateString, parseISODate } from '@dreamstack-us/kaal';
+import { DatePicker, toISODateString } from '@dreamstack-us/kaal';
 
 export default function App() {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  // Disable specific holidays
-  const disabledDates = [
-    parseISODate('2024-12-25'), // Christmas
-    parseISODate('2024-12-26'), // Boxing Day
-    parseISODate('2025-01-01'), // New Year
-  ];
+  // Disable weekends in current month (dynamically calculated)
+  const getWeekendsInMonth = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const weekends = [];
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(year, month, day);
+      if (date.getDay() === 0 || date.getDay() === 6) {
+        weekends.push(date);
+      }
+    }
+    return weekends;
+  };
+
+  const disabledDates = getWeekendsInMonth();
 
   return (
     <View style={styles.container}>
       <Text style={styles.label}>
-        Holidays are disabled
+        Weekends are disabled
       </Text>
       <Text style={styles.selected}>
         Selected: {toISODateString(selectedDate)}
