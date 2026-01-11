@@ -138,10 +138,18 @@ export const DayCell: React.FC<DayCellProps> = memo(
 
     // Today style (non-range)
     const todayStyle = useMemo(() => {
-      if (isToday && !isSelected && !isRangeStart && !isRangeEnd && !isInRange) {
+      if (
+        isToday &&
+        !isSelected &&
+        !isRangeStart &&
+        !isRangeEnd &&
+        !isInRange
+      ) {
         return {
-          backgroundColor: overrides?.cellTodayColor ?? DEFAULT_COLORS.cellToday,
-          borderRadius: overrides?.cellBorderRadius ?? DEFAULT_COLORS.cellBorderRadius,
+          backgroundColor:
+            overrides?.cellTodayColor ?? DEFAULT_COLORS.cellToday,
+          borderRadius:
+            overrides?.cellBorderRadius ?? DEFAULT_COLORS.cellBorderRadius,
           borderWidth: 1,
           borderColor: overrides?.primaryColor ?? DEFAULT_COLORS.primary,
         };
@@ -192,14 +200,17 @@ export const DayCell: React.FC<DayCellProps> = memo(
         {/* Circle for selected/range start/end */}
         {(isRangeStart || isRangeEnd || isSelected) && (
           <View
-            style={[webStyles.circleOverlay, { backgroundColor: selectedColor }]}
+            style={[
+              webStyles.circleOverlay,
+              { backgroundColor: selectedColor },
+            ]}
           />
         )}
 
         {/* Today indicator (when not in range) */}
-        {todayStyle && (
+        {todayStyle ? (
           <View style={[webStyles.circleOverlay, todayStyle]} />
-        )}
+        ) : null}
 
         <Text style={[webStyles.text, textStyle]}>{date.getUTCDate()}</Text>
       </Pressable>
