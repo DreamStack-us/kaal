@@ -1,6 +1,3 @@
-// Auto-initialize unistyles with defaults if not configured
-import './utils/initUnistyles';
-
 // Date picker components
 export { DatePicker, type KaalDatePickerProps } from './components';
 export { CalendarGrid } from './components';
@@ -68,6 +65,7 @@ export type {
   DatePickerTheme,
   DatePickerVariant,
   DatePickerProps,
+  DatePickerThemeOverrides,
 } from './types';
 
 // Time picker types
@@ -77,4 +75,14 @@ export type {
   Time12Hour,
   MinuteInterval,
   TimePickerTheme,
+  TimePickerThemeOverrides,
 } from './types';
+
+// Theme override context (for advanced usage)
+export {
+  ThemeOverrideProvider,
+  useDatePickerOverrides,
+  useTimePickerOverrides,
+  useThemeOverrides,
+} from './context/ThemeOverrideContext';
+export type { ThemeOverrideContextValue } from './context/ThemeOverrideContext';
