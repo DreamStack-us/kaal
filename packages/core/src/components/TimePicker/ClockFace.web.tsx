@@ -250,7 +250,14 @@ export const ClockFace: React.FC<ClockFaceProps> = memo(
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
           style={{ cursor: 'pointer', touchAction: 'none' }}
+          role="img"
+          aria-label={`Clock face for selecting ${mode === 'hours' ? 'hours' : 'minutes'}`}
         >
+          <title>
+            {mode === 'hours'
+              ? 'Hour selection clock'
+              : 'Minute selection clock'}
+          </title>
           {/* Background circle */}
           <circle
             cx={CLOCK_CENTER}

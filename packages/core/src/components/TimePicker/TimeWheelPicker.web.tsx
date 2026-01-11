@@ -24,10 +24,18 @@ interface WheelColumnProps {
   onSelect: (index: number) => void;
   textColor: string;
   highlightColor: string;
+  label?: string;
 }
 
 const WheelColumn: React.FC<WheelColumnProps> = memo(
-  ({ items, selectedIndex, onSelect, textColor, highlightColor }) => {
+  ({
+    items,
+    selectedIndex,
+    onSelect,
+    textColor,
+    highlightColor,
+    label = 'Select value',
+  }) => {
     const scrollRef = useRef<HTMLDivElement>(null);
     const isScrolling = useRef(false);
     const scrollTimeout = useRef<ReturnType<typeof setTimeout>>();
@@ -68,6 +76,44 @@ const WheelColumn: React.FC<WheelColumnProps> = memo(
       }, 100);
     }, [items.length, selectedIndex, onSelect]);
 
+    // Keyboard navigation (like native input[type="time"])
+    const handleKeyDown = useCallback(
+      (e: React.KeyboardEvent) => {
+        let newIndex = selectedIndex;
+
+        switch (e.key) {
+          case 'ArrowUp':
+            e.preventDefault();
+            newIndex = Math.max(0, selectedIndex - 1);
+            break;
+          case 'ArrowDown':
+            e.preventDefault();
+            newIndex = Math.min(items.length - 1, selectedIndex + 1);
+            break;
+          case 'Home':
+            e.preventDefault();
+            newIndex = 0;
+            break;
+          case 'End':
+            e.preventDefault();
+            newIndex = items.length - 1;
+            break;
+          default:
+            return;
+        }
+
+        if (newIndex !== selectedIndex) {
+          if (scrollRef.current) {
+            scrollRef.current.scrollTop = newIndex * ITEM_HEIGHT;
+          }
+          onSelect(newIndex);
+        }
+      },
+      [selectedIndex, items.length, onSelect],
+    );
+
+    const currentItem = items[selectedIndex];
+
     return (
       <View style={webStyles.column}>
         <View
@@ -77,9 +123,29 @@ const WheelColumn: React.FC<WheelColumnProps> = memo(
           ]}
         />
 
+        {/* Spinbutton - mimics input[type="time"] accessibility */}
         <div
           ref={scrollRef}
+          role="spinbutton"
+          tabIndex={0}
+          aria-label={label}
+          aria-valuenow={
+            typeof currentItem?.value === 'number' ? currentItem.value : 0
+          }
+          aria-valuemin={0}
+          aria-valuemax={items.length - 1}
+          aria-valuetext={currentItem?.label}
           onScroll={handleScroll}
+          onKeyDown={handleKeyDown}
+          onClick={(e) => {
+            const target = e.target as HTMLElement;
+            const item = target.closest('[data-index]') as HTMLElement | null;
+            if (item && scrollRef.current) {
+              const index = Number(item.dataset.index);
+              scrollRef.current.scrollTop = index * ITEM_HEIGHT;
+              onSelect(index);
+            }
+          }}
           style={{
             height: CONTAINER_HEIGHT,
             overflowY: 'auto',
@@ -87,6 +153,7 @@ const WheelColumn: React.FC<WheelColumnProps> = memo(
             scrollBehavior: 'smooth',
             position: 'relative',
             zIndex: 1,
+            outline: 'none',
             // Hide scrollbar
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
@@ -107,6 +174,7 @@ const WheelColumn: React.FC<WheelColumnProps> = memo(
             return (
               <div
                 key={`${item.value}`}
+                data-index={index}
                 style={{
                   height: ITEM_HEIGHT,
                   display: 'flex',
@@ -114,12 +182,6 @@ const WheelColumn: React.FC<WheelColumnProps> = memo(
                   alignItems: 'center',
                   scrollSnapAlign: 'center',
                   cursor: 'pointer',
-                }}
-                onClick={() => {
-                  if (scrollRef.current) {
-                    scrollRef.current.scrollTop = index * ITEM_HEIGHT;
-                  }
-                  onSelect(index);
                 }}
               >
                 <Text
@@ -264,6 +326,7 @@ export const TimeWheelPicker: React.FC<TimeWheelPickerProps> = memo(
           onSelect={handleHourChange}
           textColor={colors.textColor}
           highlightColor={colors.selectionHighlight}
+          label="Hour"
         />
 
         <Text style={[webStyles.separator, { color: colors.separatorColor }]}>
@@ -276,6 +339,7 @@ export const TimeWheelPicker: React.FC<TimeWheelPickerProps> = memo(
           onSelect={handleMinuteChange}
           textColor={colors.textColor}
           highlightColor={colors.selectionHighlight}
+          label="Minute"
         />
 
         {!is24Hour && (
@@ -285,6 +349,7 @@ export const TimeWheelPicker: React.FC<TimeWheelPickerProps> = memo(
             onSelect={handlePeriodChange}
             textColor={colors.textColor}
             highlightColor={colors.selectionHighlight}
+            label="AM/PM"
           />
         )}
       </View>

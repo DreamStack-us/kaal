@@ -16,6 +16,7 @@ function TypeScriptIcon() {
       viewBox="0 0 512 512"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
     >
       <rect width="512" height="512" rx="50" fill="#3178c6" />
       <path

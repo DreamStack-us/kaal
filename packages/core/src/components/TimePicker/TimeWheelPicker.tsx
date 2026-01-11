@@ -11,7 +11,7 @@ import Animated, {
 import { useTimePickerOverrides } from '../../context/ThemeOverrideContext';
 import { to12Hour, to24Hour } from '../../hooks/useTimePicker';
 import type { TimePeriod, TimeValue } from '../../types/timepicker';
-import { styles, WHEEL_ITEM_HEIGHT } from './TimePicker.styles';
+import { WHEEL_ITEM_HEIGHT, styles } from './TimePicker.styles';
 
 const ITEM_HEIGHT = WHEEL_ITEM_HEIGHT;
 const VISIBLE_ITEMS = 5;

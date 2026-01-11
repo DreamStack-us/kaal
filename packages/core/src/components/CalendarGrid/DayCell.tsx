@@ -45,7 +45,7 @@ export const DayCell: React.FC<DayCellProps> = memo(
     // Build cell style based on state and overrides
     // Use primaryColor as fallback for cellSelectedColor (consumer expectation)
     const cellStyle = useMemo(() => {
-      const style: Record<string, any> = {
+      const style: Record<string, unknown> = {
         backgroundColor: DEFAULT_COLORS.cellBackground,
       };
 
@@ -54,10 +54,13 @@ export const DayCell: React.FC<DayCellProps> = memo(
           overrides?.cellSelectedColor ??
           overrides?.primaryColor ??
           DEFAULT_COLORS.cellSelected;
-        style.borderRadius = overrides?.cellBorderRadius ?? DEFAULT_COLORS.cellBorderRadius;
+        style.borderRadius =
+          overrides?.cellBorderRadius ?? DEFAULT_COLORS.cellBorderRadius;
       } else if (isToday) {
-        style.backgroundColor = overrides?.cellTodayColor ?? DEFAULT_COLORS.cellToday;
-        style.borderRadius = overrides?.cellBorderRadius ?? DEFAULT_COLORS.cellBorderRadius;
+        style.backgroundColor =
+          overrides?.cellTodayColor ?? DEFAULT_COLORS.cellToday;
+        style.borderRadius =
+          overrides?.cellBorderRadius ?? DEFAULT_COLORS.cellBorderRadius;
         style.borderWidth = 1;
         style.borderColor = overrides?.primaryColor ?? DEFAULT_COLORS.primary;
       }
@@ -71,19 +74,21 @@ export const DayCell: React.FC<DayCellProps> = memo(
 
     // Build text style based on state and overrides
     const textStyle = useMemo(() => {
-      const style: Record<string, any> = {
+      const style: Record<string, unknown> = {
         color: overrides?.textColor ?? DEFAULT_COLORS.textDefault,
         fontWeight: '400' as const,
       };
 
       if (isSelected) {
-        style.color = overrides?.textSelectedColor ?? DEFAULT_COLORS.textSelected;
+        style.color =
+          overrides?.textSelectedColor ?? DEFAULT_COLORS.textSelected;
         style.fontWeight = '600';
       } else if (isToday) {
         style.color = overrides?.primaryColor ?? DEFAULT_COLORS.primary;
         style.fontWeight = '600';
       } else if (isDisabled) {
-        style.color = overrides?.textDisabledColor ?? DEFAULT_COLORS.textDisabled;
+        style.color =
+          overrides?.textDisabledColor ?? DEFAULT_COLORS.textDisabled;
       } else if (isWeekend) {
         style.color = overrides?.textWeekendColor ?? DEFAULT_COLORS.textWeekend;
       }

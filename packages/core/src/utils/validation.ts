@@ -5,7 +5,8 @@
 
 // ISO date regex pattern
 const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
-const ISO_DATETIME_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?(Z|[+-]\d{2}:\d{2})?$/;
+const ISO_DATETIME_PATTERN =
+  /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?(Z|[+-]\d{2}:\d{2})?$/;
 
 /**
  * Validates an ISO 8601 date string (YYYY-MM-DD)
@@ -13,7 +14,11 @@ const ISO_DATETIME_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?(Z|[
 export function isValidISODate(value: string): boolean {
   if (!ISO_DATE_PATTERN.test(value)) return false;
 
-  const [year, month, day] = value.split('-').map(Number) as [number, number, number];
+  const [year, month, day] = value.split('-').map(Number) as [
+    number,
+    number,
+    number,
+  ];
   const date = new Date(Date.UTC(year, month - 1, day));
 
   return (
@@ -29,7 +34,7 @@ export function isValidISODate(value: string): boolean {
 export function isValidISODateTime(value: string): boolean {
   if (!ISO_DATETIME_PATTERN.test(value)) return false;
   const date = new Date(value);
-  return !isNaN(date.getTime());
+  return !Number.isNaN(date.getTime());
 }
 
 /**
@@ -60,7 +65,11 @@ export function isValidDateRange(start: string, end: string): boolean {
  */
 export function parseISODateSafe(value: string): Date | null {
   if (!isValidISODate(value)) return null;
-  const [year, month, day] = value.split('-').map(Number) as [number, number, number];
+  const [year, month, day] = value.split('-').map(Number) as [
+    number,
+    number,
+    number,
+  ];
   return new Date(Date.UTC(year, month - 1, day));
 }
 
@@ -99,7 +108,8 @@ export const isoDateTimeSchema = {
 /** @deprecated Use isValidDateRange() instead */
 export const dateRangeSchema = {
   parse: (value: DateRange) => {
-    if (!isValidDateRange(value.start, value.end)) throw new Error('Invalid date range');
+    if (!isValidDateRange(value.start, value.end))
+      throw new Error('Invalid date range');
     return value;
   },
 };

@@ -30,11 +30,11 @@ type DeepPartial<T> = {
 };
 
 function deepMerge<T extends object>(target: T, source: DeepPartial<T>): T {
-  const result = { ...target };
+  const result = { ...target } as Record<string, unknown>;
 
   for (const key in source) {
     const sourceValue = source[key];
-    const targetValue = target[key];
+    const targetValue = target[key as keyof T];
 
     if (
       sourceValue !== undefined &&
@@ -45,13 +45,13 @@ function deepMerge<T extends object>(target: T, source: DeepPartial<T>): T {
       targetValue !== null &&
       !Array.isArray(targetValue)
     ) {
-      (result as any)[key] = deepMerge(targetValue as object, sourceValue as object);
+      result[key] = deepMerge(targetValue as object, sourceValue as object);
     } else if (sourceValue !== undefined) {
-      (result as any)[key] = sourceValue;
+      result[key] = sourceValue;
     }
   }
 
-  return result;
+  return result as T;
 }
 
 /**

@@ -35,8 +35,24 @@ interface CalendarGridProps {
 const CELL_SIZE = 44;
 
 // Week day labels starting from Sunday
-const WEEK_DAYS_SUNDAY_START = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const WEEK_DAYS_MONDAY_START = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const WEEK_DAYS_SUNDAY_START = [
+  'Sun',
+  'Mon',
+  'Tue',
+  'Wed',
+  'Thu',
+  'Fri',
+  'Sat',
+];
+const WEEK_DAYS_MONDAY_START = [
+  'Mon',
+  'Tue',
+  'Wed',
+  'Thu',
+  'Fri',
+  'Sat',
+  'Sun',
+];
 
 // Default colors (light theme for web)
 const DEFAULT_COLORS = {
@@ -139,7 +155,15 @@ const webStyles = StyleSheet.create({
 });
 
 export const CalendarGrid: React.FC<CalendarGridProps> = memo(
-  ({ value, onChange, minDate, maxDate, disabledDates, themeMode, weekStartsOn = 0 }) => {
+  ({
+    value,
+    onChange,
+    minDate,
+    maxDate,
+    disabledDates,
+    themeMode,
+    weekStartsOn = 0,
+  }) => {
     const overrides = useDatePickerOverrides();
     const [currentMonth, setCurrentMonth] = React.useState(() =>
       getFirstDayOfMonth(value),
@@ -150,7 +174,8 @@ export const CalendarGrid: React.FC<CalendarGridProps> = memo(
       [currentMonth, weekStartsOn],
     );
 
-    const weekDays = weekStartsOn === 0 ? WEEK_DAYS_SUNDAY_START : WEEK_DAYS_MONDAY_START;
+    const weekDays =
+      weekStartsOn === 0 ? WEEK_DAYS_SUNDAY_START : WEEK_DAYS_MONDAY_START;
 
     const todayDate = useMemo(() => today(), []);
 

@@ -54,7 +54,8 @@ const WheelColumn: React.FC<{
   items: { value: number; label: string }[];
   selectedIndex: number;
   onSelect: (index: number) => void;
-}> = ({ items, selectedIndex, onSelect }) => {
+  label?: string;
+}> = ({ items, selectedIndex, onSelect, label = 'Select value' }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const isScrolling = useRef(false);
   const scrollTimeout = useRef<ReturnType<typeof setTimeout>>();
@@ -95,13 +96,77 @@ const WheelColumn: React.FC<{
     }, 100);
   }, [items.length, selectedIndex, onSelect]);
 
+  // Keyboard navigation for spinbutton behavior (like native input[type="time"])
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      let newIndex = selectedIndex;
+
+      switch (e.key) {
+        case 'ArrowUp':
+          e.preventDefault();
+          newIndex = Math.max(0, selectedIndex - 1);
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          newIndex = Math.min(items.length - 1, selectedIndex + 1);
+          break;
+        case 'Home':
+          e.preventDefault();
+          newIndex = 0;
+          break;
+        case 'End':
+          e.preventDefault();
+          newIndex = items.length - 1;
+          break;
+        case 'PageUp':
+          e.preventDefault();
+          newIndex = Math.max(0, selectedIndex - 5);
+          break;
+        case 'PageDown':
+          e.preventDefault();
+          newIndex = Math.min(items.length - 1, selectedIndex + 5);
+          break;
+        default:
+          return;
+      }
+
+      if (newIndex !== selectedIndex) {
+        if (scrollRef.current) {
+          scrollRef.current.scrollTop = newIndex * ITEM_HEIGHT;
+        }
+        onSelect(newIndex);
+      }
+    },
+    [selectedIndex, items.length, onSelect],
+  );
+
+  const currentItem = items[selectedIndex];
+
   return (
     <View style={webStyles.column}>
       <View style={webStyles.selectionHighlight} />
 
+      {/* Spinbutton container - mimics input[type="time"] accessibility */}
       <div
         ref={scrollRef}
+        role="spinbutton"
+        tabIndex={0}
+        aria-label={label}
+        aria-valuenow={currentItem?.value}
+        aria-valuemin={items[0]?.value}
+        aria-valuemax={items[items.length - 1]?.value}
+        aria-valuetext={currentItem?.label}
         onScroll={handleScroll}
+        onKeyDown={handleKeyDown}
+        onClick={(e) => {
+          const target = e.target as HTMLElement;
+          const item = target.closest('[data-index]') as HTMLElement | null;
+          if (item && scrollRef.current) {
+            const index = Number(item.dataset.index);
+            scrollRef.current.scrollTop = index * ITEM_HEIGHT;
+            onSelect(index);
+          }
+        }}
         style={{
           height: CONTAINER_HEIGHT,
           overflowY: 'auto',
@@ -109,6 +174,7 @@ const WheelColumn: React.FC<{
           scrollBehavior: 'smooth',
           position: 'relative',
           zIndex: 1,
+          outline: 'none',
           // Hide scrollbar
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
@@ -127,6 +193,7 @@ const WheelColumn: React.FC<{
         {items.map((item, index) => (
           <div
             key={item.value}
+            data-index={index}
             style={{
               height: ITEM_HEIGHT,
               display: 'flex',
@@ -134,12 +201,6 @@ const WheelColumn: React.FC<{
               alignItems: 'center',
               scrollSnapAlign: 'center',
               cursor: 'pointer',
-            }}
-            onClick={() => {
-              if (scrollRef.current) {
-                scrollRef.current.scrollTop = index * ITEM_HEIGHT;
-              }
-              onSelect(index);
             }}
           >
             <Text style={webStyles.itemText}>{item.label}</Text>
@@ -218,11 +279,13 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
         items={months}
         selectedIndex={value.getUTCMonth()}
         onSelect={handleMonthChange}
+        label="Month"
       />
       <WheelColumn
         items={days}
         selectedIndex={value.getUTCDate() - 1}
         onSelect={handleDayChange}
+        label="Day"
       />
       <WheelColumn
         items={years}
@@ -230,6 +293,7 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
           (y) => y.value === value.getUTCFullYear(),
         )}
         onSelect={handleYearChange}
+        label="Year"
       />
     </View>
   );
