@@ -44,9 +44,7 @@ function isDateInRange(
   rangeEnd: Date | null,
 ): boolean {
   if (!rangeStart || !rangeEnd) return false;
-  return (
-    compareDates(date, rangeStart) > 0 && compareDates(date, rangeEnd) < 0
-  );
+  return compareDates(date, rangeStart) > 0 && compareDates(date, rangeEnd) < 0;
 }
 
 describe('Range Selection Logic', () => {
@@ -66,7 +64,9 @@ describe('Range Selection Logic', () => {
 
       expect(toISODateString(result.startDate)).toBe('2024-01-10');
       expect(result.endDate).not.toBeNull();
-      expect(toISODateString(result.endDate!)).toBe('2024-01-20');
+      if (result.endDate) {
+        expect(toISODateString(result.endDate)).toBe('2024-01-20');
+      }
     });
 
     test('selection before start resets to new start', () => {
@@ -158,7 +158,10 @@ describe('Range Selection Logic', () => {
       const result = handleRangeSelection(date, start, null);
 
       expect(toISODateString(result.startDate)).toBe('2024-01-28');
-      expect(toISODateString(result.endDate!)).toBe('2024-02-05');
+      expect(result.endDate).not.toBeNull();
+      if (result.endDate) {
+        expect(toISODateString(result.endDate)).toBe('2024-02-05');
+      }
 
       // Check middle date is in range
       const middleDate = parseISODate('2024-02-01');
@@ -173,7 +176,10 @@ describe('Range Selection Logic', () => {
       const result = handleRangeSelection(date, start, null);
 
       expect(toISODateString(result.startDate)).toBe('2023-12-28');
-      expect(toISODateString(result.endDate!)).toBe('2024-01-05');
+      expect(result.endDate).not.toBeNull();
+      if (result.endDate) {
+        expect(toISODateString(result.endDate)).toBe('2024-01-05');
+      }
 
       // Check Dec 31 is in range
       const newYearsEve = parseISODate('2023-12-31');
