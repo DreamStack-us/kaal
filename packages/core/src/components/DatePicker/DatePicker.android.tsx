@@ -1,4 +1,4 @@
-import React, { Suspense, useCallback } from 'react';
+import React, { Suspense } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { ThemeOverrideProvider } from '../../context/ThemeOverrideContext';
 import { toISODateString } from '../../utils/date';
@@ -32,42 +32,60 @@ const ExpoDatePicker = React.lazy(async () => {
   }
 });
 
-export const DatePicker: React.FC<KaalDatePickerProps> = ({
-  value,
-  onChange,
-  theme = 'native',
-  minDate,
-  maxDate,
-  disabledDates,
-  themeOverrides,
-  weekStartsOn = 0,
-}) => {
-  const handleDateChange = useCallback(
-    (date: Date) => {
-      onChange(date);
-    },
-    [onChange],
-  );
+export const DatePicker: React.FC<KaalDatePickerProps> = (props) => {
+  const {
+    theme = 'native',
+    minDate,
+    maxDate,
+    disabledDates,
+    themeOverrides,
+    weekStartsOn = 0,
+  } = props;
 
+  const themeMode = theme === 'native' ? 'android' : theme;
+
+  // Range mode
+  if (props.selectionMode === 'range') {
+    return (
+      <ThemeOverrideProvider value={{ datePicker: themeOverrides }}>
+        <CalendarGrid
+          selectionMode="range"
+          startDate={props.startDate}
+          endDate={props.endDate}
+          onRangeChange={props.onRangeChange}
+          minDate={minDate}
+          maxDate={maxDate}
+          disabledDates={disabledDates}
+          themeMode={themeMode}
+          weekStartsOn={weekStartsOn}
+        />
+      </ThemeOverrideProvider>
+    );
+  }
+
+  // Single selection mode
+  // Native picker only available for single selection
   if (theme === 'native') {
     return (
       <View style={styles.container}>
         <Suspense fallback={<ActivityIndicator />}>
-          <ExpoDatePicker value={value} onChange={handleDateChange} />
+          <ExpoDatePicker value={props.value} onChange={props.onChange} />
         </Suspense>
       </View>
     );
   }
 
+  // Single selection with custom theme
   return (
     <ThemeOverrideProvider value={{ datePicker: themeOverrides }}>
       <CalendarGrid
-        value={value}
-        onChange={onChange}
+        selectionMode="single"
+        value={props.value}
+        onChange={props.onChange}
         minDate={minDate}
         maxDate={maxDate}
         disabledDates={disabledDates}
-        themeMode={theme}
+        themeMode={themeMode}
         weekStartsOn={weekStartsOn}
       />
     </ThemeOverrideProvider>

@@ -1,4 +1,4 @@
-import React, { Suspense, useCallback } from 'react';
+import React, { Suspense } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { ThemeOverrideProvider } from '../../context/ThemeOverrideContext';
 import { toISODateString } from '../../utils/date';
@@ -35,32 +35,48 @@ const ExpoDatePicker = React.lazy(async () => {
   }
 });
 
-export const DatePicker: React.FC<KaalDatePickerProps> = ({
-  value,
-  onChange,
-  mode = 'date',
-  theme = 'native',
-  variant = 'wheel',
-  minDate,
-  maxDate,
-  disabledDates,
-  themeOverrides,
-  weekStartsOn = 0,
-}) => {
-  const handleDateChange = useCallback(
-    (date: Date) => {
-      onChange(date);
-    },
-    [onChange],
-  );
+export const DatePicker: React.FC<KaalDatePickerProps> = (props) => {
+  const {
+    mode = 'date',
+    theme = 'native',
+    variant = 'wheel',
+    minDate,
+    maxDate,
+    disabledDates,
+    themeOverrides,
+    weekStartsOn = 0,
+  } = props;
 
+  const themeMode = theme === 'native' ? 'ios' : theme;
+
+  // Range mode
+  if (props.selectionMode === 'range') {
+    return (
+      <ThemeOverrideProvider value={{ datePicker: themeOverrides }}>
+        <CalendarGrid
+          selectionMode="range"
+          startDate={props.startDate}
+          endDate={props.endDate}
+          onRangeChange={props.onRangeChange}
+          minDate={minDate}
+          maxDate={maxDate}
+          disabledDates={disabledDates}
+          themeMode={themeMode}
+          weekStartsOn={weekStartsOn}
+        />
+      </ThemeOverrideProvider>
+    );
+  }
+
+  // Single selection mode
+  // Native picker only available for single selection
   if (theme === 'native') {
     return (
       <View style={styles.container}>
         <Suspense fallback={<ActivityIndicator />}>
           <ExpoDatePicker
-            value={value}
-            onChange={handleDateChange}
+            value={props.value}
+            onChange={props.onChange}
             variant={variant}
           />
         </Suspense>
@@ -68,15 +84,17 @@ export const DatePicker: React.FC<KaalDatePickerProps> = ({
     );
   }
 
+  // Single selection with custom theme
   return (
     <ThemeOverrideProvider value={{ datePicker: themeOverrides }}>
       <CalendarGrid
-        value={value}
-        onChange={onChange}
+        selectionMode="single"
+        value={props.value}
+        onChange={props.onChange}
         minDate={minDate}
         maxDate={maxDate}
         disabledDates={disabledDates}
-        themeMode={theme}
+        themeMode={themeMode}
         weekStartsOn={weekStartsOn}
       />
     </ThemeOverrideProvider>

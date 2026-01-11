@@ -14,10 +14,23 @@ import { DatePicker } from '@dreamstack-us/kaal';
 
 ## Props
 
-### `value`
+### Selection Mode
+
+The DatePicker supports two selection modes: single date and range selection.
+
+### `selectionMode`
+
+**Type:** `'single' | 'range'`
+**Default:** `'single'`
+
+Determines whether the picker selects a single date or a date range.
+
+### Single Selection (Default)
+
+#### `value`
 
 **Type:** `Date`
-**Required:** Yes
+**Required:** Yes (when `selectionMode` is `'single'`)
 
 The currently selected date.
 
@@ -26,12 +39,51 @@ const [date, setDate] = useState(new Date());
 <DatePicker value={date} onChange={setDate} />
 ```
 
-### `onChange`
+#### `onChange`
 
 **Type:** `(date: Date) => void`
-**Required:** Yes
+**Required:** Yes (when `selectionMode` is `'single'`)
 
 Callback fired when the selected date changes.
+
+### Range Selection
+
+#### `startDate`
+
+**Type:** `Date | null`
+**Required:** Yes (when `selectionMode` is `'range'`)
+
+The start date of the selected range.
+
+#### `endDate`
+
+**Type:** `Date | null`
+**Required:** Yes (when `selectionMode` is `'range'`)
+
+The end date of the selected range.
+
+#### `onRangeChange`
+
+**Type:** `(range: { startDate: Date; endDate: Date | null }) => void`
+**Required:** Yes (when `selectionMode` is `'range'`)
+
+Callback fired when the range selection changes.
+
+```tsx
+const [range, setRange] = useState({
+  startDate: new Date(),
+  endDate: null,
+});
+
+<DatePicker
+  selectionMode="range"
+  startDate={range.startDate}
+  endDate={range.endDate}
+  onRangeChange={setRange}
+/>
+```
+
+### Common Props
 
 ### `theme`
 
@@ -181,11 +233,13 @@ Custom theme overrides for styling the DatePicker without using a theme provider
 | `primaryColor` | `string` | Primary accent color for navigation and highlights |
 | `cellSelectedColor` | `string` | Background color of the selected date cell |
 | `cellTodayColor` | `string` | Background color of today's date cell |
+| `cellInRangeColor` | `string` | Background color for dates within the selected range |
 | `cellBorderRadius` | `number` | Border radius for date cells |
 | `textColor` | `string` | Default text color for dates |
 | `textSelectedColor` | `string` | Text color for the selected date |
 | `textDisabledColor` | `string` | Text color for disabled dates |
 | `textWeekendColor` | `string` | Text color for weekend dates |
+| `textInRangeColor` | `string` | Text color for dates within the selected range |
 | `backgroundColor` | `string` | Container background color |
 | `headerBackground` | `string` | Header/navigation background color |
 | `borderRadius` | `number` | Border radius for the calendar container |
@@ -238,33 +292,57 @@ function WheelPickerWithRange() {
 ## TypeScript
 
 ```tsx
-import type { DatePickerProps, DatePickerThemeOverrides } from '@dreamstack-us/kaal';
+import type {
+  DatePickerProps,
+  DatePickerThemeOverrides,
+  DatePickerDateRange,
+  DatePickerSelectionMode,
+} from '@dreamstack-us/kaal';
 
-// DatePickerProps interface
-interface DatePickerProps {
-  value: Date;
-  onChange: (date: Date) => void;
-  mode?: 'date' | 'time' | 'datetime';
-  theme?: 'native' | 'ios' | 'android' | 'custom';
-  variant?: 'wheel' | 'calendar' | 'compact';
-  minDate?: Date;
-  maxDate?: Date;
-  disabledDates?: Date[];
-  locale?: string;
-  weekStartsOn?: 0 | 1;
-  themeOverrides?: DatePickerThemeOverrides;
-}
+// DateRange type
+type DateRange = {
+  startDate: Date;
+  endDate: Date | null;
+};
+
+// DatePickerProps is a union type supporting both modes:
+// - Single selection: value, onChange
+// - Range selection: selectionMode="range", startDate, endDate, onRangeChange
+
+// Single selection example
+const SinglePicker: React.FC = () => {
+  const [date, setDate] = useState(new Date());
+  return <DatePicker value={date} onChange={setDate} />;
+};
+
+// Range selection example
+const RangePicker: React.FC = () => {
+  const [range, setRange] = useState<DateRange>({
+    startDate: new Date(),
+    endDate: null,
+  });
+  return (
+    <DatePicker
+      selectionMode="range"
+      startDate={range.startDate}
+      endDate={range.endDate}
+      onRangeChange={setRange}
+    />
+  );
+};
 
 // DatePickerThemeOverrides interface
 interface DatePickerThemeOverrides {
   primaryColor?: string;
   cellSelectedColor?: string;
   cellTodayColor?: string;
+  cellInRangeColor?: string;
   cellBorderRadius?: number;
   textColor?: string;
   textSelectedColor?: string;
   textDisabledColor?: string;
   textWeekendColor?: string;
+  textInRangeColor?: string;
   backgroundColor?: string;
   headerBackground?: string;
   borderRadius?: number;
