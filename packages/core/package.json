@@ -1,6 +1,6 @@
 {
   "name": "@dreamstack-us/kaal",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "High-performance React Native DatePicker with Unistyles v3",
   "type": "module",
   "main": "./lib/module/index.js",
@@ -19,7 +19,12 @@
     },
     "./package.json": "./package.json"
   },
-  "files": ["lib", "src", "!**/__tests__", "!**/*.test.*"],
+  "files": [
+    "lib",
+    "src",
+    "!**/__tests__",
+    "!**/*.test.*"
+  ],
   "scripts": {
     "build": "bob build",
     "dev": "bob build --watch",
@@ -38,7 +43,7 @@
     "react-native-reanimated": ">=3.17.0",
     "react-native-gesture-handler": ">=2.20.0",
     "react-native-svg": ">=13.0.0",
-    "@dreamstack-us/kaal-themes": ">=0.0.1"
+    "@dreamstack-us/kaal-themes": ">=1.0.0"
   },
   "peerDependenciesMeta": {
     "@expo/ui": {
