@@ -1,6 +1,6 @@
 # @dreamstack-us/kaal
 
-## 1.0.0
+## 0.0.2
 
 ### Minor Changes
 
@@ -18,4 +18,4 @@
 ### Patch Changes
 
 - Updated dependencies [[`4273b58`](https://github.com/DreamStack-us/kaal/commit/4273b58daee1f7c772607762c33be712009552df)]:
-  - @dreamstack-us/kaal-themes@1.0.0
+  - @dreamstack-us/kaal-themes@0.0.2

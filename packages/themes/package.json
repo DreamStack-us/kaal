@@ -1,6 +1,6 @@
 {
   "name": "@dreamstack-us/kaal-themes",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "Theme system for @dreamstack-us/kaal",
   "type": "module",
   "main": "./lib/module/index.js",
