@@ -1,6 +1,0 @@
-{
-  "enabledPlugins": {
-    "typescript-lsp@claude-plugins-official": true,
-    "linear@claude-plugins-official": true
-  }
-}
