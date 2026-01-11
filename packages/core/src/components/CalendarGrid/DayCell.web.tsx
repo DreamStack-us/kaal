@@ -1,3 +1,4 @@
+/// <reference lib="dom" />
 import type React from 'react';
 import { memo, useMemo } from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
@@ -12,20 +13,21 @@ interface DayCellProps {
   onPress?: () => void;
 }
 
-// Default colors (dark theme)
+// Default colors (light theme for web)
 const DEFAULT_COLORS = {
   cellBackground: 'transparent',
-  cellSelected: '#4DA6FF',
-  cellToday: '#1E3A5F',
-  textDefault: '#FFFFFF',
+  cellSelected: '#007AFF',
+  cellToday: 'rgba(0, 122, 255, 0.1)',
+  textDefault: '#1C1C1E',
   textSelected: '#FFFFFF',
-  textDisabled: '#555555',
+  textDisabled: '#8E8E93',
   textWeekend: '#8E8E93',
-  primary: '#4DA6FF',
+  primary: '#007AFF',
   cellBorderRadius: 22,
 };
 
-const styles = StyleSheet.create({
+// Web-compatible styles (no unistyles dependency)
+const webStyles = StyleSheet.create({
   cell: {
     width: 44,
     height: 44,
@@ -97,12 +99,12 @@ export const DayCell: React.FC<DayCellProps> = memo(
     }, [overrides, isSelected, isToday, isDisabled, isWeekend]);
 
     if (!date) {
-      return <Pressable style={styles.cell} disabled />;
+      return <Pressable style={webStyles.cell} disabled />;
     }
 
     return (
       <Pressable
-        style={[styles.cell, cellStyle]}
+        style={[webStyles.cell, cellStyle]}
         onPress={onPress}
         disabled={isDisabled}
         accessibilityRole="button"
@@ -113,7 +115,7 @@ export const DayCell: React.FC<DayCellProps> = memo(
         }).format(date)}
         accessibilityState={{ selected: isSelected, disabled: isDisabled }}
       >
-        <Text style={[styles.text, textStyle]}>{date.getUTCDate()}</Text>
+        <Text style={[webStyles.text, textStyle]}>{date.getUTCDate()}</Text>
       </Pressable>
     );
   },

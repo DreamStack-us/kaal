@@ -17,11 +17,7 @@
     "packages/core": {
       "name": "@dreamstack-us/kaal",
       "version": "0.0.1",
-      "dependencies": {
-        "valibot": "^1.0.0",
-      },
       "devDependencies": {
-        "@dreamstack-us/kaal-themes": "workspace:*",
         "@types/react": "^18.3.0",
         "react": "18.3.1",
         "react-native": "0.78.0",
@@ -32,9 +28,9 @@
         "react-native-svg": "^15.15.1",
         "react-native-unistyles": "^3.0.0",
         "typescript": "^5.7.0",
-        "typescript-config": "workspace:*",
       },
       "peerDependencies": {
+        "@dreamstack-us/kaal-themes": ">=0.0.1",
         "react": ">=18.2.0",
         "react-native": ">=0.78.0",
         "react-native-gesture-handler": ">=2.20.0",
@@ -43,6 +39,9 @@
         "react-native-svg": ">=13.0.0",
         "react-native-unistyles": "^3.0.0",
       },
+      "optionalPeers": [
+        "@dreamstack-us/kaal-themes",
+      ],
     },
     "packages/themes": {
       "name": "@dreamstack-us/kaal-themes",
@@ -1294,8 +1293,6 @@
     "util-deprecate": ["util-deprecate@1.0.2", "", {}, "sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw=="],
 
     "utils-merge": ["utils-merge@1.0.1", "", {}, "sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA=="],
-
-    "valibot": ["valibot@1.2.0", "", { "peerDependencies": { "typescript": ">=5" }, "optionalPeers": ["typescript"] }, "sha512-mm1rxUsmOxzrwnX5arGS+U4T25RdvpPjPN4yR0u9pUBov9+zGVtO84tif1eY4r6zWxVxu3KzIyknJy3rxfRZZg=="],
 
     "vlq": ["vlq@1.0.1", "", {}, "sha512-gQpnTgkubC6hQgdIcRdYGDSDc+SaujOdyesZQMv6JlfQee/9Mp0Qhnys6WxDWvQnL5WZdT7o2Ul187aSt0Rq+w=="],
 

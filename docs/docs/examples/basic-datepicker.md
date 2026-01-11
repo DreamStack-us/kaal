@@ -8,29 +8,37 @@ A simple date picker with calendar view.
 
 ## Live Example
 
-```SnackPlayer name=Basic%20DatePicker&dependencies=@dreamstack-us/kaal,@dreamstack-us/kaal-themes,react-native-unistyles
+```SnackPlayer name=Basic%20DatePicker&dependencies=@dreamstack-us/kaal
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { DatePicker, toISODateString, KaalProvider } from '@dreamstack-us/kaal';
-import { kaalNativeTheme } from '@dreamstack-us/kaal-themes';
+import { DatePicker, toISODateString } from '@dreamstack-us/kaal';
 
 export default function App() {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   return (
-    <KaalProvider theme={kaalNativeTheme}>
-      <View style={styles.container}>
-        <Text style={styles.label}>
-          Selected: {toISODateString(selectedDate)}
-        </Text>
+    <View style={styles.container}>
+      <Text style={styles.label}>
+        Selected: {toISODateString(selectedDate)}
+      </Text>
 
-        <DatePicker
-          value={selectedDate}
-          onChange={setSelectedDate}
-          variant="calendar"
-        />
-      </View>
-    </KaalProvider>
+      <DatePicker
+        value={selectedDate}
+        onChange={setSelectedDate}
+        variant="calendar"
+        weekStartsOn={0}
+        themeOverrides={{
+          primaryColor: '#3b82f6',
+          cellSelectedColor: '#3b82f6',
+          cellTodayColor: 'rgba(59, 130, 246, 0.15)',
+          textColor: '#1e293b',
+          textSelectedColor: '#ffffff',
+          textDisabledColor: '#94a3b8',
+          backgroundColor: '#ffffff',
+          borderRadius: 16,
+        }}
+      />
+    </View>
   );
 }
 
@@ -50,19 +58,6 @@ const styles = StyleSheet.create({
 
 ## Code Breakdown
 
-### Setup with KaalProvider
-
-Wrap your app with `KaalProvider` and a theme:
-
-```tsx
-import { KaalProvider } from '@dreamstack-us/kaal';
-import { kaalNativeTheme } from '@dreamstack-us/kaal-themes';
-
-<KaalProvider theme={kaalNativeTheme}>
-  {/* Your components */}
-</KaalProvider>
-```
-
 ### Basic Usage
 
 ```tsx
@@ -74,34 +69,61 @@ const [selectedDate, setSelectedDate] = useState(new Date());
   value={selectedDate}
   onChange={setSelectedDate}
   variant="calendar"
+  weekStartsOn={0}
+  themeOverrides={{
+    primaryColor: '#3b82f6',
+    backgroundColor: '#ffffff',
+    textColor: '#1e293b',
+  }}
 />
 ```
 
-## Wheel Variant
+### Week Start
 
-```SnackPlayer name=Wheel%20DatePicker&dependencies=@dreamstack-us/kaal,@dreamstack-us/kaal-themes,react-native-unistyles
+Set which day starts the week using `weekStartsOn`:
+
+```tsx
+// Sunday first (US default)
+<DatePicker weekStartsOn={0} ... />
+
+// Monday first (Europe)
+<DatePicker weekStartsOn={1} ... />
+```
+
+## Dark Theme Example
+
+```SnackPlayer name=Dark%20DatePicker&dependencies=@dreamstack-us/kaal
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { DatePicker, toISODateString, KaalProvider } from '@dreamstack-us/kaal';
-import { kaalIOSTheme } from '@dreamstack-us/kaal-themes';
+import { DatePicker, toISODateString } from '@dreamstack-us/kaal';
 
 export default function App() {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   return (
-    <KaalProvider theme={kaalIOSTheme}>
-      <View style={styles.container}>
-        <Text style={styles.label}>
-          Selected: {toISODateString(selectedDate)}
-        </Text>
+    <View style={styles.container}>
+      <Text style={styles.label}>
+        Selected: {toISODateString(selectedDate)}
+      </Text>
 
-        <DatePicker
-          value={selectedDate}
-          onChange={setSelectedDate}
-          variant="wheel"
-        />
-      </View>
-    </KaalProvider>
+      <DatePicker
+        value={selectedDate}
+        onChange={setSelectedDate}
+        variant="calendar"
+        weekStartsOn={0}
+        themeOverrides={{
+          primaryColor: '#22d3ee',
+          cellSelectedColor: '#22d3ee',
+          cellTodayColor: 'rgba(34, 211, 238, 0.2)',
+          textColor: '#f8fafc',
+          textSelectedColor: '#0f172a',
+          textDisabledColor: '#64748b',
+          textWeekendColor: '#94a3b8',
+          backgroundColor: '#1e293b',
+          borderRadius: 16,
+        }}
+      />
+    </View>
   );
 }
 
@@ -109,23 +131,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#0f172a',
   },
   label: {
     fontSize: 16,
     marginBottom: 16,
-    color: '#666',
+    color: '#94a3b8',
   },
 });
 ```
 
 ## With Min/Max Date
 
-```SnackPlayer name=DatePicker%20with%20Range&dependencies=@dreamstack-us/kaal,@dreamstack-us/kaal-themes,react-native-unistyles
+```SnackPlayer name=DatePicker%20with%20Range&dependencies=@dreamstack-us/kaal
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { DatePicker, toISODateString, addDays, KaalProvider } from '@dreamstack-us/kaal';
-import { kaalNativeTheme } from '@dreamstack-us/kaal-themes';
+import { DatePicker, toISODateString, addDays } from '@dreamstack-us/kaal';
 
 export default function App() {
   const today = new Date();
@@ -136,23 +157,30 @@ export default function App() {
   const maxDate = addDays(today, 30);
 
   return (
-    <KaalProvider theme={kaalNativeTheme}>
-      <View style={styles.container}>
-        <Text style={styles.hint}>
-          Select a date within the next 30 days
-        </Text>
-        <Text style={styles.selected}>
-          Selected: {toISODateString(selectedDate)}
-        </Text>
+    <View style={styles.container}>
+      <Text style={styles.hint}>
+        Select a date within the next 30 days
+      </Text>
+      <Text style={styles.selected}>
+        Selected: {toISODateString(selectedDate)}
+      </Text>
 
-        <DatePicker
-          value={selectedDate}
-          onChange={setSelectedDate}
-          minDate={minDate}
-          maxDate={maxDate}
-        />
-      </View>
-    </KaalProvider>
+      <DatePicker
+        value={selectedDate}
+        onChange={setSelectedDate}
+        minDate={minDate}
+        maxDate={maxDate}
+        weekStartsOn={0}
+        themeOverrides={{
+          primaryColor: '#3b82f6',
+          cellSelectedColor: '#3b82f6',
+          textColor: '#1e293b',
+          textDisabledColor: '#cbd5e1',
+          backgroundColor: '#ffffff',
+          borderRadius: 16,
+        }}
+      />
+    </View>
   );
 }
 

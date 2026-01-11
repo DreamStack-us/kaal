@@ -1,28 +1,30 @@
-import { StyleSheet } from 'react-native-unistyles';
+import { StyleSheet } from 'react-native';
 
 const ITEM_HEIGHT = 44;
 const VISIBLE_ITEMS = 5;
 const CONTAINER_HEIGHT = ITEM_HEIGHT * VISIBLE_ITEMS;
 
-export const styles = StyleSheet.create((theme) => ({
+/**
+ * Default styles for TimePicker using plain React Native StyleSheet.
+ * Colors use dark theme defaults - consumers override via themeOverrides prop.
+ */
+export const styles = StyleSheet.create({
   // Container styles
   container: {
-    backgroundColor: theme.colors.background.elevated,
-    borderRadius: theme.radii.card,
-    padding: theme.spacing(4),
+    backgroundColor: '#2C2C2E',
+    borderRadius: 16,
+    padding: 16,
   },
 
   // ============ Wheel Picker Styles (iOS) ============
   wheelContainer: {
     flexDirection: 'row',
     height: CONTAINER_HEIGHT,
-    backgroundColor: theme.colors.background.elevated,
-    // @ts-ignore - web-only property
-    backdropFilter: 'blur(20px)',
-    borderRadius: theme.radii.card,
+    backgroundColor: '#2C2C2E',
+    borderRadius: 16,
     overflow: 'hidden',
     alignItems: 'center',
-    paddingHorizontal: theme.spacing(2),
+    paddingHorizontal: 8,
   },
 
   wheelColumn: {
@@ -38,8 +40,8 @@ export const styles = StyleSheet.create((theme) => ({
     left: 4,
     right: 4,
     height: ITEM_HEIGHT,
-    backgroundColor: theme.colors.datepicker.wheelHighlight,
-    borderRadius: theme.radii.button,
+    backgroundColor: 'rgba(120, 120, 128, 0.24)',
+    borderRadius: 8,
     zIndex: 0,
   },
 
@@ -55,7 +57,7 @@ export const styles = StyleSheet.create((theme) => ({
 
   wheelItemText: {
     fontSize: 22,
-    color: theme.colors.foreground.default,
+    color: '#FFFFFF',
     fontWeight: '400',
     opacity: 0.5,
   },
@@ -68,24 +70,24 @@ export const styles = StyleSheet.create((theme) => ({
   wheelSeparator: {
     fontSize: 22,
     fontWeight: '500',
-    color: theme.colors.foreground.default,
-    paddingHorizontal: theme.spacing(1),
+    color: '#FFFFFF',
+    paddingHorizontal: 4,
   },
 
   // ============ Material Time Picker Styles ============
   materialContainer: {
-    backgroundColor: theme.colors.background.subtle,
+    backgroundColor: '#2C2C2E',
     borderRadius: 28,
-    padding: theme.spacing(6),
+    padding: 24,
     width: 320,
   },
 
   materialHeader: {
     fontSize: 12,
     fontWeight: '500',
-    color: theme.colors.foreground.muted,
+    color: '#8E8E93',
     letterSpacing: 0.5,
-    marginBottom: theme.spacing(5),
+    marginBottom: 20,
     textTransform: 'uppercase',
   },
 
@@ -94,8 +96,8 @@ export const styles = StyleSheet.create((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: theme.spacing(3),
-    marginBottom: theme.spacing(6),
+    gap: 12,
+    marginBottom: 24,
   },
 
   timeFieldsContainer: {
@@ -104,22 +106,22 @@ export const styles = StyleSheet.create((theme) => ({
   },
 
   timeField: {
-    backgroundColor: theme.colors.background.elevated,
-    borderRadius: theme.radii.button,
-    paddingVertical: theme.spacing(3),
-    paddingHorizontal: theme.spacing(2),
+    backgroundColor: '#3A3A3C',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
     minWidth: 80,
     alignItems: 'center',
   },
 
   timeFieldActive: {
-    backgroundColor: theme.colors.primary.default,
+    backgroundColor: '#4DA6FF',
   },
 
   timeFieldText: {
     fontSize: 48,
     fontWeight: '400',
-    color: theme.colors.foreground.default,
+    color: '#FFFFFF',
     fontVariant: ['tabular-nums'],
   },
 
@@ -130,48 +132,48 @@ export const styles = StyleSheet.create((theme) => ({
   timeSeparator: {
     fontSize: 48,
     fontWeight: '400',
-    color: theme.colors.foreground.default,
-    marginHorizontal: theme.spacing(1),
+    color: '#FFFFFF',
+    marginHorizontal: 4,
   },
 
   // Period toggle (AM/PM)
   periodToggleContainer: {
     borderWidth: 1,
-    borderColor: theme.colors.border.strong,
-    borderRadius: theme.radii.button,
+    borderColor: '#48484A',
+    borderRadius: 8,
     overflow: 'hidden',
   },
 
   periodButton: {
-    paddingVertical: theme.spacing(2),
-    paddingHorizontal: theme.spacing(3),
+    paddingVertical: 8,
+    paddingHorizontal: 12,
     backgroundColor: 'transparent',
   },
 
   periodButtonActive: {
-    backgroundColor: `${theme.colors.primary.default}20`, // 20% opacity
+    backgroundColor: 'rgba(77, 166, 255, 0.2)',
   },
 
   periodButtonTop: {
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border.strong,
+    borderBottomColor: '#48484A',
   },
 
   periodButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: theme.colors.foreground.muted,
+    color: '#8E8E93',
   },
 
   periodButtonTextActive: {
-    color: theme.colors.primary.default,
+    color: '#4DA6FF',
   },
 
   // ============ Clock Face Styles ============
   clockContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: theme.spacing(5),
+    marginBottom: 20,
   },
 
   // ============ Action Buttons ============
@@ -182,28 +184,33 @@ export const styles = StyleSheet.create((theme) => ({
   },
 
   keyboardButton: {
-    padding: theme.spacing(2),
+    padding: 8,
   },
 
   keyboardButtonText: {
     fontSize: 20,
-    color: theme.colors.foreground.muted,
+    color: '#8E8E93',
   },
 
   actionButtonsContainer: {
     flexDirection: 'row',
-    gap: theme.spacing(2),
+    gap: 8,
   },
 
   actionButton: {
-    paddingVertical: theme.spacing(2.5),
-    paddingHorizontal: theme.spacing(4),
+    paddingVertical: 10,
+    paddingHorizontal: 16,
     borderRadius: 20,
   },
 
   actionButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: theme.colors.primary.default,
+    color: '#4DA6FF',
   },
-}));
+});
+
+// Export constants for use in components
+export const WHEEL_ITEM_HEIGHT = ITEM_HEIGHT;
+export const WHEEL_VISIBLE_ITEMS = VISIBLE_ITEMS;
+export const WHEEL_CONTAINER_HEIGHT = CONTAINER_HEIGHT;

@@ -65,6 +65,7 @@ export type {
   DatePickerTheme,
   DatePickerVariant,
   DatePickerProps,
+  DatePickerThemeOverrides,
 } from './types';
 
 // Time picker types
@@ -74,4 +75,14 @@ export type {
   Time12Hour,
   MinuteInterval,
   TimePickerTheme,
+  TimePickerThemeOverrides,
 } from './types';
+
+// Theme override context (for advanced usage)
+export {
+  ThemeOverrideProvider,
+  useDatePickerOverrides,
+  useTimePickerOverrides,
+  useThemeOverrides,
+} from './context/ThemeOverrideContext';
+export type { ThemeOverrideContextValue } from './context/ThemeOverrideContext';

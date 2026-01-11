@@ -8,22 +8,33 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+import { useTimePickerOverrides } from '../../context/ThemeOverrideContext';
 import { to12Hour, to24Hour } from '../../hooks/useTimePicker';
 import type { TimePeriod, TimeValue } from '../../types/timepicker';
-import { styles } from './TimePicker.styles';
+import { WHEEL_ITEM_HEIGHT, styles } from './TimePicker.styles';
 
-const ITEM_HEIGHT = 44;
+const ITEM_HEIGHT = WHEEL_ITEM_HEIGHT;
 const VISIBLE_ITEMS = 5;
 const CONTAINER_HEIGHT = ITEM_HEIGHT * VISIBLE_ITEMS;
+
+// Default colors (dark theme)
+const DEFAULT_COLORS = {
+  containerBackground: '#2C2C2E',
+  selectionHighlight: 'rgba(120, 120, 128, 0.24)',
+  textColor: '#FFFFFF',
+  separatorColor: '#FFFFFF',
+};
 
 interface WheelColumnProps {
   items: { value: number | string; label: string }[];
   selectedIndex: number;
   onSelect: (index: number) => void;
+  textColor: string;
+  highlightColor: string;
 }
 
 const WheelColumn: React.FC<WheelColumnProps> = memo(
-  ({ items, selectedIndex, onSelect }) => {
+  ({ items, selectedIndex, onSelect, textColor, highlightColor }) => {
     const translateY = useSharedValue(-selectedIndex * ITEM_HEIGHT);
 
     const handleSelect = useCallback(
@@ -66,7 +77,12 @@ const WheelColumn: React.FC<WheelColumnProps> = memo(
 
     return (
       <View style={styles.wheelColumn}>
-        <View style={styles.wheelSelectionIndicator} />
+        <View
+          style={[
+            styles.wheelSelectionIndicator,
+            { backgroundColor: highlightColor },
+          ]}
+        />
 
         <GestureDetector gesture={panGesture}>
           <Animated.View style={[styles.wheelItemsContainer, animatedStyle]}>
@@ -79,6 +95,7 @@ const WheelColumn: React.FC<WheelColumnProps> = memo(
                   <Text
                     style={[
                       styles.wheelItemText,
+                      { color: textColor },
                       isSelected && styles.wheelItemTextSelected,
                     ]}
                   >
@@ -107,6 +124,30 @@ interface TimeWheelPickerProps {
 
 export const TimeWheelPicker: React.FC<TimeWheelPickerProps> = memo(
   ({ value, onChange, is24Hour = false, minuteInterval = 1 }) => {
+    const overrides = useTimePickerOverrides();
+
+    // Build colors from overrides (use backgroundColor as fallback for wheelContainerBackground)
+    const colors = useMemo(
+      () => ({
+        containerBackground:
+          overrides?.wheelContainerBackground ??
+          overrides?.backgroundColor ??
+          DEFAULT_COLORS.containerBackground,
+        selectionHighlight:
+          overrides?.wheelSelectionHighlight ??
+          DEFAULT_COLORS.selectionHighlight,
+        textColor:
+          overrides?.wheelTextColor ??
+          overrides?.textColor ??
+          DEFAULT_COLORS.textColor,
+        separatorColor:
+          overrides?.wheelSeparatorColor ??
+          overrides?.textColor ??
+          DEFAULT_COLORS.separatorColor,
+      }),
+      [overrides],
+    );
+
     // Generate hour items
     const hourItems = useMemo(() => {
       if (is24Hour) {
@@ -181,19 +222,30 @@ export const TimeWheelPicker: React.FC<TimeWheelPickerProps> = memo(
     );
 
     return (
-      <View style={styles.wheelContainer}>
+      <View
+        style={[
+          styles.wheelContainer,
+          { backgroundColor: colors.containerBackground },
+        ]}
+      >
         <WheelColumn
           items={hourItems}
           selectedIndex={hourIndex}
           onSelect={handleHourChange}
+          textColor={colors.textColor}
+          highlightColor={colors.selectionHighlight}
         />
 
-        <Text style={styles.wheelSeparator}>:</Text>
+        <Text style={[styles.wheelSeparator, { color: colors.separatorColor }]}>
+          :
+        </Text>
 
         <WheelColumn
           items={minuteItems}
           selectedIndex={minuteIndex}
           onSelect={handleMinuteChange}
+          textColor={colors.textColor}
+          highlightColor={colors.selectionHighlight}
         />
 
         {!is24Hour && (
@@ -201,6 +253,8 @@ export const TimeWheelPicker: React.FC<TimeWheelPickerProps> = memo(
             items={periodItems}
             selectedIndex={periodIndex}
             onSelect={handlePeriodChange}
+            textColor={colors.textColor}
+            highlightColor={colors.selectionHighlight}
           />
         )}
       </View>
