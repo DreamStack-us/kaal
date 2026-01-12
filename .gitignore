@@ -47,6 +47,6 @@ coverage/
 docs/.docusaurus/
 docs/build/
 
-# Claude Code - AI workflows and personal thoughts (not for public)
+# Claude Code (private - use .internal submodule)
 .claude/
 thoughts/
