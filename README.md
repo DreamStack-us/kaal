@@ -195,7 +195,7 @@ themeOverrides={{
 
 ## Documentation
 
-Full docs with live examples: **[kaal.dreamstack.us](https://kaal.dreamstack.us)**
+Full docs with live examples: **[dreamstack-us.github.io/kaal](https://dreamstack-us.github.io/kaal/)**
 
 ## Development
 
