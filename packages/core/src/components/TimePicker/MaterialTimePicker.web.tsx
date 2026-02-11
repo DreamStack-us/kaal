@@ -115,18 +115,8 @@ const webStyles = StyleSheet.create({
   },
   actionsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'center',
-  },
-  keyboardButton: {
-    padding: 8,
-  },
-  keyboardButtonText: {
-    fontSize: 20,
-    color: '#8E8E93',
-  },
-  actionButtonsContainer: {
-    flexDirection: 'row',
     gap: 8,
   },
   actionButton: {
@@ -374,12 +364,8 @@ export const MaterialTimePicker: React.FC<MaterialTimePickerProps> = memo(
           is24Hour={is24Hour}
         />
 
-        <View style={webStyles.actionsContainer}>
-          <Pressable style={webStyles.keyboardButton}>
-            <Text style={webStyles.keyboardButtonText}>⌨️</Text>
-          </Pressable>
-
-          <View style={webStyles.actionButtonsContainer}>
+        {(onCancel || onConfirm) && (
+          <View style={webStyles.actionsContainer}>
             {onCancel && (
               <Pressable style={webStyles.actionButton} onPress={onCancel}>
                 <Text
@@ -399,7 +385,7 @@ export const MaterialTimePicker: React.FC<MaterialTimePickerProps> = memo(
               </Pressable>
             )}
           </View>
-        </View>
+        )}
       </View>
     );
   },

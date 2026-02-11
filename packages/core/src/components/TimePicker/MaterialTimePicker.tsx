@@ -270,12 +270,8 @@ export const MaterialTimePicker: React.FC<MaterialTimePickerProps> = memo(
         />
 
         {/* Actions */}
-        <View style={styles.actionsContainer}>
-          <Pressable style={styles.keyboardButton}>
-            <Text style={styles.keyboardButtonText}>⌨️</Text>
-          </Pressable>
-
-          <View style={styles.actionButtonsContainer}>
+        {(onCancel || onConfirm) && (
+          <View style={styles.actionsContainer}>
             {onCancel && (
               <Pressable style={styles.actionButton} onPress={onCancel}>
                 <Text style={[styles.actionButtonText, actionButtonTextStyle]}>
@@ -291,7 +287,7 @@ export const MaterialTimePicker: React.FC<MaterialTimePickerProps> = memo(
               </Pressable>
             )}
           </View>
-        </View>
+        )}
       </View>
     );
   },
