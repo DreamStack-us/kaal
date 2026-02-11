@@ -1,5 +1,28 @@
 # @dreamstack-us/kaal
 
+## 0.0.5
+
+### Patch Changes
+
+- [#17](https://github.com/DreamStack-us/kaal/pull/17) [`fbc284a`](https://github.com/DreamStack-us/kaal/commit/fbc284a91b4af40858666cb1aee18dc8db40945a) Thanks [@hariDasu](https://github.com/hariDasu)! - fix: correct UTC timezone handling in CalendarGrid
+
+  - Fix off-by-one month label in CalendarGrid header (e.g., showing "January" instead of "February")
+  - Fix off-by-one day in DayCell accessibility labels
+  - Root cause: `Intl.DateTimeFormat` was interpreting UTC dates in local timezone, causing date rollback in western timezones
+  - Added `timeZone: 'UTC'` to all DateTimeFormat calls in date utilities and DayCell components
+
+- [#17](https://github.com/DreamStack-us/kaal/pull/17) [`fbc284a`](https://github.com/DreamStack-us/kaal/commit/fbc284a91b4af40858666cb1aee18dc8db40945a) Thanks [@hariDasu](https://github.com/hariDasu)! - fix: apply themeOverrides in MaterialTimePicker web implementation
+
+  - Web TimePicker now respects `themeOverrides` prop for time fields, separator, AM/PM toggle, and action buttons
+  - Previously, `MaterialTimePicker.web.tsx` used hardcoded colors (#007AFF blue) and ignored the ThemeOverrideProvider context
+  - Ported the override pattern from the native implementation so web and native behave consistently
+
+- [`3b6b28a`](https://github.com/DreamStack-us/kaal/commit/3b6b28a8aa506d02a885de17ec6b2b248dbccb02) Thanks [@hariDasu](https://github.com/hariDasu)! - feat: thermometer-style range picker and dependency cleanup
+
+  - Add thermometer effect to date range selection (narrower band connecting start/end circles)
+  - Remove react-native-unistyles from peer dependencies (not used in code)
+  - Make react-native-nitro-modules optional
+
 ## 0.0.4
 
 ### Patch Changes
