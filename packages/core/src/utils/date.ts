@@ -186,7 +186,10 @@ export const formatMonth = (
   locale = 'en-US',
   style: 'long' | 'short' | 'narrow' = 'long',
 ): string => {
-  return new Intl.DateTimeFormat(locale, { month: style }).format(date);
+  return new Intl.DateTimeFormat(locale, {
+    month: style,
+    timeZone: 'UTC',
+  }).format(date);
 };
 
 /**
@@ -197,7 +200,10 @@ export const formatWeekday = (
   locale = 'en-US',
   style: 'long' | 'short' | 'narrow' = 'short',
 ): string => {
-  return new Intl.DateTimeFormat(locale, { weekday: style }).format(date);
+  return new Intl.DateTimeFormat(locale, {
+    weekday: style,
+    timeZone: 'UTC',
+  }).format(date);
 };
 
 /**
@@ -207,6 +213,7 @@ export const formatYearMonth = (date: Date, locale = 'en-US'): string => {
   return new Intl.DateTimeFormat(locale, {
     month: 'long',
     year: 'numeric',
+    timeZone: 'UTC',
   }).format(date);
 };
 

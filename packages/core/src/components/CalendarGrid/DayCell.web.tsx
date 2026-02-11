@@ -173,6 +173,7 @@ export const DayCell: React.FC<DayCellProps> = memo(
           weekday: 'long',
           month: 'long',
           day: 'numeric',
+          timeZone: 'UTC',
         }).format(date)}
         accessibilityState={{ selected: isSelected, disabled: isDisabled }}
       >
