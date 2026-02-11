@@ -1,10 +1,26 @@
 /// <reference lib="dom" />
 import type React from 'react';
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useTimePickerOverrides } from '../../context/ThemeOverrideContext';
 import { to12Hour, to24Hour } from '../../hooks/useTimePicker';
 import type { ClockMode, TimePeriod, TimeValue } from '../../types/timepicker';
 import { ClockFace } from './ClockFace';
+
+// Default colors (dark theme)
+const DEFAULT_COLORS = {
+  containerBackground: '#2C2C2E',
+  headerColor: '#8E8E93',
+  timeFieldBackground: '#3A3A3C',
+  timeFieldActiveBackground: '#007AFF',
+  textColor: '#FFFFFF',
+  separatorColor: '#FFFFFF',
+  borderColor: '#48484A',
+  periodActiveBackground: 'rgba(0, 122, 255, 0.2)',
+  periodTextColor: '#8E8E93',
+  periodTextActiveColor: '#007AFF',
+  actionButtonColor: '#007AFF',
+};
 
 interface MaterialTimePickerProps {
   value: TimeValue;
@@ -127,6 +143,7 @@ const webStyles = StyleSheet.create({
 
 export const MaterialTimePicker: React.FC<MaterialTimePickerProps> = memo(
   ({ value, onChange, is24Hour = false, onCancel, onConfirm }) => {
+    const overrides = useTimePickerOverrides();
     const [mode, setMode] = useState<ClockMode>('hours');
     const { hour: hour12, period } = to12Hour(value.hours);
 
@@ -155,9 +172,95 @@ export const MaterialTimePicker: React.FC<MaterialTimePickerProps> = memo(
       : hour12.toString().padStart(2, '0');
     const displayMinute = value.minutes.toString().padStart(2, '0');
 
+    // Build override styles from themeOverrides
+    const containerStyle = useMemo(
+      () => ({
+        backgroundColor:
+          overrides?.containerBackground ?? DEFAULT_COLORS.containerBackground,
+      }),
+      [overrides],
+    );
+
+    const headerStyle = useMemo(
+      () => ({
+        color: overrides?.headerColor ?? DEFAULT_COLORS.headerColor,
+      }),
+      [overrides],
+    );
+
+    const timeFieldStyle = useMemo(
+      () => ({
+        backgroundColor:
+          overrides?.timeFieldBackground ?? DEFAULT_COLORS.timeFieldBackground,
+      }),
+      [overrides],
+    );
+
+    const timeFieldActiveStyle = useMemo(
+      () => ({
+        backgroundColor:
+          overrides?.timeFieldActiveBackground ??
+          DEFAULT_COLORS.timeFieldActiveBackground,
+      }),
+      [overrides],
+    );
+
+    const textStyle = useMemo(
+      () => ({
+        color: overrides?.textColor ?? DEFAULT_COLORS.textColor,
+      }),
+      [overrides],
+    );
+
+    const separatorStyle = useMemo(
+      () => ({
+        color: overrides?.separatorColor ?? DEFAULT_COLORS.separatorColor,
+      }),
+      [overrides],
+    );
+
+    const periodContainerStyle = useMemo(
+      () => ({
+        borderColor: overrides?.periodBorderColor ?? DEFAULT_COLORS.borderColor,
+      }),
+      [overrides],
+    );
+
+    const periodActiveStyle = useMemo(
+      () => ({
+        backgroundColor:
+          overrides?.periodActiveBackground ??
+          DEFAULT_COLORS.periodActiveBackground,
+      }),
+      [overrides],
+    );
+
+    const periodTextStyle = useMemo(
+      () => ({
+        color: overrides?.periodTextColor ?? DEFAULT_COLORS.periodTextColor,
+      }),
+      [overrides],
+    );
+
+    const periodTextActiveStyle = useMemo(
+      () => ({
+        color:
+          overrides?.periodTextActiveColor ??
+          DEFAULT_COLORS.periodTextActiveColor,
+      }),
+      [overrides],
+    );
+
+    const actionButtonTextStyle = useMemo(
+      () => ({
+        color: overrides?.actionButtonColor ?? DEFAULT_COLORS.actionButtonColor,
+      }),
+      [overrides],
+    );
+
     return (
-      <View style={webStyles.materialContainer}>
-        <Text style={webStyles.materialHeader}>Select time</Text>
+      <View style={[webStyles.materialContainer, containerStyle]}>
+        <Text style={[webStyles.materialHeader, headerStyle]}>Select time</Text>
 
         <View style={webStyles.timeInputContainer}>
           <View style={webStyles.timeFieldsContainer}>
@@ -165,12 +268,17 @@ export const MaterialTimePicker: React.FC<MaterialTimePickerProps> = memo(
               onPress={handleHourPress}
               style={[
                 webStyles.timeField,
-                mode === 'hours' && webStyles.timeFieldActive,
+                timeFieldStyle,
+                mode === 'hours' && [
+                  webStyles.timeFieldActive,
+                  timeFieldActiveStyle,
+                ],
               ]}
             >
               <Text
                 style={[
                   webStyles.timeFieldText,
+                  textStyle,
                   mode === 'hours' && webStyles.timeFieldTextActive,
                 ]}
               >
@@ -178,18 +286,23 @@ export const MaterialTimePicker: React.FC<MaterialTimePickerProps> = memo(
               </Text>
             </Pressable>
 
-            <Text style={webStyles.timeSeparator}>:</Text>
+            <Text style={[webStyles.timeSeparator, separatorStyle]}>:</Text>
 
             <Pressable
               onPress={handleMinutePress}
               style={[
                 webStyles.timeField,
-                mode === 'minutes' && webStyles.timeFieldActive,
+                timeFieldStyle,
+                mode === 'minutes' && [
+                  webStyles.timeFieldActive,
+                  timeFieldActiveStyle,
+                ],
               ]}
             >
               <Text
                 style={[
                   webStyles.timeFieldText,
+                  textStyle,
                   mode === 'minutes' && webStyles.timeFieldTextActive,
                 ]}
               >
@@ -199,19 +312,26 @@ export const MaterialTimePicker: React.FC<MaterialTimePickerProps> = memo(
           </View>
 
           {!is24Hour && (
-            <View style={webStyles.periodToggleContainer}>
+            <View style={[webStyles.periodToggleContainer, periodContainerStyle]}>
               <Pressable
                 onPress={() => handlePeriodChange('AM')}
                 style={[
                   webStyles.periodButton,
                   webStyles.periodButtonTop,
-                  period === 'AM' && webStyles.periodButtonActive,
+                  period === 'AM' && [
+                    webStyles.periodButtonActive,
+                    periodActiveStyle,
+                  ],
                 ]}
               >
                 <Text
                   style={[
                     webStyles.periodButtonText,
-                    period === 'AM' && webStyles.periodButtonTextActive,
+                    periodTextStyle,
+                    period === 'AM' && [
+                      webStyles.periodButtonTextActive,
+                      periodTextActiveStyle,
+                    ],
                   ]}
                 >
                   AM
@@ -221,13 +341,20 @@ export const MaterialTimePicker: React.FC<MaterialTimePickerProps> = memo(
                 onPress={() => handlePeriodChange('PM')}
                 style={[
                   webStyles.periodButton,
-                  period === 'PM' && webStyles.periodButtonActive,
+                  period === 'PM' && [
+                    webStyles.periodButtonActive,
+                    periodActiveStyle,
+                  ],
                 ]}
               >
                 <Text
                   style={[
                     webStyles.periodButtonText,
-                    period === 'PM' && webStyles.periodButtonTextActive,
+                    periodTextStyle,
+                    period === 'PM' && [
+                      webStyles.periodButtonTextActive,
+                      periodTextActiveStyle,
+                    ],
                   ]}
                 >
                   PM
@@ -253,12 +380,16 @@ export const MaterialTimePicker: React.FC<MaterialTimePickerProps> = memo(
           <View style={webStyles.actionButtonsContainer}>
             {onCancel && (
               <Pressable style={webStyles.actionButton} onPress={onCancel}>
-                <Text style={webStyles.actionButtonText}>Cancel</Text>
+                <Text style={[webStyles.actionButtonText, actionButtonTextStyle]}>
+                  Cancel
+                </Text>
               </Pressable>
             )}
             {onConfirm && (
               <Pressable style={webStyles.actionButton} onPress={onConfirm}>
-                <Text style={webStyles.actionButtonText}>OK</Text>
+                <Text style={[webStyles.actionButtonText, actionButtonTextStyle]}>
+                  OK
+                </Text>
               </Pressable>
             )}
           </View>
