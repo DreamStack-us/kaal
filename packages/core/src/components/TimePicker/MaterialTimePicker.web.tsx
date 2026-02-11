@@ -312,7 +312,9 @@ export const MaterialTimePicker: React.FC<MaterialTimePickerProps> = memo(
           </View>
 
           {!is24Hour && (
-            <View style={[webStyles.periodToggleContainer, periodContainerStyle]}>
+            <View
+              style={[webStyles.periodToggleContainer, periodContainerStyle]}
+            >
               <Pressable
                 onPress={() => handlePeriodChange('AM')}
                 style={[
@@ -380,14 +382,18 @@ export const MaterialTimePicker: React.FC<MaterialTimePickerProps> = memo(
           <View style={webStyles.actionButtonsContainer}>
             {onCancel && (
               <Pressable style={webStyles.actionButton} onPress={onCancel}>
-                <Text style={[webStyles.actionButtonText, actionButtonTextStyle]}>
+                <Text
+                  style={[webStyles.actionButtonText, actionButtonTextStyle]}
+                >
                   Cancel
                 </Text>
               </Pressable>
             )}
             {onConfirm && (
               <Pressable style={webStyles.actionButton} onPress={onConfirm}>
-                <Text style={[webStyles.actionButtonText, actionButtonTextStyle]}>
+                <Text
+                  style={[webStyles.actionButtonText, actionButtonTextStyle]}
+                >
                   OK
                 </Text>
               </Pressable>
