@@ -19,22 +19,22 @@ import {
 describe('date utilities', () => {
   describe('toISODateString', () => {
     test('formats date to YYYY-MM-DD', () => {
-      const date = new Date(Date.UTC(2024, 0, 15));
+      const date = new Date(2024, 0, 15);
       expect(toISODateString(date)).toBe('2024-01-15');
     });
 
     test('pads month and day with zeros', () => {
-      const date = new Date(Date.UTC(2024, 5, 5));
+      const date = new Date(2024, 5, 5);
       expect(toISODateString(date)).toBe('2024-06-05');
     });
   });
 
   describe('parseISODate', () => {
-    test('parses YYYY-MM-DD string', () => {
+    test('parses YYYY-MM-DD string to local date', () => {
       const date = parseISODate('2024-01-15');
-      expect(date.getUTCFullYear()).toBe(2024);
-      expect(date.getUTCMonth()).toBe(0);
-      expect(date.getUTCDate()).toBe(15);
+      expect(date.getFullYear()).toBe(2024);
+      expect(date.getMonth()).toBe(0);
+      expect(date.getDate()).toBe(15);
     });
   });
 
@@ -199,11 +199,11 @@ describe('date utilities', () => {
       expect(result).toBeInstanceOf(Date);
     });
 
-    test('returns date at midnight UTC', () => {
+    test('returns date at local midnight', () => {
       const result = today();
-      expect(result.getUTCHours()).toBe(0);
-      expect(result.getUTCMinutes()).toBe(0);
-      expect(result.getUTCSeconds()).toBe(0);
+      expect(result.getHours()).toBe(0);
+      expect(result.getMinutes()).toBe(0);
+      expect(result.getSeconds()).toBe(0);
     });
   });
 });

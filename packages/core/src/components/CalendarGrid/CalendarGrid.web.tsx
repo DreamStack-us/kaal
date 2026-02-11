@@ -109,8 +109,8 @@ const generateMonthDays = (
   }
 
   const monthDays = getMonthDays(
-    currentMonth.getUTCFullYear(),
-    currentMonth.getUTCMonth(),
+    currentMonth.getFullYear(),
+    currentMonth.getMonth(),
   );
   for (const day of monthDays) {
     days.push(day);
