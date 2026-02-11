@@ -179,21 +179,8 @@ export const styles = StyleSheet.create({
   // ============ Action Buttons ============
   actionsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'center',
-  },
-
-  keyboardButton: {
-    padding: 8,
-  },
-
-  keyboardButtonText: {
-    fontSize: 20,
-    color: '#8E8E93',
-  },
-
-  actionButtonsContainer: {
-    flexDirection: 'row',
     gap: 8,
   },
 
