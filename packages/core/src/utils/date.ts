@@ -1,15 +1,19 @@
 /**
  * Date utilities using native Date and Intl APIs
  * Replaces @js-temporal/polyfill for lighter bundle size
+ *
+ * All date-only values use LOCAL time (not UTC). This ensures that
+ * dates displayed in the calendar match what consumers read with
+ * standard .getDate(), .getMonth(), .getFullYear() methods.
  */
 
 /**
- * Converts a Date to ISO date string (YYYY-MM-DD)
+ * Converts a Date to ISO date string (YYYY-MM-DD) using local time
  */
 export const toISODateString = (date: Date): string => {
-  const year = date.getUTCFullYear();
-  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-  const day = String(date.getUTCDate()).padStart(2, '0');
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
 
@@ -34,11 +38,11 @@ export const toISODateTimeString = (date: Date, timeZone?: string): string => {
 };
 
 /**
- * Parses an ISO date string (YYYY-MM-DD) to Date
+ * Parses an ISO date string (YYYY-MM-DD) to a local Date
  */
 export const parseISODate = (iso: string): Date => {
   const parts = iso.split('-').map(Number) as [number, number, number];
-  return new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+  return new Date(parts[0], parts[1] - 1, parts[2]);
 };
 
 /**
@@ -67,7 +71,7 @@ export const getDateRange = (start: Date, end: Date): Date[] => {
 
   while (current.getTime() <= end.getTime()) {
     dates.push(new Date(current.getTime()));
-    current.setUTCDate(current.getUTCDate() + 1);
+    current.setDate(current.getDate() + 1);
   }
 
   return dates;
@@ -99,7 +103,7 @@ export const getUserTimezone = (): string => {
  */
 export const addDays = (date: Date, days: number): Date => {
   const result = new Date(date.getTime());
-  result.setUTCDate(result.getUTCDate() + days);
+  result.setDate(result.getDate() + days);
   return result;
 };
 
@@ -108,13 +112,15 @@ export const addDays = (date: Date, days: number): Date => {
  */
 export const addMonths = (date: Date, months: number): Date => {
   const result = new Date(date.getTime());
-  const dayOfMonth = result.getUTCDate();
-  result.setUTCDate(1);
-  result.setUTCMonth(result.getUTCMonth() + months);
+  const dayOfMonth = result.getDate();
+  result.setDate(1);
+  result.setMonth(result.getMonth() + months);
   const daysInMonth = new Date(
-    Date.UTC(result.getUTCFullYear(), result.getUTCMonth() + 1, 0),
-  ).getUTCDate();
-  result.setUTCDate(Math.min(dayOfMonth, daysInMonth));
+    result.getFullYear(),
+    result.getMonth() + 1,
+    0,
+  ).getDate();
+  result.setDate(Math.min(dayOfMonth, daysInMonth));
   return result;
 };
 
@@ -137,10 +143,7 @@ export const isSameDay = (a: Date, b: Date): boolean => {
  * Checks if two dates are the same month
  */
 export const isSameMonth = (a: Date, b: Date): boolean => {
-  return (
-    a.getUTCFullYear() === b.getUTCFullYear() &&
-    a.getUTCMonth() === b.getUTCMonth()
-  );
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth();
 };
 
 /**
@@ -148,9 +151,9 @@ export const isSameMonth = (a: Date, b: Date): boolean => {
  */
 export const getMonthDays = (year: number, month: number): Date[] => {
   const days: Date[] = [];
-  const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
   for (let day = 1; day <= daysInMonth; day++) {
-    days.push(new Date(Date.UTC(year, month, day)));
+    days.push(new Date(year, month, day));
   }
   return days;
 };
@@ -161,21 +164,21 @@ export const getMonthDays = (year: number, month: number): Date[] => {
  */
 export const getFirstDayOfMonth = (date: Date | null | undefined): Date => {
   const d = date ?? today();
-  return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1));
+  return new Date(d.getFullYear(), d.getMonth(), 1);
 };
 
 /**
  * Gets the last day of the month
  */
 export const getLastDayOfMonth = (date: Date): Date => {
-  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0));
+  return new Date(date.getFullYear(), date.getMonth() + 1, 0);
 };
 
 /**
  * Gets the day of week (0 = Sunday, 6 = Saturday)
  */
 export const getDayOfWeek = (date: Date): number => {
-  return date.getUTCDay();
+  return date.getDay();
 };
 
 /**
@@ -188,7 +191,6 @@ export const formatMonth = (
 ): string => {
   return new Intl.DateTimeFormat(locale, {
     month: style,
-    timeZone: 'UTC',
   }).format(date);
 };
 
@@ -202,7 +204,6 @@ export const formatWeekday = (
 ): string => {
   return new Intl.DateTimeFormat(locale, {
     weekday: style,
-    timeZone: 'UTC',
   }).format(date);
 };
 
@@ -213,14 +214,13 @@ export const formatYearMonth = (date: Date, locale = 'en-US'): string => {
   return new Intl.DateTimeFormat(locale, {
     month: 'long',
     year: 'numeric',
-    timeZone: 'UTC',
   }).format(date);
 };
 
 /**
- * Gets today's date at midnight UTC
+ * Gets today's date at local midnight
  */
 export const today = (): Date => {
   const now = new Date();
-  return new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
 };

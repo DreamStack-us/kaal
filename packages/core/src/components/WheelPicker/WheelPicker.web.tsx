@@ -15,7 +15,7 @@ interface WheelPickerProps {
 }
 
 const getDaysInMonth = (year: number, month: number): number => {
-  return new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+  return new Date(year, month + 1, 0).getDate();
 };
 
 const generateDateItems = (
@@ -26,8 +26,8 @@ const generateDateItems = (
 ) => {
   if (type === 'day') {
     const daysInMonth = getDaysInMonth(
-      currentDate.getUTCFullYear(),
-      currentDate.getUTCMonth(),
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
     );
     return Array.from({ length: daysInMonth }, (_, i) => ({
       value: i + 1,
@@ -40,10 +40,8 @@ const generateDateItems = (
       label: new Date(2000, i).toLocaleString('en-US', { month: 'short' }),
     }));
   }
-  const minYear =
-    minDate?.getUTCFullYear() ?? currentDate.getUTCFullYear() - 100;
-  const maxYear =
-    maxDate?.getUTCFullYear() ?? currentDate.getUTCFullYear() + 10;
+  const minYear = minDate?.getFullYear() ?? currentDate.getFullYear() - 100;
+  const maxYear = maxDate?.getFullYear() ?? currentDate.getFullYear() + 10;
   return Array.from({ length: maxYear - minYear + 1 }, (_, i) => ({
     value: minYear + i,
     label: String(minYear + i),
@@ -234,9 +232,7 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
     (index: number) => {
       const newDay = days[index]?.value;
       if (newDay !== undefined) {
-        const newDate = new Date(
-          Date.UTC(value.getUTCFullYear(), value.getUTCMonth(), newDay),
-        );
+        const newDate = new Date(value.getFullYear(), value.getMonth(), newDay);
         onChange(newDate);
       }
     },
@@ -247,11 +243,9 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
     (index: number) => {
       const newMonth = months[index]?.value;
       if (newMonth !== undefined) {
-        const daysInNewMonth = getDaysInMonth(value.getUTCFullYear(), newMonth);
-        const newDay = Math.min(value.getUTCDate(), daysInNewMonth);
-        const newDate = new Date(
-          Date.UTC(value.getUTCFullYear(), newMonth, newDay),
-        );
+        const daysInNewMonth = getDaysInMonth(value.getFullYear(), newMonth);
+        const newDay = Math.min(value.getDate(), daysInNewMonth);
+        const newDate = new Date(value.getFullYear(), newMonth, newDay);
         onChange(newDate);
       }
     },
@@ -262,11 +256,9 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
     (index: number) => {
       const newYear = years[index]?.value;
       if (newYear !== undefined) {
-        const daysInNewMonth = getDaysInMonth(newYear, value.getUTCMonth());
-        const newDay = Math.min(value.getUTCDate(), daysInNewMonth);
-        const newDate = new Date(
-          Date.UTC(newYear, value.getUTCMonth(), newDay),
-        );
+        const daysInNewMonth = getDaysInMonth(newYear, value.getMonth());
+        const newDay = Math.min(value.getDate(), daysInNewMonth);
+        const newDate = new Date(newYear, value.getMonth(), newDay);
         onChange(newDate);
       }
     },
@@ -277,21 +269,19 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
     <View style={webStyles.container}>
       <WheelColumn
         items={months}
-        selectedIndex={value.getUTCMonth()}
+        selectedIndex={value.getMonth()}
         onSelect={handleMonthChange}
         label="Month"
       />
       <WheelColumn
         items={days}
-        selectedIndex={value.getUTCDate() - 1}
+        selectedIndex={value.getDate() - 1}
         onSelect={handleDayChange}
         label="Day"
       />
       <WheelColumn
         items={years}
-        selectedIndex={years.findIndex(
-          (y) => y.value === value.getUTCFullYear(),
-        )}
+        selectedIndex={years.findIndex((y) => y.value === value.getFullYear())}
         onSelect={handleYearChange}
         label="Year"
       />

@@ -173,7 +173,6 @@ export const DayCell: React.FC<DayCellProps> = memo(
           weekday: 'long',
           month: 'long',
           day: 'numeric',
-          timeZone: 'UTC',
         }).format(date)}
         accessibilityState={{ selected: isSelected, disabled: isDisabled }}
       >
@@ -213,7 +212,7 @@ export const DayCell: React.FC<DayCellProps> = memo(
           <View style={[webStyles.circleOverlay, todayStyle]} />
         ) : null}
 
-        <Text style={[webStyles.text, textStyle]}>{date.getUTCDate()}</Text>
+        <Text style={[webStyles.text, textStyle]}>{date.getDate()}</Text>
       </Pressable>
     );
   },

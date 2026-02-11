@@ -19,12 +19,12 @@ export function isValidISODate(value: string): boolean {
     number,
     number,
   ];
-  const date = new Date(Date.UTC(year, month - 1, day));
+  const date = new Date(year, month - 1, day);
 
   return (
-    date.getUTCFullYear() === year &&
-    date.getUTCMonth() === month - 1 &&
-    date.getUTCDate() === day
+    date.getFullYear() === year &&
+    date.getMonth() === month - 1 &&
+    date.getDate() === day
   );
 }
 
@@ -70,7 +70,7 @@ export function parseISODateSafe(value: string): Date | null {
     number,
     number,
   ];
-  return new Date(Date.UTC(year, month - 1, day));
+  return new Date(year, month - 1, day);
 }
 
 // Types for date picker values
