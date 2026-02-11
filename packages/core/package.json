@@ -1,6 +1,6 @@
 {
   "name": "@dreamstack-us/kaal",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "High-performance React Native DatePicker and TimePicker",
   "type": "module",
   "main": "./lib/module/index.js",

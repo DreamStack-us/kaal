@@ -1,5 +1,13 @@
 # @dreamstack-us/kaal
 
+## 0.1.1
+
+### Patch Changes
+
+- [#21](https://github.com/DreamStack-us/kaal/pull/21) [`ded6ff4`](https://github.com/DreamStack-us/kaal/commit/ded6ff4a281f42f4cb5404e5a1e8370f00f6cf7b) Thanks [@hariDasu](https://github.com/hariDasu)! - fix: remove non-functional keyboard icon from MaterialTimePicker
+
+  Removed the keyboard toggle button that appeared at the bottom-left of the Material-style time picker. The button had no functionality and was purely decorative.
+
 ## 0.1.0
 
 ### Minor Changes
