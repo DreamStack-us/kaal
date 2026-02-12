@@ -65,8 +65,15 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 
   // Use native iOS picker for 'native' or 'ios' theme
   if (theme === 'native' || theme === 'ios') {
+    const containerBg =
+      themeOverrides?.containerBackground ?? themeOverrides?.backgroundColor;
     return (
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          containerBg ? { backgroundColor: containerBg } : undefined,
+        ]}
+      >
         <Suspense fallback={<ActivityIndicator />}>
           <ExpoTimePicker
             value={value}

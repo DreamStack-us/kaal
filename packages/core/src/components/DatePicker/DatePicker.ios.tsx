@@ -72,7 +72,14 @@ export const DatePicker: React.FC<KaalDatePickerProps> = (props) => {
   // Native picker only available for single selection
   if (theme === 'native') {
     return (
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          themeOverrides?.backgroundColor
+            ? { backgroundColor: themeOverrides.backgroundColor }
+            : undefined,
+        ]}
+      >
         <Suspense fallback={<ActivityIndicator />}>
           <ExpoDatePicker
             value={props.value}
