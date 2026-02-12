@@ -36,7 +36,7 @@ jobs:
 
           if [[ "$BRANCH" == "main" ]]; then
             echo "environment=production" >> $GITHUB_OUTPUT
-            echo "url=https://kaal.dreamstack.us" >> $GITHUB_OUTPUT
+            echo "url=https://dreamstack-us.github.io/kaal/" >> $GITHUB_OUTPUT
             echo "version=prod-$SHORT_SHA" >> $GITHUB_OUTPUT
           elif [[ "$BRANCH" == "develop" ]]; then
             echo "environment=develop" >> $GITHUB_OUTPUT

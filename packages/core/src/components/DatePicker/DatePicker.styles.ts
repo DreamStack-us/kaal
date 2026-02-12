@@ -6,7 +6,7 @@ import { Platform, StyleSheet } from 'react-native';
  */
 export const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#1E1E1E',
+    backgroundColor: 'transparent',
     borderRadius: 16,
     overflow: 'hidden',
     padding: 16,
@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
       backgroundColor: 'rgba(255, 255, 255, 0.7)',
     },
     default: {
-      backgroundColor: '#2C2C2E',
+      backgroundColor: 'transparent',
     },
   }),
 });

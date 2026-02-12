@@ -11,7 +11,7 @@ const CONTAINER_HEIGHT = ITEM_HEIGHT * VISIBLE_ITEMS;
 export const styles = StyleSheet.create({
   // Container styles
   container: {
-    backgroundColor: '#2C2C2E',
+    backgroundColor: 'transparent',
     borderRadius: 16,
     padding: 16,
   },
@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
   wheelContainer: {
     flexDirection: 'row',
     height: CONTAINER_HEIGHT,
-    backgroundColor: '#2C2C2E',
+    backgroundColor: 'transparent',
     borderRadius: 16,
     overflow: 'hidden',
     alignItems: 'center',
@@ -76,7 +76,7 @@ export const styles = StyleSheet.create({
 
   // ============ Material Time Picker Styles ============
   materialContainer: {
-    backgroundColor: '#2C2C2E',
+    backgroundColor: 'transparent',
     borderRadius: 28,
     padding: 24,
     width: 320,
