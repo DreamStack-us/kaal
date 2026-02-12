@@ -1,5 +1,11 @@
 # @dreamstack-us/kaal
 
+## 0.1.2
+
+### Patch Changes
+
+- [#24](https://github.com/DreamStack-us/kaal/pull/24) [`5be08c1`](https://github.com/DreamStack-us/kaal/commit/5be08c13a11f78c08d6fc7a3d7460f09bd1c653e) Thanks [@hariDasu](https://github.com/hariDasu)! - Fix hardcoded grey container backgrounds (#2C2C2E, #1E1E1E) in DatePicker and TimePicker — wrappers are now transparent by default so consumer themes show through. Native iOS picker wrappers also respect themeOverrides.backgroundColor. Fix documentation URL pointing to GitHub Pages.
+
 ## 0.1.1
 
 ### Patch Changes
